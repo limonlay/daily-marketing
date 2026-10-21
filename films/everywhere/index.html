@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<title>Daily everywhere</title>
+<link rel="stylesheet" href="./runtime/fonts.css">
+<link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@500;700&family=Google+Sans:wght@500;700&display=block" rel="stylesheet">
+<style>
+/* ACCENT = Lemon: "Daily did it". Flat colour only (brand/DESIGN.md). */
+:root{--cream:#f2f0ea;--prussian:#14213d;--lemon:#ffd23f;--night:#0a0d14}
+*{box-sizing:border-box}
+html,body{margin:0;width:1080px;height:1920px;overflow:hidden;background:#000}
+#main{position:absolute;left:0;top:0;width:1080px;height:1920px;overflow:hidden;background:var(--cream);font-family:"Anuphan",sans-serif}
+.scene{position:absolute;inset:0}
+.cam{position:absolute;inset:0}
+.h{position:absolute;left:0;width:1080px;text-align:center;white-space:pre;font-weight:700;color:var(--prussian)}
+.scr{position:absolute;left:-40px;top:20px;width:1200px}
+</style>
+</head>
+<body>
+<div id="main">
+
+  <!-- BEAT 1 HOOK (0-113) -->
+  <section id="s1" class="scene">
+    <div id="cam1" class="cam">
+      <img id="lem1" src="lemon.svg" style="position:absolute;left:290px;top:420px;width:500px">
+      <div id="h1a" class="h" style="top:1080px;font-size:118px;line-height:150px">เที่ยวที่ไหน</div>
+      <div id="h1b" class="h" style="top:1230px;font-size:118px;line-height:150px">จดเป็นเงินที่นั่น</div>
+    </div>
+  </section>
+
+  <!-- BEAT 2-3 PROOF (113-338): the real card, four languages -->
+  <section id="s2" class="scene" style="background:var(--night);visibility:hidden">
+    <div id="cam2" class="cam">
+      <img id="th" class="scr" src="th.webp" style="visibility:hidden"><img id="ja" class="scr" src="ja.webp" style="visibility:hidden">
+      <img id="en" class="scr" src="en.webp" style="visibility:hidden"><img id="ko" class="scr" src="ko.webp" style="visibility:hidden">
+    </div>
+    <div style="position:absolute;left:0;width:1080px;top:1560px;text-align:center"><span id="pill" style="display:inline-block;white-space:pre;background:var(--lemon);color:var(--prussian);font:700 72px/1 'Anuphan';padding:24px 48px;border-radius:0 56px 0 56px">ภาษาของคุณ เงินของคุณ</span></div>
+  </section>
+
+  <!-- BEAT 4 CTA (338-450) -->
+  <section id="s4" class="scene" style="background:var(--prussian);visibility:hidden">
+    <img id="lemon" src="lemon.svg" style="position:absolute;left:290px;top:560px;width:500px">
+    <div id="word" style="position:absolute;left:0;width:1080px;top:1020px;text-align:center;font:700 190px/1 'Google Sans';letter-spacing:-.03em;color:var(--cream)">Daily</div>
+    <div id="url" style="position:absolute;left:0;width:1080px;top:1260px;text-align:center;font:500 50px/1 'Google Sans';color:var(--lemon)">daily.limonlay.com</div>
+  </section>
+</div>
+
+<script src="./runtime/vendor/gsap.min.js"></script>
+<script src="./runtime/motion.js"></script>
+<script>
+const M = Motion.film({ fps: 30, duration: 15, width: 1080, height: 1920, clock: 'smooth' });
+const B = n => Math.round(n * 14.0625);          // 128 BPM beat -> frame
+
+/* BEAT 1 HOOK: lemon already rolling on frame 0; lines on beats; lemon dives toward the card's lemon spot */
+M.kf('#lem1', 'x', [[0, -620], [12, 0, 'softLand'], [B(6), 0], [B(8), 330, 'gentleIn']]);
+M.kf('#lem1', 'y', [[B(6), 0], [B(8), -60, 'gentleIn']]);
+M.kf('#lem1', 'rotation', [[0, -300], [12, 0, 'softLand'], [B(6), 0], [B(8), 12, 'gentleIn']]);
+M.kf('#lem1', 'scale', [[B(6), 1], [B(8), .62, 'gentleIn']]);
+M.words('#h1a', { at: B(2), mech: 'rise', dist: 90, frames: 12, ease: 'softLand' });
+M.words('#h1b', { at: B(4), mech: 'rise', dist: 90, frames: 12, ease: 'softLand' });
+M.kf('#h1a', 'y', [[B(6), 0], [B(8), -40, 'accelExit']]);
+M.drift('#cam1', { prop: 'scale', from: 1, to: 1.05, start: 0, end: B(8) });
+
+/* BEAT 2 PROOF: hard cut to the real card; language swaps on every 4th beat; one continuous camera */
+M.cut(B(8), { hide: ['#s1'], show: ['#s2', '#th'] });
+M.cut(B(12), { hide: ['#th'], show: ['#ja'] });
+M.cut(B(16), { hide: ['#ja'], show: ['#en'] });
+M.cut(B(20), { hide: ['#en'], show: ['#ko'] });
+M.camera('#cam2', [[B(8), { scale: 1.06, y: 0 }], [B(20), { scale: 1.14, y: 0 }],
+                   [B(22), { scale: .86, y: -60 }, 'whip'], [B(24), { scale: .84, y: -60 }]], { origin: '540px 960px' });
+
+// every language cut lands with a snap (on a wrapper: the camera owns #cam2's transform) and a small sideways travel
+const w2 = M.wrap('#cam2');
+[8, 12, 16, 20].forEach((b, i) => M.snap(w2, { at: B(b), from: { scale: 1.16, x: i % 2 ? -70 : 70 }, to: { scale: 1, x: 0 }, tail: 18, origin: '540px 700px' }));
+M.kf('#ja', 'x', [[B(12), 0], [B(16), -36, 'cruise']]); M.kf('#en', 'x', [[B(16), 0], [B(20), 36, 'cruise']]);
+M.kf('#th', 'x', [[B(8), 0], [B(12), 36, 'cruise']]);
+/* BEAT 3: the pull-back reveals the whole Korean screen; the pill lands on the downbeat */
+M.enter('#pill', { at: B(22), frames: 10, from: { y: 90, scale: 1.4 }, ease: 'softLand', smear: { axis: 'y', px: 24 } });
+
+/* BEAT 4 CTA */
+M.cut(B(24), { hide: ['#s2'], show: ['#s4'] });
+M.enter('#lemon', { at: B(24), frames: 16, ease: 'snapSettle', from: { scale: 3.5, rotation: -20, blur: 10 } });
+M.words('#word', { at: B(25), mech: 'rise', dist: 70, frames: 12 });
+M.enter('#url', { at: B(26), frames: 10, from: { y: 30 }, ease: 'softLand' });
+M.drift('#s4', { prop: 'scale', from: 1, to: .94, start: B(24), end: 450 });
+
+window.__ready = Motion.loaded().then(() => { if (/selftest/.test(location.search)) Motion.selfTest(M, { samples: 24 }); });
+</script>
+</body>
+</html>
