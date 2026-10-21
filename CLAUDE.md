@@ -26,10 +26,13 @@ HTML page with a pure `render(t)` → Playwright screenshots per frame (Chromium
 9:16 1080×1920, 30 fps, 15 s, 128 BPM (scene changes on beats). Music: code-made (RuiC) or Mixkit (free commercial). No paid AI services
 (Higgsfield, Novoads, Gemini, ElevenLabs were checked and rejected: not free).
 
+## Making a video
+Use the repo skill **`daily-video`** (`.claude/skills/daily-video/`): brief → beat map → stills → render → gates (`check.py`) → NOTE.md. New films go in `films/<name>/`.
+
 ## Skills tried (user-level, `~/.claude/skills`; reinstall in a new session)
 motionmaxxing (storyboard + gates), ruic-motion-reel (code music), beat-synced-edit (beat detection, Python/librosa),
 kinetic-typography, text-to-lottie (diffusionstudio/lottie), motion-design (howseen-ai). logo-intro was dropped (WebGL too slow, gradients).
-Next step: one Daily video skill that combines their strengths.
+Their strengths are combined in `daily-video`; reinstalling them is optional.
 
 ## Git
 Small, low-risk changes may go straight to `main`; ask the owner before rewriting history. Keep large renders out of git unless they are deliverables.

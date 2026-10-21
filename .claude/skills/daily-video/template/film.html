@@ -1,0 +1,91 @@
+<!doctype html><html lang="th"><head><meta charset="utf-8">
+<title>Daily film</title>
+<link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@100..700&family=Google+Sans+Flex:wght@100..1000&family=Big+Shoulders+Display:wght@900&display=block" rel="stylesheet">
+<style>
+/* Daily tokens (brand/DESIGN.md). Flat colour only: no gradients, borders, outlines, soft shadows. */
+:root{--prussian:#14213d;--lemon:#ffd23f;--lemon-ink:#876800;--night:#0a0d14;--cream:#f2f0ea;--paper:#FAF9F6;--over:#d9480f;
+  --th:"Anuphan",sans-serif;--en:"Google Sans Flex",sans-serif;--poster:"Big Shoulders Display",sans-serif}
+*{box-sizing:border-box;margin:0}
+html,body{overflow:hidden;background:var(--night)}
+#stage{position:absolute;left:0;top:0;overflow:hidden;font-family:var(--th);color:var(--cream)}
+.sc{position:absolute;inset:0;visibility:hidden}
+.p{position:absolute;will-change:transform}
+.leaf{border-radius:0 var(--r,80px) 0 var(--r,80px)}          /* leaf corners 0 R 0 R */
+.hard{box-shadow:14px 14px 0 var(--prussian)}                  /* the only shadow allowed: hard offset, no blur */
+.mask{overflow:hidden;padding:.06em 0 .16em}                  /* room for Thai upper/lower marks */
+.mask>span{display:inline-block}
+.c{position:absolute;left:0;right:0;text-align:center}
+</style></head><body><div id="stage">
+
+<!-- ===== A HOOK (beats 0-8): the problem, one specific case ===== -->
+<section class="sc" id="A" style="background:var(--cream);color:var(--prussian)">
+  <div class="p paper leaf hard" id="rc" style="--r:60px;left:28%;top:22%;width:48%;background:#fffdf7;padding:4% 4.5%">
+    <div style="font:700 44px/1 var(--en)">Café 7am</div>
+    <div style="display:flex;justify-content:space-between;font:500 40px/1.2 var(--th);margin-top:28px"><span>ลาเต้เย็น</span><span>65</span></div>
+    <div style="display:flex;justify-content:space-between;font:700 54px/1 var(--th);margin-top:40px;background:var(--lemon);padding:16px 20px;border-radius:0 30px 0 30px"><span>รวม</span><span>฿65</span></div>
+  </div>
+  <div class="c mask" style="top:66%;font-size:118px;font-weight:700"><span id="a1">จ่ายแล้ว… ลืมทุกที</span></div>
+</section>
+
+<!-- ===== B PROOF (beats 8-24): the real Daily screen, magnified, camera moves ===== -->
+<section class="sc" id="B" style="background:var(--night)">
+  <div class="p" id="cam" style="inset:0"><img src="screen.webp" id="app" style="position:absolute;left:7%;width:86%"></div>
+  <div class="c" style="top:8%"><span class="p leaf" id="b1" style="--r:56px;position:relative;display:inline-block;background:var(--lemon);color:var(--prussian);font:700 92px/1 var(--th);padding:26px 56px">ทุกเหรียญ มีที่ไป</span></div>
+</section>
+
+<!-- ===== C CTA (beats 24-32): the lemon lands, wordmark; end moving, hold <= 1.4 s ===== -->
+<section class="sc" id="C" style="background:var(--prussian)">
+  <img class="p" id="lemon" src="lemon.svg" style="left:26%;top:28%;width:48%">
+  <div class="c" id="word" style="top:54%;font:700 190px/1 var(--en);letter-spacing:-.03em">Daily</div>
+  <div class="c" id="url" style="top:66%;font:500 50px/1 var(--en);color:var(--lemon)">daily.limonlay.com</div>
+</section>
+</div>
+
+<script>
+/* ---------- kit (copy as is) ---------- */
+const Q = new URLSearchParams(location.search), W = +Q.get('w') || 1080, H = +Q.get('h') || 1920;
+const stage = document.getElementById('stage'); Object.assign(stage.style, { width: W + 'px', height: H + 'px' });
+document.documentElement.style.fontSize = (W / 1080 * 16) + 'px';          // layouts in % + rem survive other formats
+const $ = id => document.getElementById(id), cl = (x, a = 0, b = 1) => Math.min(b, Math.max(a, x));
+const BPM = 128, BEAT = 60 / BPM;                                          // assets/daily-track-128bpm.wav
+const beatAt = t => { const B = window.BEATS; if (!B) return t / BEAT;      // real beats from beats.py, else the grid
+  if (t < B[0]) return (t - B[0]) / (B[1] - B[0]);
+  for (let k = 0; k < B.length - 1; k++) if (t < B[k + 1]) return k + (t - B[k]) / (B[k + 1] - B[k]);
+  return B.length - 1 + (t - B[B.length - 1]) / (B[B.length - 1] - B[B.length - 2]); };
+const tb = b => { const B = window.BEATS; return B && B[b] != null ? B[b] : b * BEAT; };   // beat -> seconds
+// eases: land decelerates, leave accelerates; no bounce (one settle per film at most)
+const out = x => 1 - Math.pow(1 - cl(x), 4), expo = x => x >= 1 ? 1 : 1 - Math.pow(2, -10 * cl(x));
+const inn = x => Math.pow(cl(x), 3), io = x => { x = cl(x); return x < .5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2; };
+const settle = x => { x = cl(x); const c = 1.4; return 1 + (c + 1) * Math.pow(x - 1, 3) + c * Math.pow(x - 1, 2); };
+const rng = s => () => { s |= 0; s = s + 0x6D2B79F5 | 0; let t = Math.imul(s ^ s >>> 15, 1 | s); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; };
+const tf = (el, s) => { el.style.transform = s; };
+// scenes on beats: [[id, fromBeat, toBeat]]
+const scenes = S => t => { const b = beatAt(t); for (const [id, a, z] of S) $(id).style.visibility = b >= a && b < z ? 'visible' : 'hidden'; };
+// mask-up reveal of a line (element inside .mask)
+const rise = (el, t, at, d = .55) => { const k = expo((t - at) / d); tf(el, `translateY(${(1 - k) * 110}%)`); };
+// enter from an offset pose, starting at `at` (put it ON a beat: the pop is the cut), landing d s later
+const enter = (el, t, at, from, d = .35, ease = out) => { const k = ease((t - at) / d);
+  el.style.opacity = t < at ? 0 : 1;
+  tf(el, `translate(${(from.x || 0) * (1 - k)}px,${(from.y || 0) * (1 - k)}px) rotate(${(from.r || 0) * (1 - k)}deg) scale(${1 + ((from.s ?? 1) - 1) * (1 - k)})`); };
+// beat punch for a container: 1 + amt on each beat, decays in ~0.15 s
+const punch = (t, amt = .03) => 1 + amt * Math.exp(-(beatAt(t) % 1) * 14);
+
+/* ---------- the film: everything is a pure function of t ---------- */
+const show = scenes([['A', 0, 8], ['B', 8, 24], ['C', 24, 99]]);
+window.render = t => {
+  show(t);
+  // A
+  enter($('rc'), t, 0, { y: -260, r: -14 }); rise($('a1'), t, tb(2));
+  tf($('A'), `scale(${(1 + t * .03) * punch(t, .015)})`);                    // never freeze: push-in + beat punch
+  // B: camera glides down the real list, label lands on a beat
+  const k = io((t - tb(8)) / (tb(24) - tb(8)));
+  tf($('cam'), `translateY(${-H * .05 - k * H * .12}px) scale(${1.25 * punch(t, .012)})`);
+  enter($('b1'), t, tb(10), { y: -120, s: 1.5 });
+  // C: lemon arrives oversized and settles, words rise, keeps drifting
+  enter($('lemon'), t, tb(24), { s: 3.2, r: -20 }, .45, settle);
+  enter($('word'), t, tb(25), { y: 60 }); enter($('url'), t, tb(26), { y: 30 });
+  tf($('C'), `scale(${1 - cl((t - tb(24)) / 4) * .1})`);                        // still drifting on the last frame
+  if (t > tb(25)) tf($('lemon'), `translateY(${Math.sin((t - tb(25)) * 2.2) * 14}px) rotate(${Math.sin((t - tb(25)) * 1.7) * 3}deg)`);
+};
+render(0);
+</script></body></html>
