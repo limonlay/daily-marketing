@@ -1,0 +1,92 @@
+<!doctype html><html><head><meta charset="utf-8">
+<link href="gf/p.css" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0}
+html,body{width:1080px;height:1920px;overflow:hidden;font-family:"Google Sans","Noto Sans Thai",sans-serif;color:#14213d;background:#fff}
+.s{position:absolute;inset:0;opacity:0;overflow:hidden}
+.tag{position:absolute;background:#14213d;color:#fff;border-radius:999px;padding:20px 52px;font-size:78px;font-weight:700;white-space:nowrap;transform-origin:50% 50%}
+.tag.o{background:#fca311;color:#14213d}
+.mascot{position:absolute}
+.phone{position:absolute;left:220px;top:330px;width:640px;height:1338px;border-radius:90px;border:20px solid #14213d;background:#fff;overflow:hidden;box-shadow:0 60px 120px rgba(20,33,61,.35)}
+.phone img{width:600px;height:1298px;display:block}
+</style></head><body>
+
+<!-- Mascot "Bo": the Daily app mark come alive (navy block, orange half-moon, ฿) -->
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="bo" viewBox="0 0 400 470">
+  <ellipse cx="200" cy="455" rx="130" ry="12" fill="rgba(20,33,61,.2)"/>
+  <rect x="130" y="320" width="22" height="130" rx="11" fill="#14213d"/><rect x="248" y="320" width="22" height="130" rx="11" fill="#14213d"/>
+  <ellipse cx="141" cy="452" rx="30" ry="12" fill="#14213d"/><ellipse cx="259" cy="452" rx="30" ry="12" fill="#14213d"/>
+  <image href="lemon.svg" x="-20" y="40" width="440" height="341"/>
+  <ellipse cx="160" cy="215" rx="34" ry="40" fill="#fff"/><ellipse cx="246" cy="215" rx="34" ry="40" fill="#fff"/>
+  <circle class="pup" cx="168" cy="224" r="17" fill="#14213d"/><circle class="pup" cx="238" cy="224" r="17" fill="#14213d"/>
+  <path class="brow" d="M85 130 L180 150 M305 130 L210 150" stroke="#14213d" stroke-width="12" stroke-linecap="round" transform="translate(5 30) scale(.95)"/>
+  <path class="mouth" d="M160 300 Q200 280 240 300" stroke="#14213d" stroke-width="10" fill="none" stroke-linecap="round" transform="translate(4 -16)"/>
+</symbol></defs></svg>
+
+<!-- S1 hook -->
+<div class="s" id="s1" style="background:#fca311">
+  <div id="cnt" style="position:absolute;top:240px;left:0;right:0;text-align:center;font-size:230px;font-weight:700;color:#14213d">฿25,000</div>
+  <svg class="mascot" id="m1" viewBox="0 0 400 470" style="left:290px;top:760px;width:500px;height:588px"><use href="#bo"/></svg>
+  <div class="tag" id="p1" style="left:110px;top:560px">เงินเดือนเข้า…</div>
+  <div class="tag" id="p3" style="left:170px;top:1460px;background:#fff;color:#e63946;font-size:100px">หายไปไหน?!</div>
+</div>
+
+<!-- S2 real add flow -->
+<div class="s" id="s2" style="background:#f4f5f8">
+  <div class="tag o" id="p5" style="left:190px;top:110px">จดจริง ใน 3 วิ</div>
+  <div class="phone"><img id="app"></div>
+  <svg class="mascot" id="m2" viewBox="0 0 400 470" style="left:-30px;top:1560px;width:300px;height:353px"><use href="#bo"/></svg>
+  <div class="tag" id="p6" style="left:640px;top:1700px;font-size:64px">บันทึกแล้ว ✓</div>
+</div>
+
+<!-- S3 real summary -->
+<div class="s" id="s3" style="background:#14213d">
+  <div class="tag o" id="p7" style="left:150px;top:110px">อ๋อ… ไปอยู่ตรงนี้!</div>
+  <div class="phone" style="border-color:#fff"><img id="app2"></div>
+  <svg class="mascot" id="m3" viewBox="0 0 400 470" style="left:770px;top:1500px;width:300px;height:353px"><use href="#bo"/></svg>
+</div>
+
+<!-- S4 CTA -->
+<div class="s" id="s4" style="background:#fca311">
+  <svg class="mascot" id="m4" viewBox="0 0 400 470" style="left:340px;top:330px;width:400px;height:470px"><use href="#bo"/></svg>
+  <div style="position:absolute;top:900px;left:0;right:0;text-align:center;font-size:150px;font-weight:700">Daily</div>
+  <div style="position:absolute;top:1110px;left:0;right:0;text-align:center;font-size:66px;font-weight:500">จดเงินวันละ 3 วิ ใช้ฟรี</div>
+  <div id="url" style="position:absolute;top:1300px;left:190px;right:190px;text-align:center;background:#14213d;color:#fff;border-radius:70px;padding:30px;font-size:64px;font-weight:700">daily.limonlay.com</div>
+</div>
+
+<script>
+const $=id=>document.getElementById(id);
+document.querySelectorAll('.mascot').forEach(s=>s.innerHTML=document.getElementById('bo').innerHTML);
+const cl=(x,a=0,b=1)=>Math.min(b,Math.max(a,x));
+const ease=x=>1-Math.pow(1-cl(x),3);
+const back=x=>{x=cl(x);const c=2;return 1+(c+1)*Math.pow(x-1,3)+c*Math.pow(x-1,2)};
+const SC=[["s1",0,2.6],["s2",2.6,5.6],["s3",5.6,8.2],["s4",8.2,99]];
+const tag=(id,t0,t)=>{const p=back((t-t0)/.25),e=$(id);e.style.opacity=t>=t0?1:0;e.style.transform=`scale(${p})`};
+const frame=(img,u,K)=>{let f=K[0][1];for(const [k,n] of K)if(u>=k)f=n;const s='app/'+String(f).padStart(2,'0')+'.png';if(!img.src.endsWith(s))img.src=s};
+// mood: angry brows + frown, or happy brows up + smile
+const mood=(happy)=>{document.querySelectorAll('.brow').forEach(b=>b.setAttribute('d',happy?'M95 120 Q135 100 175 120 M215 120 Q255 100 295 120':'M85 130 L180 150 M305 130 L210 150'));
+  document.querySelectorAll('.mouth').forEach(m=>m.setAttribute('d',happy?'M150 285 Q200 340 250 285':'M160 300 Q200 280 240 300'))};
+window.render=t=>{
+  for(const [id,a,b] of SC)$(id).style.opacity=t>=a&&t<b?1:0;
+  mood(t>4.8);
+  // S1: salary counts down to 0, mascot stomps closer, shake on punchline
+  const n=Math.round(25000*(1-ease((t-.5)/1.3)));$('cnt').textContent='฿'+n.toLocaleString();$('cnt').style.color=n<3000?'#e63946':'#14213d';
+  $('m1').style.transform=`translateY(${-Math.abs(Math.sin(t*9))*30}px) scale(${.85+cl(t/2.4)*.3})`;
+  tag('p1',.1,t);tag('p3',1.8,t);
+  $('s1').style.transform=t>1.8&&t<2.2?`translate(${Math.sin(t*120)*14}px,${Math.cos(t*90)*10}px) scale(1.05)`:'';
+  // S2: real add-entry frames
+  const u=t-2.6;tag('p5',2.65,t);
+  frame($('app'),u,[[0,0],[.3,1],[.38,2],[.46,3],[.54,4],[.62,5],[.95,6],[1.15,7],[1.4,8],[1.65,9],[1.75,10],[1.85,11],[1.95,12],[2.05,13],[2.2,14],[2.3,15],[2.4,16],[2.5,17],[2.6,18]]);
+  $('m2').style.transform=u>2.2?`translateY(${-Math.abs(Math.sin(u*14))*70}px)`:`rotate(${Math.sin(u*10)*6}deg)`;
+  $('p6').style.opacity=u>2.2?1:0;if(u>2.2)tag('p6',4.8,t);
+  // S3: real summary, scroll through categories
+  const v=t-5.6;frame($('app2'),v,[[0,19],[1,20],[1.15,21],[1.3,22],[1.45,23]]);tag('p7',5.75,t);
+  $('m3').style.transform=`translateY(${-Math.abs(Math.sin(v*8))*40}px)`;
+  document.querySelectorAll('#m3 .pup').forEach(p=>p.setAttribute('transform',`translate(-16 ${v<1?10:0})`));
+  // S4
+  const z=t-8.2;$('m4').style.transform=`translateY(${-Math.abs(Math.sin(z*7))*50}px) scale(${back(z/.4)})`;
+  $('url').style.transform=`scale(${1+.05*Math.sin(z*7)})`;
+};
+render(0);
+</script></body></html>

@@ -1,0 +1,73 @@
+<!doctype html><html><head><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@300;500;700&family=Big+Shoulders+Display:wght@900&family=Google+Sans:wght@400;700&display=block" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0}
+html,body{width:1080px;height:1920px;overflow:hidden;background:#0a0d14;color:#f2f0ea;font-family:"Google Sans","Anuphan",sans-serif}
+.a{position:absolute;will-change:transform,opacity}
+.line{left:0;right:0;text-align:center;font-family:"Anuphan";font-weight:500;font-size:92px;letter-spacing:-.01em}
+.small{font-weight:300;font-size:52px;color:#9a9890}
+.big{font-family:"Big Shoulders Display";font-weight:900;line-height:.8;white-space:nowrap}
+.leaf{border-radius:0 120px 0 120px}
+</style></head><body>
+<div id="st" class="a" style="inset:0">
+  <!-- geometric art blocks -->
+  <div id="sq" class="a" style="background:#14213d;width:760px;height:760px;left:160px;top:420px" ></div>
+  <div id="ci" class="a" style="background:#ffd23f;width:300px;height:300px;border-radius:50%;left:700px;top:260px"></div>
+  <div id="dr" class="a" style="background:#f2f0ea;width:180px;height:180px;border-radius:50% 50% 0 50%;left:130px;top:1250px"></div>
+  <div id="BIG" class="a big" style="font-size:620px;color:#14213d;left:-40px;top:500px">DAILY</div>
+  <img id="lemon" class="a" src="lemon.svg" style="width:640px;left:220px;top:620px">
+  <div id="phone" class="a leaf" style="background:#14213d;width:680px;height:1380px;left:200px;top:470px;padding:40px;overflow:hidden">
+    <img src="shot-th-dark.webp" style="width:600px;display:block;border-radius:0 80px 0 80px">
+  </div>
+  <div id="t1" class="a line" style="top:1420px">ทุกเหรียญ</div>
+  <div id="t2" class="a line" style="top:1530px">มีที่ไป</div>
+  <div id="t3" class="a line" style="top:130px">จดในสามวินาที</div>
+  <div id="t4" class="a line small" style="top:260px">สแกนบิล · ถาม AI · ดูกราฟ</div>
+  <div id="n1" class="a line" style="top:700px;font-size:120px">ไม่มีโฆษณา</div>
+  <div id="n2" class="a line" style="top:860px;font-size:120px">ไม่ขายข้อมูล</div>
+  <div id="n3" class="a line" style="top:1020px;font-size:120px;color:#ffd23f">ใช้ฟรี</div>
+  <div id="end" class="a" style="left:0;right:0;top:1180px;text-align:center">
+    <div style="font-weight:700;font-size:170px;letter-spacing:-.03em">Daily</div>
+    <div class="small" style="font-family:'Google Sans';margin-top:30px;font-size:50px;color:#f2f0ea">daily.limonlay.com</div>
+  </div>
+</div>
+<script>
+const $=id=>document.getElementById(id),cl=(x,a=0,b=1)=>Math.min(b,Math.max(a,x));
+const io=x=>{x=cl(x);return x<.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2};      // ease in-out cubic
+const out=x=>1-Math.pow(1-cl(x),4);
+const set=(id,o,tf='')=>{const e=$(id);e.style.opacity=o;e.style.transform=tf};
+// fade+rise in at a, out at b
+const show=(t,a,b,d=.7)=>Math.min(out((t-a)/d),1-io((t-b)/.5));
+window.render=t=>{
+  // 0–3.4  lemon descends into silence; "every coin / has a place"
+  let L=out(t/2.2), Lx=io((t-3.0)/1.2);
+  let lemonS=.55+.45*L - Lx*.25, lemonY=-260*(1-L) + (t>3?-470*Lx:0), lemonR=-14*(1-L)+Math.sin(t*.8)*2;
+  // 7.6+ lemon returns for the end card
+  const E=out((t-11.6)/1.2);
+  if(t>11.4){lemonS=.6+.15*E;lemonY=-180+60*(1-E);lemonR=0}
+  set('lemon',t<4.2?1:(t>11.4?E:1-io((t-4.0)/.4)),`translateY(${lemonY}px) rotate(${lemonR}deg) scale(${lemonS})`);
+  set('t1',show(t,.9,3.2),`translateY(${30*(1-out((t-.9)/.8))}px)`);
+  set('t2',show(t,1.4,3.2),`translateY(${30*(1-out((t-1.4)/.8))}px)`);
+  // square block: under the lemon, then becomes the phone stage
+  const q=out((t-.3)/1.4);
+  set('sq',t<4.4?q*(1-io((t-3.9)/.5)):0,`scale(${.2+.8*q}) rotate(${45*(1-q)}deg)`);
+  $('sq').style.borderRadius=`0 ${380*q}px 0 ${380*q}px`;
+  // huge DAILY sliding behind (3.0–6)
+  const B=t-3; set('BIG',show(t,3.0,5.6,.4)*1,`translateX(${-B*120}px)`);$('BIG').style.color='#14213d';
+  // 4.2–8.6  the real app rises like a product shot
+  const P=out((t-4.2)/1.4), Pz=io((t-7.9)/.7);
+  set('phone',P*(1-Pz),`translateY(${(1-P)*900 - (t-4.2)*14}px) rotate(${-3*(1-P)}deg) scale(${1-Pz*.08})`);
+  set('t3',show(t,5.0,7.9),`translateY(${20*(1-out((t-5)/.8))}px)`);
+  set('t4',show(t,5.6,7.9),'');
+  // orbiting art shapes
+  const s=t-4;set('ci',show(t,4.6,8.0,1),`translate(${Math.cos(s*.7)*60}px,${Math.sin(s*.7)*40+ (1-out((t-4.6)/1))*-400}px)`);
+  set('dr',show(t,5.2,8.0,1),`translate(${Math.sin(s*.6)*50}px,${(1-out((t-5.2)/1))*400}px) rotate(${s*8}deg)`);
+  // 8.6–11.6  three statements, one by one
+  [['n1',8.6],['n2',9.3],['n3',10.0]].forEach(([id,a])=>set(id,show(t,a,11.2,.6),`translateY(${40*(1-out((t-a)/.6))}px)`));
+  // 11.8–15 end card
+  set('end',out((t-12.2)/.9),`translateY(${30*(1-out((t-12.2)/.9))}px)`);
+  // slow global push-in, Apple-style
+  $('st').style.transform=`scale(${1+t*.004})`;
+};
+render(0);
+</script></body></html>

@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<title>Daily receipt</title>
+<link rel="stylesheet" href="./runtime/fonts.css">
+<link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@500;700&family=Google+Sans:wght@500;700&display=block" rel="stylesheet">
+<style>
+/* ACCENT = Lemon: "Daily acted / done". Flat colours only, hard offset shadows only (DESIGN.md). */
+:root{--cream:#f2f0ea;--prussian:#14213d;--lemon:#ffd23f;--night:#0a0d14;--th:"Anuphan",sans-serif;--en:"Google Sans",sans-serif}
+*{box-sizing:border-box}
+html,body{margin:0;width:1080px;height:1920px;overflow:hidden;background:#000}
+#main{position:absolute;left:0;top:0;width:1080px;height:1920px;overflow:hidden;background:var(--cream);font-family:var(--th)}
+.scene{position:absolute;inset:0}
+.cam{position:absolute;inset:0}
+.h{position:absolute;left:0;width:1080px;text-align:center;white-space:pre;font-weight:700;color:var(--prussian)}
+/* receipt: a paper piece */
+.rc{position:absolute;width:520px;background:#fffdf7;padding:54px 52px 60px;box-shadow:18px 18px 0 var(--prussian);color:var(--prussian);border-radius:0 60px 0 60px}
+.rc .shop{font:700 46px/1 var(--en);letter-spacing:-.02em}
+.rc .row{display:flex;justify-content:space-between;font:500 40px/1.2 var(--th);margin-top:30px}
+.rc .tot{display:flex;justify-content:space-between;font:700 56px/1 var(--th);margin-top:46px;background:var(--lemon);margin-left:-20px;margin-right:-20px;padding:18px 20px;border-radius:0 30px 0 30px}
+.rc .bar{height:12px;background:#d8d5cc;margin-top:22px}
+</style>
+</head>
+<body>
+<div id="main">
+
+  <!-- BEAT 1 HOOK (0-112): cream paper; the coffee receipt arrives already moving -->
+  <section id="s1" class="scene">
+    <div id="cam1" class="cam">
+      <div id="rc1" class="rc" style="left:280px;top:430px;transform:rotate(-4deg)">
+        <div class="shop">Café 7am</div><div class="bar" style="width:60%"></div>
+        <div class="row"><span>ลาเต้เย็น</span><span>65</span></div>
+        <div class="row"><span>ครัวซองต์</span><span>55</span></div>
+        <div class="tot"><span>รวม</span><span>฿120</span></div>
+      </div>
+      <div id="h1" class="h" style="top:1290px;font-size:120px;line-height:150px">จ่ายแล้ว… ลืมทุกที</div>
+    </div>
+  </section>
+
+  <!-- BEAT 2-3 PROOF (112-394): the real Daily screen, magnified; the receipt drops into the list -->
+  <section id="s2" class="scene" style="background:var(--night);visibility:hidden">
+    <div id="cam2" class="cam">
+      <img id="app" src="shot-th-dark.webp" style="position:absolute;left:75px;top:0;width:930px">
+    </div>
+    <div id="rc2" class="rc" style="left:280px;top:430px">
+      <div class="shop">Café 7am</div><div class="bar" style="width:60%"></div>
+      <div class="row"><span>ลาเต้เย็น</span><span>65</span></div>
+      <div class="row"><span>ครัวซองต์</span><span>55</span></div>
+      <div class="tot"><span>รวม</span><span>฿120</span></div>
+    </div>
+    <div id="pill2" style="position:absolute;left:0;width:1080px;top:440px;text-align:center"><span id="h2" style="display:inline-block;white-space:pre;background:var(--lemon);color:var(--prussian);font:700 92px/1 var(--th);padding:26px 56px;border-radius:0 56px 0 56px">จดในไม่กี่วิ</span></div>
+    <div id="pill3" style="position:absolute;left:0;width:1080px;top:1610px;text-align:center"><span id="h3" style="display:inline-block;white-space:pre;background:var(--cream);color:var(--prussian);font:700 92px/1 var(--th);padding:26px 56px;border-radius:0 56px 0 56px">ทุกเหรียญ มีที่ไป</span></div>
+  </section>
+
+  <!-- BEAT 4 CTA (394-450): the lemon from the balance card crashes forward; wordmark -->
+  <section id="s4" class="scene" style="background:var(--prussian);visibility:hidden">
+    <img id="lemon" src="lemon.svg" style="position:absolute;left:290px;top:560px;width:500px">
+    <div id="word" style="position:absolute;left:0;width:1080px;top:1020px;text-align:center;font:700 190px/1 var(--en);letter-spacing:-.03em;color:var(--cream)">Daily</div>
+    <div id="url" style="position:absolute;left:0;width:1080px;top:1260px;text-align:center;font:500 50px/1 var(--en);color:var(--lemon)">daily.limonlay.com</div>
+  </section>
+</div>
+
+<script src="./runtime/vendor/gsap.min.js"></script>
+<script src="./runtime/motion.js"></script>
+<script>
+const M = Motion.film({ fps: 30, duration: 15, width: 1080, height: 1920, clock: 'smooth' });
+const B = n => Math.round(n * 14.0625);          // 128 BPM beat -> frame
+
+/* BEAT 1 HOOK — receipt already sliding on frame 0, words on beats */
+M.kf('#rc1', 'y', [[0, -260], [10, 0, 'softLand']]);
+M.kf('#rc1', 'rotation', [[0, -11], [14, -4, 'softLand'], [112, -1]]);
+M.drift('#cam1', { prop: 'scale', from: 1, to: 1.06, start: 0, end: 112 });
+M.words('#h1', { at: B(2), mech: 'rise', dist: 90, gaps: [B(2)], frames: 12, ease: 'softLand' });
+M.kf('#rc1', 'scale', [[90, 1], [112, 1.08, 'gentleIn']]);     // accelerate into the cut
+
+/* BEAT 2 PROOF — cut on motion to the real screen; the receipt falls into the list and becomes a row */
+M.cut(B(8), { hide: ['#s1'], show: ['#s2'] });
+M.camera('#cam2', [[B(8), { y: -430, scale: 1.28 }], [B(20), { y: -200, scale: 1.34 }, 'cruise']], { origin: '540px 960px' });
+M.kf('#rc2', 'rotation', [[B(8), -1], [B(12), 3, 'softLand']]);
+M.kf('#rc2', 'scale', [[B(8), 1.08], [B(11), 1.08], [B(13), .26, 'accelExit']]);
+M.kf('#rc2', 'y', [[B(8), 0], [B(11), 120, 'softInOut'], [B(13), 330, 'accelExit']]);
+M.hide('#rc2', B(13));
+M.enter('#pill2', { at: B(9), frames: 10, from: { y: -60, scale: 1.6 }, ease: 'softLand', smear: { axis: 'y', px: 24 } });
+M.exit('#pill2', { at: B(19), frames: 9, to: { y: -160 }, ease: 'accelExit', hide: true });
+
+/* BEAT 3 PROOF — camera glides up to the real balance card (lemon on the card) */
+M.camera('#cam2', [[B(20), { y: -200, scale: 1.34 }], [B(23), { y: 470, scale: 1.25 }, 'whip'], [B(28), { y: 500, scale: 1.32 }]], { origin: '540px 960px' });
+M.enter('#pill3', { at: B(23), frames: 10, from: { y: 80, scale: 1.5 }, ease: 'softLand', smear: { axis: 'y', px: 24 } });
+
+/* BEAT 4 CTA — the lemon arrives oversized, wordmark rises; still drifting on the last frame */
+M.cut(B(28), { hide: ['#s2'], show: ['#s4'] });
+M.enter('#lemon', { at: B(28), frames: 16, ease: 'snapSettle', from: { scale: 3.5, rotation: -20, blur: 10 } });
+M.words('#word', { at: B(29), mech: 'rise', dist: 70, frames: 12 });
+M.enter('#url', { at: B(30), frames: 10, from: { y: 30 }, ease: 'softLand' });
+M.drift('#s4', { prop: 'scale', from: 1, to: .96, start: B(28), end: 450 });
+
+window.__ready = Motion.loaded().then(() => { if (/selftest/.test(location.search)) Motion.selfTest(M, { samples: 24 }); });
+</script>
+</body>
+</html>

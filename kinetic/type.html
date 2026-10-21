@@ -1,0 +1,75 @@
+<!doctype html><html lang="th"><head><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@100..700&family=Google+Sans+Flex:wght@100..1000&display=block" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0}
+html,body{width:1080px;height:1920px;overflow:hidden;background:#0a0d14;color:#f2f0ea;font-family:"Anuphan",sans-serif}
+.sc{position:absolute;inset:0;display:none}
+.c{position:absolute;left:0;width:1080px;text-align:center}
+.line{overflow:hidden;padding:.06em 0 .14em}               /* mask: room for Thai upper/lower marks */
+.line>span{display:inline-block;will-change:transform}
+.w{display:inline-block;will-change:transform}
+</style></head><body>
+<!-- kinetic-typography techniques: mask-up by line, word stagger, variable weight morph, blur-in, text on a path. Thai is split by line/word only (never by character: marks must stay on their base letter). -->
+
+<div class="sc" id="A" aria-label="เงินเดือนออก แล้วก็… หายไปไหน?">
+  <div class="c" style="top:560px;font-size:150px;font-weight:600;line-height:1.15">
+    <div class="line"><span id="a1">เงินเดือนออก</span></div>
+    <div class="line"><span id="a2" style="color:#9a9890">แล้วก็…</span></div>
+  </div>
+  <div class="c" id="a3" style="top:1040px;font-size:190px;white-space:nowrap;color:#ffd23f;line-height:1.2">หายไปไหน?</div>
+</div>
+
+<div class="sc" id="B" style="background:#f2f0ea;color:#14213d" aria-label="กาแฟ 65 ค่ารถ 45 ข้าว 120 ช้อปปิ้ง 890">
+  <div class="c" id="bw" style="top:520px;font-weight:700;line-height:1.25">
+    <div><span class="w" style="font-size:150px">กาแฟ</span> <span class="w" style="font-size:150px;color:#876800;margin-left:.3em">65</span></div>
+    <div><span class="w" style="font-size:150px">ค่ารถ</span> <span class="w" style="font-size:150px;color:#876800;margin-left:.3em">45</span></div>
+    <div><span class="w" style="font-size:150px">ข้าว</span> <span class="w" style="font-size:150px;color:#876800;margin-left:.3em">120</span></div>
+    <div><span class="w" style="font-size:150px">ช้อปปิ้ง</span> <span class="w" style="font-size:150px;color:#d9480f;margin-left:.3em">890</span></div>
+  </div>
+</div>
+
+<div class="sc" id="C" style="background:#14213d" aria-label="Daily จดให้ทุกเหรียญ">
+  <svg id="pathsvg" class="c" style="top:300px" width="1080" height="900" viewBox="0 0 1080 900">
+    <path id="curve" d="M-300,760 Q540,180 1380,760" fill="none"/>
+    <text font-family="Anuphan" font-weight="700" font-size="110" letter-spacing="6" fill="#ffd23f"><textPath id="tp" href="#curve" startOffset="0%">ทุกเหรียญ · ทุกเหรียญ · ทุกเหรียญ · ทุกเหรียญ</textPath></text>
+  </svg>
+  <div class="c" style="top:1040px;font-size:130px;font-weight:600;line-height:1.2">
+    <div class="line"><span id="c1">จดให้ครบ</span></div>
+    <div class="line"><span id="c2">โดยไม่ต้องจำ</span></div>
+  </div>
+</div>
+
+<div class="sc" id="D" style="background:#0a0d14" aria-label="Daily daily.limonlay.com">
+  <div class="c" id="word" style="top:760px;font-family:'Google Sans Flex';font-size:260px;letter-spacing:-.03em">Daily</div>
+  <div class="c" id="url" style="top:1110px;font-family:'Google Sans Flex';font-weight:500;font-size:52px;color:#ffd23f">daily.limonlay.com</div>
+</div>
+
+<script>
+// 128 BPM (RuiC track): beat .46875 s. A 0-8 beats, B 8-16, C 16-26, D 26-32.
+const BT=60/128,$=id=>document.getElementById(id),cl=x=>Math.min(1,Math.max(0,x));
+const expo=x=>x>=1?1:1-Math.pow(2,-10*cl(x));               // easeOutExpo (the skill's "premium" enter)
+const inout=x=>{x=cl(x);return x<.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2};
+const SC=[['A',0,8],['B',8,16],['C',16,26],['D',26,99]];
+const up=(el,t,at,d=.55)=>{const k=expo((t-at)/d);el.style.transform=`translateY(${(1-k)*110}%)`};   // mask-up reveal
+window.render=t=>{
+  const b=t/BT;
+  for(const[id,a,z]of SC)$(id).style.display=b>=a&&b<z?'block':'none';
+  // A: line mask-up on beats, then "หายไปไหน?" weight 100 -> 700 + blur-in, then thins out again
+  up($('a1'),t,.05);up($('a2'),t,2*BT);
+  const a3=$('a3'),k=expo((t-4*BT)/.5),w=100+600*inout((t-4*BT)/(2*BT))-500*inout((t-6.6*BT)/(1.2*BT));
+  a3.style.opacity=k;a3.style.filter=`blur(${(1-k)*14}px)`;a3.style.fontVariationSettings=`"wght" ${w}`;
+  a3.style.transform=`scale(${1+.04*Math.sin(t*8)*k})`;
+  // B: word stagger, one word per half beat, each pops in from below
+  [...document.querySelectorAll('#bw .w')].forEach((e,i)=>{const at=(8+i*.5+.0)*BT,k=expo((t-at)/.35);
+    e.style.opacity=t>=at?1:0;e.style.transform=`translateY(${(1-k)*80}px) scale(${1+(1-k)*.4})`});
+  const bs=$('bw');bs.style.transform=`translateY(${-(b-8)*12}px)`;
+  // C: text runs along the curve; two lines mask up
+  $('tp').setAttribute('startOffset',(-60+(b-16)*9)+'%');
+  up($('c1'),t,18*BT);up($('c2'),t,20*BT);
+  // D: wordmark weight morph 100 -> 700 on the downbeat, url wipes in (clip-path)
+  const wm=$('word'),dk=inout((t-26*BT)/(1.5*BT));
+  wm.style.fontVariationSettings=`"wght" ${100+600*dk}`;wm.style.transform=`scale(${1.25-.25*expo((t-26*BT)/.6)})`;
+  $('url').style.clipPath=`inset(0 ${100-100*expo((t-28*BT)/.5)}% 0 0)`;
+};
+render(0);
+</script></body></html>

@@ -1,0 +1,392 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Daily — landing key visual v3 (mockup)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@800;900&family=Anuphan:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  /* v3 = v1 (the poster) with a little of v2: the real app on a device tucked into the poster,
+     a translucent bar, and a quiet "›" text link. Grain, DAI/LY, falling lemons and the lemon-shadow CTA stay. */
+  :root {
+    --prussian: #14213d; --lemon: #ffd23f; --ink: #000000; --paper: #e5e5e5; --white: #ffffff; --lemon-ink: #876800; --mute: #4a5468;
+    --display: "Big Shoulders Display", "Google Sans", sans-serif;
+    --text: "Google Sans", "Anuphan", system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body { margin: 0; color: var(--prussian); font: 400 17px/1.55 var(--text); background: var(--paper); }
+  /* paper grain, like a printed poster */
+  body { position: relative; }
+  body::before { content: ""; position: absolute; inset: 0; pointer-events: none; z-index: 0; opacity: .32; mix-blend-mode: multiply;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .5 0 0 0 0 .5 0 0 0 0 .5 0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
+  a { color: inherit; }
+  :focus-visible { outline: 3px solid var(--prussian); outline-offset: 3px; }
+
+  .bar { position: sticky; top: 0; z-index: 5; background: rgba(229,229,229,.72); backdrop-filter: saturate(160%) blur(18px); -webkit-backdrop-filter: saturate(160%) blur(18px); }
+  .nav { position: relative; z-index: 2; display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    max-width: 1280px; margin: 0 auto; padding: 14px clamp(16px, 4vw, 48px); }
+  .brand { display: flex; align-items: center; gap: 6px; font: 700 24px/1 var(--text); letter-spacing: -.03em; text-decoration: none; }
+  .brand img { width: 30px; height: 23px; }
+  .nav-r { display: flex; align-items: center; gap: 18px; font-size: 15px; }
+  .nav-r select { font: inherit; color: inherit; background: transparent; border: 0; padding: 4px; cursor: pointer; }
+  .signin { text-decoration: none; font-weight: 500; padding: 10px 18px; background: var(--prussian); color: var(--white); border-radius: 0 12px 0 12px; }
+
+  .hero { position: relative; z-index: 1; max-width: 1280px; margin: 0 auto; padding: 8px clamp(16px, 4vw, 48px) 40px;
+    display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr); gap: clamp(24px, 5vw, 72px); align-items: center; }
+
+  /* the poster */
+  .poster { position: relative; aspect-ratio: 4 / 5; isolation: isolate; }
+  .word { position: absolute; inset: 0; margin: 0; display: grid; grid-template-rows: 1fr 1fr; font: 900 clamp(150px, 27vw, 380px)/.78 var(--display);
+    letter-spacing: -.035em; color: var(--prussian); user-select: none; }
+  .word span { display: block; }
+  .word .r2 { justify-self: end; }
+  .lm { position: absolute; background: url(../brand/lemon.svg) center / contain no-repeat; filter: drop-shadow(0 18px 18px rgba(20, 33, 61, .28)); }
+  .lm.big { width: 58%; aspect-ratio: 760 / 590; left: 34%; top: 36%; z-index: -1; transform: rotate(-14deg); }
+  .lm.s1 { width: 15%; aspect-ratio: 760 / 590; left: 70%; top: 6%; transform: rotate(24deg); }
+  .lm.s2 { width: 11%; aspect-ratio: 760 / 590; left: 38%; top: 88%; transform: rotate(-30deg); }
+  .lm.s3 { width: 18%; aspect-ratio: 760 / 590; left: 76%; top: 86%; transform: rotate(8deg); }
+  /* the one motion: lemons drop in once, then rest */
+  @media (prefers-reduced-motion: no-preference) {
+    .lm { animation: drop .9s cubic-bezier(.3, 1.4, .5, 1) both; }
+    .lm.big { animation-delay: .15s; } .lm.s1 { animation-delay: .35s; } .lm.s2 { animation-delay: .5s; } .lm.s3 { animation-delay: .62s; }
+    @keyframes drop { from { opacity: 0; translate: 0 -120px; } to { opacity: 1; translate: 0 0; } }
+  }
+  .device { position: absolute; left: 4%; bottom: -4%; width: 33%; aspect-ratio: 1170 / 2532; rotate: -6deg; z-index: 1;
+    border-radius: 15% / 7%; background: #0d0d0f; padding: 2.2%; box-shadow: 14px 14px 0 var(--lemon); }
+  .device::after { content: ""; position: absolute; top: 2.6%; left: 50%; translate: -50% 0; width: 30%; height: 3.3%; background: #000; border-radius: 99px; }
+  .screen { width: 100%; height: 100%; border-radius: 12.5% / 5.8%; overflow: hidden; background: #fff; }
+  .screen img { width: 100%; height: 100%; object-fit: cover; object-position: top; display: block; }
+  @media (prefers-reduced-motion: no-preference) {
+    .device { animation: rise 1s cubic-bezier(.2,.8,.2,1) .5s both; }
+    @keyframes rise { from { opacity: 0; translate: 0 60px; } to { opacity: 1; translate: 0 0; } }
+  }
+  .more { color: #2f6fed; text-decoration: none; font-weight: 500; } .more:hover { text-decoration: underline; }
+  .corner { position: absolute; font: 500 13px/1.35 var(--text); color: var(--prussian); }
+  .corner.tl { right: 0; top: 0; text-align: right; } .corner.br { left: 0; bottom: 0; }
+
+  .copy { max-width: 30rem; }
+  .copy h1 { margin: 0 0 18px; font: 700 clamp(34px, 4.2vw, 54px)/1.18 "Anuphan", var(--text); letter-spacing: -.01em; }
+  .copy p { margin: 0 0 28px; font-size: 18px; color: var(--mute); max-width: 26rem; }
+  .cta { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 22px; }
+  .go { display: inline-block; text-decoration: none; background: var(--prussian); color: var(--white); font: 700 18px/1 var(--text);
+    padding: 19px 30px; border-radius: 0 22px 0 22px; box-shadow: 6px 6px 0 var(--lemon); transition: transform .15s, box-shadow .15s; }
+  .go:hover { transform: translate(-2px, -2px); box-shadow: 8px 8px 0 var(--lemon); }
+  .go:active { transform: translate(2px, 2px); box-shadow: 3px 3px 0 var(--lemon); }
+  .note { font-size: 14px; color: var(--mute); }
+
+  /* receipt → entry: the product in one line */
+  .demo { margin-top: 40px; display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+  .rcpt { background: var(--white); padding: 12px 14px 16px; font: 500 12px/1.5 var(--text); color: #333; width: 128px; transform: rotate(-4deg);
+    clip-path: polygon(0 0, 100% 0, 100% 92%, 90% 100%, 80% 92%, 70% 100%, 60% 92%, 50% 100%, 40% 92%, 30% 100%, 20% 92%, 10% 100%, 0 92%); }
+  .rcpt b { display: flex; justify-content: space-between; border-top: 1px dashed #999; margin-top: 6px; padding-top: 4px; }
+  .arrow { width: 40px; height: 2px; background: var(--prussian); position: relative; }
+  .arrow::after { content: ""; position: absolute; right: -1px; top: -5px; border: 6px solid transparent; border-left: 9px solid var(--prussian); border-right: 0; }
+  .entry { background: var(--prussian); color: var(--white); border-radius: 0 16px 0 16px; padding: 12px 16px; display: grid; grid-template-columns: auto 1fr auto; gap: 2px 12px; align-items: center; min-width: 220px; }
+  .entry .ic { grid-row: span 2; width: 34px; height: 34px; border-radius: 50%; background: var(--lemon); display: grid; place-items: center; font-size: 17px; }
+  .entry .n { font-weight: 700; } .entry .a { font-weight: 700; grid-row: span 2; } .entry small { color: #9aa3b5; font-size: 12px; }
+
+  .facts { position: relative; z-index: 1; max-width: 1280px; margin: 0 auto; padding: 26px clamp(16px, 4vw, 48px) 56px;
+    display: flex; flex-wrap: wrap; gap: 10px 40px; font-size: 15px; }
+  .facts span { white-space: nowrap; }
+  .facts span::before { content: ""; display: inline-block; width: 9px; height: 9px; background: var(--lemon); border-radius: 0 4px 0 4px; margin-right: 9px; vertical-align: 1px; }
+
+  /* dark mode: night paper, cream poster type, lemon becomes the button */
+  @media (prefers-color-scheme: dark) {
+    :root { color-scheme: dark; --mute: #a3abbb; --cream: #f2f0ea; --night: #0a0d14; }
+    body { color: var(--cream); background: var(--night); }
+    body::before { mix-blend-mode: overlay; opacity: .22; }
+    :focus-visible { outline-color: var(--lemon); }
+    .bar { background: rgba(10,13,20,.72); }
+    .signin { background: var(--cream); color: var(--prussian); }
+    .word, .corner { color: var(--cream); }
+    .lm { filter: drop-shadow(0 18px 18px rgba(0,0,0,.55)); }
+    .device { box-shadow: 14px 14px 0 var(--lemon); }
+    .go { background: var(--lemon); color: var(--prussian); box-shadow: 6px 6px 0 var(--cream); }
+    .go:hover { box-shadow: 8px 8px 0 var(--cream); } .go:active { box-shadow: 3px 3px 0 var(--cream); }
+    .more { color: #7aa7ff; }
+    .arrow { background: var(--cream); } .arrow::after { border-left-color: var(--cream); }
+    .entry { background: #18233d; }
+  }
+
+  @media (max-width: 880px) {
+    .hero { grid-template-columns: 1fr; gap: 8px; }
+    .poster { max-width: 520px; width: 100%; margin: 0 auto; }
+    .word { font-size: clamp(150px, 64vw, 360px); }
+    .poster { aspect-ratio: 4 / 4.6; margin-bottom: 14%; }
+    .demo { gap: 10px; } .arrow { width: 22px; } .rcpt { width: 112px; } .entry { min-width: 0; flex: 1; }
+    .copy { max-width: none; margin-top: 8px; }
+    .nav-r .lang { display: none; }
+  }
+
+  /* ---------- explainers: poster numbers, lemon marker, asymmetric cards ---------- */
+  .sec { position: relative; z-index: 1; max-width: 1180px; margin: 0 auto; padding: clamp(64px, 9vw, 120px) clamp(16px, 4vw, 48px) 0; }
+  .kick { display: flex; align-items: baseline; gap: 10px; margin: 0 0 14px; font: 600 16px/1 "Anuphan", var(--text); }
+  .kick b { font: 900 34px/1 var(--display); letter-spacing: 0; }
+  .sec h2 { margin: 0; max-width: 18ch; font: 700 clamp(32px, 4.4vw, 56px)/1.15 "Anuphan", var(--text); letter-spacing: -.01em; }
+  .mark { box-shadow: inset 0 -.32em 0 var(--lemon); padding: 0 .08em; }
+  .sec .lead { margin: 16px 0 0; max-width: 34rem; font-size: 18px; color: var(--mute); }
+
+  /* how it works — order without numbers:
+     reading direction (left→right, top→bottom), one continuous lemon track that thickens toward the goal (continuity + goal gradient),
+     the same money changing state at each stop (receipt → entry → balance), stops growing in size, and a staggered reveal in order. */
+  .flow { list-style: none; margin: 48px 0 0; padding: 0; position: relative; display: grid; grid-template-columns: .85fr 1fr 1.3fr; gap: clamp(20px, 4vw, 56px); padding-right: 110px; }
+  .flow .track { position: absolute; left: 0; right: 0; top: 136px; height: 44px; background: var(--lemon); clip-path: polygon(0 46%, 100% 0, 100% 100%, 0 54%); z-index: 0; }
+  .flow .goal { position: absolute; right: -6px; top: 112px; width: 112px; aspect-ratio: 760 / 590; rotate: 14deg; z-index: 2; }
+  .st { position: relative; z-index: 1; }
+  .st .pic { height: 190px; display: flex; align-items: flex-end; padding-bottom: 28px; }
+  .st h3 { margin: 18px 0 6px; font: 700 22px/1.3 "Anuphan", var(--text); }
+  .st p { margin: 0; color: var(--mute); font-size: 16px; max-width: 22rem; }
+  .st-a .rcpt { width: 150px; font-size: 13px; transform: rotate(-6deg); }
+  .st-b .entry { width: 100%; max-width: 280px; }
+  .sum { width: 100%; background: var(--prussian); color: var(--white); border-radius: 0 32px 0 32px; padding: 22px 24px 24px; }
+  .sum small { display: block; color: #b8c0d0; font-size: 13px; }
+  .sum b { display: block; font: 700 clamp(34px, 3.6vw, 46px)/1.1 var(--text); letter-spacing: -.02em; margin: 2px 0 14px; }
+  .sum .bar { height: 10px; background: #26345a; border-radius: 0 5px 0 5px; overflow: hidden; } .sum .bar i { display: block; width: 62%; height: 100%; background: var(--lemon); }
+  @media (prefers-reduced-motion: no-preference) {
+    .js .flow .st, .js .flow .track, .js .flow .goal { opacity: 0; }
+    .js .flow.in .st { animation: stop .6s cubic-bezier(.2,.8,.2,1) both; }
+    .js .flow.in .st-b { animation-delay: .25s; } .js .flow.in .st-c { animation-delay: .5s; }
+    .js .flow.in .track { animation: grow .9s cubic-bezier(.4,0,.2,1) both; }
+    .js .flow.in .goal { animation: drop .9s cubic-bezier(.3,1.4,.5,1) .8s both; }
+    @keyframes stop { from { opacity: 0; translate: -24px 0; } to { opacity: 1; translate: 0 0; } }
+    @keyframes grow { from { opacity: 1; clip-path: polygon(0 46%, 0 46%, 0 54%, 0 54%); } to { opacity: 1; clip-path: polygon(0 46%, 100% 0, 100% 100%, 0 54%); } }
+  }
+
+  /* feature rows: copy + a built visual, alternating */
+  .row { margin-top: clamp(48px, 7vw, 88px); display: grid; grid-template-columns: 1fr 1fr; gap: clamp(28px, 6vw, 80px); align-items: center; }
+  .row.flip .vis { order: -1; }
+  .row h3 { margin: 0 0 12px; font: 700 clamp(26px, 3vw, 38px)/1.2 "Anuphan", var(--text); }
+  .row p { margin: 0 0 18px; color: var(--mute); max-width: 30rem; }
+  .ticks { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+  .ticks li { display: flex; gap: 12px; align-items: baseline; }
+  .ticks li::before { content: ""; flex: none; width: 11px; height: 11px; background: var(--lemon); border-radius: 0 5px 0 5px; translate: 0 1px; }
+  .vis { position: relative; min-height: 340px; display: grid; place-items: center; padding: 36px 24px; background: var(--white); border-radius: 0 40px 0 40px; box-shadow: 10px 10px 0 var(--prussian); overflow: hidden; }
+  .vis .big { position: absolute; right: -8px; bottom: -28px; font: 900 180px/.8 var(--display); color: var(--paper); letter-spacing: -.04em; z-index: 0; user-select: none; }
+  .vis > :not(.big) { position: relative; z-index: 1; }
+
+  /* chat visual */
+  .chat { width: min(100%, 360px); display: grid; gap: 10px; font-size: 15px; }
+  .b { max-width: 82%; padding: 11px 14px; border-radius: 16px 16px 16px 4px; background: #eef0f4; color: var(--prussian); }
+  .b.me { justify-self: end; background: var(--prussian); color: var(--white); border-radius: 16px 16px 4px 16px; }
+  .b small { display: block; color: var(--mute); font-size: 12px; margin-top: 2px; }
+  .bars { display: grid; gap: 6px; margin-top: 10px; }
+  .bars i { display: grid; grid-template-columns: 4.2em 1fr auto; gap: 8px; align-items: center; font: 500 12px/1 var(--text); font-style: normal; }
+  .bars em { grid-column: 3; grid-row: 1; font-style: normal; }
+  .bars i::after { content: ""; grid-column: 2; grid-row: 1; height: 8px; width: var(--w); background: var(--lemon); border-radius: 0 4px 0 4px; }
+
+  /* type-to-log visual */
+  .type { width: min(100%, 360px); display: grid; gap: 14px; }
+  .field { display: flex; align-items: center; gap: 10px; padding: 14px 16px; border-radius: 0 16px 0 16px; background: var(--paper); font: 500 18px/1 var(--text); color: var(--prussian); }
+  .field .caret { width: 2px; height: 22px; background: var(--prussian); animation: blink 1s steps(1) infinite; }
+  @keyframes blink { 50% { opacity: 0; } }
+  .down { justify-self: center; width: 2px; height: 26px; background: var(--prussian); position: relative; }
+  .down::after { content: ""; position: absolute; left: -5px; bottom: -2px; border: 6px solid transparent; border-top: 9px solid var(--prussian); border-bottom: 0; }
+
+  /* budget visual */
+  .budget { width: min(100%, 360px); display: grid; gap: 16px; }
+  .bud { display: grid; grid-template-columns: 1fr auto; gap: 6px 10px; font-size: 15px; color: var(--prussian); }
+  .bud b { font-weight: 600; } .bud span { color: var(--mute); font-size: 13px; }
+  .bud .track { grid-column: 1 / -1; height: 12px; background: #eceef2; border-radius: 0 6px 0 6px; overflow: hidden; }
+  .bud .track i { display: block; height: 100%; width: var(--w); background: var(--lemon); }
+  .bud.over .track i { background: #e5484d; } .bud.over span { color: #c62a2f; font-weight: 600; }
+
+  /* lock visual */
+  .lockv { display: grid; justify-items: center; gap: 18px; color: var(--prussian); }
+  .face { width: 120px; height: 120px; position: relative; background: var(--prussian); border-radius: 0 40px 0 40px; }
+  .face i { position: absolute; inset: 32px; background: var(--lemon); border-radius: 50%; }
+  .chips { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+  .chips span { font: 600 13px/1 var(--text); padding: 9px 13px; background: var(--paper); border-radius: 0 10px 0 10px; }
+
+  /* bento of small truths */
+  .bento { margin-top: 44px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; }
+  .tile { position: relative; min-height: 190px; padding: 22px; border-radius: 0 28px 0 28px; background: var(--white); color: var(--prussian); display: flex; flex-direction: column; justify-content: flex-end; overflow: hidden; }
+  .tile .t { position: absolute; top: 14px; left: 20px; font: 900 76px/.9 var(--display); letter-spacing: -.02em; }
+  .tile h3 { margin: 0; font: 700 19px/1.3 "Anuphan", var(--text); }
+  .tile p { margin: 4px 0 0; font-size: 14px; color: var(--mute); }
+  .tile.wide { grid-column: span 2; }
+  .tile.ink { background: var(--prussian); color: var(--white); } .tile.ink p { color: #b8c0d0; } .tile.ink .t { color: var(--lemon); }
+  .tile.lem { background: var(--lemon); } .tile.lem p { color: var(--prussian); opacity: .75; }
+
+  /* closing band */
+  .band { position: relative; z-index: 1; max-width: 1180px; margin: clamp(72px, 10vw, 128px) auto 0; padding: 0 clamp(16px, 4vw, 48px); }
+  .band-in { position: relative; overflow: hidden; background: var(--prussian); color: var(--white); border-radius: 0 56px 0 56px; padding: clamp(36px, 6vw, 72px); display: grid; grid-template-columns: 1fr auto; gap: 28px; align-items: end; }
+  .band-in h2 { margin: 0; font: 700 clamp(30px, 4vw, 52px)/1.15 "Anuphan", var(--text); }
+  .band-in p { margin: 10px 0 0; color: #b8c0d0; }
+  .band-in .go { background: var(--lemon); color: var(--prussian); box-shadow: 6px 6px 0 var(--white); }
+  .band-in .lm { width: 220px; aspect-ratio: 760 / 590; right: -40px; top: -60px; rotate: 18deg; opacity: .95; }
+  .band-in > * { position: relative; z-index: 1; } .band-in .lm { position: absolute; z-index: 0; }
+  .facts { margin-top: 56px; }
+
+  @media (max-width: 880px) {
+    .flow { grid-template-columns: 1fr; gap: 36px; padding: 0 0 70px 52px; }
+    .flow .track { left: 6px; right: auto; top: 8px; bottom: 40px; width: 30px; height: auto; clip-path: polygon(44% 0, 56% 0, 100% 100%, 0 100%); }
+    .flow .goal { right: auto; left: -14px; top: auto; bottom: 0; width: 84px; }
+    .st .pic { height: auto; padding-bottom: 0; }
+    @keyframes grow { from { opacity: 1; clip-path: polygon(44% 0, 56% 0, 56% 0, 44% 0); } to { opacity: 1; clip-path: polygon(44% 0, 56% 0, 100% 100%, 0 100%); } }
+    .row { grid-template-columns: 1fr; } .row.flip .vis { order: 0; }
+    .vis { min-height: 0; box-shadow: 7px 7px 0 var(--prussian); }
+    .bento { grid-template-columns: 1fr 1fr; } .tile.wide { grid-column: span 2; }
+    .band-in { grid-template-columns: 1fr; }
+  }
+  @media (prefers-color-scheme: dark) {
+    .sum { background: var(--cream); color: var(--prussian); } .sum small { color: #4a5468; } .sum .bar { background: #d8d6cf; }
+    .vis { background: #111a2e; box-shadow: 10px 10px 0 var(--lemon); }
+    .vis .big { color: #18233d; }
+    .b { background: #1e2a45; color: var(--cream); } .b.me { background: var(--lemon); color: var(--prussian); } .b.me small { color: var(--prussian); }
+    .field { background: #1e2a45; color: var(--cream); } .field .caret, .down { background: var(--cream); } .down::after { border-top-color: var(--cream); }
+    .bud, .lockv { color: var(--cream); } .face { background: var(--cream); } .bud .track { background: #1e2a45; }
+    .chips span { background: #1e2a45; }
+    .tile { background: #111a2e; color: var(--cream); }
+    .tile.ink { background: var(--cream); color: var(--prussian); } .tile.ink p { color: #4a5468; } .tile.ink .t { color: var(--prussian); }
+    .tile.lem { color: var(--prussian); }
+    .band-in { background: var(--lemon); color: var(--prussian); } .band-in p { color: #3d4a66; }
+    .band-in .go { background: var(--prussian); color: var(--white); box-shadow: 6px 6px 0 var(--cream); }
+  }
+  @media (max-width: 880px) and (prefers-color-scheme: dark) { .vis { box-shadow: 7px 7px 0 var(--lemon); } }
+  @media (prefers-reduced-motion: reduce) { .field .caret { animation: none; } }
+</style>
+<script>document.documentElement.classList.add('js');
+addEventListener('DOMContentLoaded', () => { const f = document.querySelector('.flow'); if (!f) return;
+  if (!('IntersectionObserver' in window)) return f.classList.add('in');
+  new IntersectionObserver((es, o) => es.forEach(e => { if (e.isIntersecting) { f.classList.add('in'); o.disconnect(); } }), { threshold: .3 }).observe(f); });</script>
+</head>
+<body>
+<header class="bar"><div class="nav">
+  <a class="brand" href="#" aria-label="Daily">Daily<img src="../brand/lemon.svg" alt=""></a>
+  <nav class="nav-r">
+    <select class="lang" aria-label="ภาษา"><option>ไทย</option><option>English</option><option>日本語</option></select>
+    <a class="signin" href="#">เข้าสู่ระบบ</a>
+  </nav>
+</div></header>
+
+<main class="hero">
+  <div class="poster">
+    <p class="word" aria-hidden="true"><span class="r1">DAI</span><span class="r2">LY</span></p>
+    <i class="lm big" aria-hidden="true"></i><i class="lm s1" aria-hidden="true"></i><i class="lm s2" aria-hidden="true"></i><i class="lm s3" aria-hidden="true"></i>
+    <div class="device"><div class="screen"><picture><source media="(prefers-color-scheme: dark)" srcset="app-screen-dark.png"><img src="app-screen.png" alt="หน้าหลักของ Daily: คงเหลือ ฿24,885 รายรับ ฿35,000 รายจ่าย ฿10,115"></picture></div></div>
+    <span class="corner tl" aria-hidden="true">ฟรี<br>ไม่มีโฆษณา</span>
+  </div>
+
+  <div class="copy">
+    <h1>จดทุกบาท<br>อย่างมีสไตล์</h1>
+    <p>ถ่ายบิลแล้ว AI จดให้ ถามได้ว่าเดือนนี้เงินไปไหน ตั้งงบไว้ แล้วดูสรุปสวยๆ ทุกสิ้นเดือน</p>
+    <div class="cta">
+      <a class="go" href="#">เริ่มจดฟรี</a>
+      <a class="more" href="#">ดูว่าทำอะไรได้บ้าง ›</a>
+    </div>
+    <div class="demo" aria-label="ตัวอย่าง: บิลกลายเป็นรายการ">
+      <div class="rcpt">ร้านข้าวมันไก่<br>ข้าวมันไก่ ×1<br>ชาเย็น ×1<b><span>รวม</span><span>฿75</span></b></div>
+      <i class="arrow" aria-hidden="true"></i>
+      <div class="entry"><span class="ic" aria-hidden="true">🍽</span><span class="n">อาหาร</span><span class="a">−฿75</span><small>ข้าวมันไก่ · ชาเย็น</small></div>
+    </div>
+  </div>
+</main>
+
+<section class="sec" id="how">
+  <p class="kick">จากบิล ถึงภาพรวม</p>
+  <h2>จดเงินแบบที่<span class="mark">ไม่ต้องจด</span></h2>
+  <p class="lead">ไม่ต้องกรอกฟอร์มยาวๆ แค่บอก Daily ว่าจ่ายอะไรไป ที่เหลือแอปจัดให้</p>
+  <ol class="flow" aria-label="วิธีใช้ Daily">
+    <i class="track" aria-hidden="true"></i>
+    <li class="st st-a"><div class="pic" aria-hidden="true"><div class="rcpt">ร้านข้าวมันไก่<br>ข้าวมันไก่ ×1<br>ชาเย็น ×1<b><span>รวม</span><span>฿75</span></b></div></div>
+      <h3>ถ่ายบิล หรือพิมพ์</h3><p>ถ่ายใบเสร็จ แนบสลิป หรือพิมพ์สั้นๆ ว่า “กาแฟ 65”</p></li>
+    <li class="st st-b"><div class="pic" aria-hidden="true"><div class="entry"><span class="ic">🍽</span><span class="n">อาหาร</span><span class="a">−฿75</span><small>ข้าวมันไก่ · ชาเย็น</small></div></div>
+      <h3>AI แยกให้</h3><p>อ่านร้าน ราคา วันที่ แล้วเลือกหมวดให้ คุณแค่ดูแล้วกดบันทึก</p></li>
+    <li class="st st-c"><div class="pic" aria-hidden="true"><div class="sum"><small>คงเหลือเดือนนี้</small><b>฿24,885</b><div class="bar"><i></i></div></div></div>
+      <h3>เห็นภาพรวม</h3><p>คงเหลือ งบรายหมวด สรุปรายเดือน และถาม AI ได้ทุกเรื่องเงิน</p></li>
+    <i class="lm goal" aria-hidden="true"></i>
+  </ol>
+</section>
+
+<section class="sec" id="features">
+  <p class="kick"><b>→</b> ทำอะไรได้บ้าง</p>
+  <h2>เงินทุกบาท <span class="mark">มีที่มา</span>ที่ไป</h2>
+
+  <div class="row">
+    <div>
+      <h3>พิมพ์ภาษาคน ได้รายการจริง</h3>
+      <p>ไม่ต้องเลือกหมวด ไม่ต้องหาวันที่ พิมพ์เหมือนจดโน้ต Daily เข้าใจทั้งไทยและอังกฤษ</p>
+      <ul class="ticks"><li>สแกนใบเสร็จ สลิปโอน และภาพหน้าจอสั่งของ</li><li>หลายรายการในบิลเดียว แยกให้ครบ</li><li>สกุลเงินต่างประเทศ แปลงเป็นบาทให้</li><li>แก้ได้ทุกช่องก่อนบันทึก</li></ul>
+    </div>
+    <div class="vis" aria-hidden="true"><span class="big">AI</span>
+      <div class="type">
+        <div class="field">ข้าวมันไก่ 50 ชาเย็น 25<span class="caret"></span></div>
+        <i class="down"></i>
+        <div class="entry"><span class="ic">🍽</span><span class="n">อาหาร</span><span class="a">−฿75</span><small>ข้าวมันไก่ · ชาเย็น</small></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row flip">
+    <div>
+      <h3>ถามได้ว่าเงินไปไหน</h3>
+      <p>คุยกับ AI จากข้อมูลของคุณเอง ได้คำตอบเป็นตัวเลข ไม่ใช่คำแนะนำลอยๆ</p>
+      <ul class="ticks"><li>“เดือนนี้กินไปเท่าไร”</li><li>“เทียบกับเดือนก่อนเป็นยังไง”</li><li>“ช่วยจดค่าแท็กซี่เมื่อวาน 120”</li></ul>
+    </div>
+    <div class="vis" aria-hidden="true"><span class="big">ASK</span>
+      <div class="chat">
+        <div class="b me">เดือนนี้กินไปเท่าไร</div>
+        <div class="b">อาหาร ฿3,240 มากกว่าเดือนก่อน 12%<small>ส่วนใหญ่เป็นกาแฟ 18 แก้ว</small>
+          <div class="bars"><i style="--w:100%"><span>ต.ค.</span><em>฿3,240</em></i><i style="--w:88%"><span>ก.ย.</span><em>฿2,890</em></i></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div>
+      <h3>ตั้งงบ แล้วรู้ก่อนเกิน</h3>
+      <p>ตั้งงบรายหมวด เห็นทันทีว่าเหลือเท่าไร หมวดไหนใกล้หมด</p>
+      <ul class="ticks"><li>งบรายเดือนแยกหมวด</li><li>สรุปรายเดือนและรายปี</li><li>นำเข้า CSV / Excel และส่งออก CSV</li></ul>
+    </div>
+    <div class="vis" aria-hidden="true"><span class="big">฿</span>
+      <div class="budget">
+        <div class="bud"><b>อาหาร</b><span>เหลือ ฿1,760</span><div class="track"><i style="--w:65%"></i></div></div>
+        <div class="bud"><b>เดินทาง</b><span>เหลือ ฿955</span><div class="track"><i style="--w:36%"></i></div></div>
+        <div class="bud over"><b>ช้อปปิ้ง</b><span>เกิน ฿390</span><div class="track"><i style="--w:100%"></i></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row flip">
+    <div>
+      <h3>เป็นของคุณคนเดียว</h3>
+      <p>ข้อมูลการเงินเป็นเรื่องส่วนตัว Daily ไม่มีโฆษณาและไม่ขายข้อมูล</p>
+      <ul class="ticks"><li>ล็อกแอปด้วย Face ID / สแกนนิ้ว หรือ PIN</li><li>ยืนยันตัวตนสองชั้น (2FA) และ passkey</li><li>ซ่อนยอดเงินเวลาเปิดในที่สาธารณะ</li></ul>
+    </div>
+    <div class="vis" aria-hidden="true"><span class="big">ID</span>
+      <div class="lockv"><div class="face"><i></i></div><div class="chips"><span>Face ID</span><span>2FA</span><span>ไม่มีโฆษณา</span></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="more">
+  <p class="kick"><b>+</b> เล็กๆ แต่ครบ</p>
+  <h2>ใช้ได้<span class="mark">ทุกที่</span> ทุกภาษา</h2>
+  <div class="bento">
+    <div class="tile ink wide"><span class="t">14</span><h3>ภาษา</h3><p>ไทย อังกฤษ ญี่ปุ่น จีน เกาหลี เวียดนาม และอีกมาก</p></div>
+    <div class="tile"><span class="t">฿$€</span><h3>ทุกสกุลเงิน</h3><p>เลือกสกุลหลักได้</p></div>
+    <div class="tile lem"><span class="t">0</span><h3>โฆษณา</h3><p>ฟรี ไม่มีโฆษณา</p></div>
+    <div class="tile"><span class="t">PWA</span><h3>ทุกเครื่อง</h3><p>มือถือ แท็บเล็ต คอม ไม่ต้องลงแอป</p></div>
+    <div class="tile ink"><span class="t">◐</span><h3>โหมดมืด</h3><p>ตามเครื่องหรือเลือกเอง</p></div>
+    <div class="tile wide"><span class="t">CSV</span><h3>ย้ายมาง่าย</h3><p>นำเข้าจาก Excel / CSV ของแอปเดิม และส่งออกได้ทุกเมื่อ</p></div>
+  </div>
+</section>
+
+<section class="band">
+  <div class="band-in">
+    <i class="lm" aria-hidden="true"></i>
+    <div><h2>เริ่มจดบาทแรก<br>วันนี้เลย</h2><p>ใช้ฟรี เปิดในเบราว์เซอร์ได้ทันที</p></div>
+    <a class="go" href="#">เริ่มจดฟรี</a>
+  </div>
+</section>
+
+<footer class="facts">
+  <span>สแกนบิลด้วย AI</span><span>คุยกับ AI เรื่องเงินของคุณ</span><span>งบรายหมวด</span><span>Face ID และ 2FA</span><span>ใช้ได้ทุกเครื่อง</span><span>14 ภาษา ทุกสกุลเงิน</span>
+</footer>
+</body>
+</html>

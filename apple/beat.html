@@ -1,0 +1,51 @@
+<!doctype html><html><head><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Anuphan:wght@500;700&family=Big+Shoulders+Display:wght@900&family=Google+Sans:wght@400;700&display=block" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0}
+html,body{width:1080px;height:1920px;overflow:hidden;background:#0a0d14}
+#st{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;flex-direction:column}
+.w{font-family:"Anuphan";font-weight:700;font-size:230px;letter-spacing:-.02em}
+.m{font-family:"Anuphan";font-weight:500;font-size:120px}
+.big{font-family:"Big Shoulders Display";font-weight:900;font-size:900px;line-height:.8;white-space:nowrap}
+.ph{background:#0a0d14;padding:36px;border-radius:0 110px 0 110px}
+.ph img{width:620px;display:block;border-radius:0 80px 0 80px}
+</style></head><body><div id="st"></div>
+<script>
+// 120 BPM: one beat = 0.5 s; 30 beats = 15 s. Every scene starts on a beat.
+const BEAT=.5, P='#14213d',L='#ffd23f',K='#0a0d14',C='#f2f0ea';
+const S=[
+ [2,K,()=>`<img src="lemon.svg" style="width:640px">`],
+ [1,L,()=>`<div class="w" style="color:${P}">จด</div>`],
+ [1,P,()=>`<div class="w" style="color:${C}">สแกน</div>`],
+ [1,C,()=>`<div class="w" style="color:${P}">ถาม AI</div>`],
+ [1,L,()=>`<div class="w" style="color:${P}">ดูกราฟ</div>`],
+ [4,P,()=>`<div class="ph"><img src="shot-th-dark.webp"></div>`],
+ [1,K,()=>`<div style="width:520px;height:520px;border-radius:50%;background:${L}"></div>`],
+ [1,L,()=>`<div style="width:520px;height:520px;background:${P}"></div>`],
+ [1,P,()=>`<div style="width:520px;height:520px;border-radius:50% 50% 0 50%;background:${C}"></div>`],
+ [1,C,()=>`<div style="width:520px;height:520px;border-radius:0 260px 0 260px;background:${L}"></div>`],
+ [4,L,()=>`<div class="big" id="big" style="color:${P}">DAILY</div>`],
+ [2,K,()=>`<div class="m" style="color:${C}">ไม่มีโฆษณา</div>`],
+ [2,P,()=>`<div class="m" style="color:${C}">ไม่ขายข้อมูล</div>`],
+ [2,L,()=>`<div class="w" style="color:${P}">ใช้ฟรี</div>`],
+ [6,K,()=>`<img src="lemon.svg" style="width:420px"><div style="font-family:'Google Sans';font-weight:700;font-size:170px;letter-spacing:-.03em;color:${C};margin-top:40px">Daily</div><div style="font-family:'Google Sans';font-size:52px;color:${C};margin-top:24px">daily.limonlay.com</div>`],
+];
+let cur=-1;const st=document.getElementById('st');
+// Optional real beat times (seconds, from beat_map.py) → fractional beat index
+const beatAt=t=>{const B=window.BEATS;if(!B)return t/BEAT;
+  if(t<B[0])return (t-B[0])/(B[1]-B[0]);for(let k=0;k<B.length-1;k++)if(t<B[k+1])return k+(t-B[k])/(B[k+1]-B[k]);
+  return B.length-1+(t-B[B.length-1])/(B[B.length-1]-B[B.length-2])};
+window.render=t=>{
+  let b=beatAt(t),acc=0,i=0;while(i<S.length-1&&b>=acc+S[i][0]){acc+=S[i][0];i++}
+  if(i!==cur){cur=i;document.body.style.background=S[i][1];st.innerHTML=S[i][2]()}
+  const beatPh=b-Math.floor(b), inScene=b-acc;
+  // punch on every beat: 1.07 → 1 in ~0.15 s
+  const punch=1+.07*Math.exp(-beatPh*14);
+  let tf=`scale(${punch})`;
+  if(i===0)tf+=` rotate(${-12+12*Math.min(1,inScene/2)}deg)`;
+  if(i===5)tf+=` translateY(${(1-Math.min(1,inScene/1))*500}px)`;
+  st.style.transform=tf;
+  const big=document.getElementById('big');if(big)big.style.transform=`translateX(${700-inScene*520}px)`;
+};
+render(0);
+</script></body></html>

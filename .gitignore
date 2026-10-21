@@ -1,0 +1,11 @@
+node_modules/
+.venv/
+*.events.json
+look/
+look-final/
+stills/
+f/
+sheet*.png
+!apple/sheet*.png
+motionmaxxing/draft.mp4
+motionmaxxing/track.wav

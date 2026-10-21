@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Daily — landing key visual (mockup)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@800;900&family=Anuphan:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  /* Daily landing key visual — mockup only (not wired to the app)
+     Concept: the poster. "DAILY" set as a tall condensed column of type, lemons dropped through it
+     like fruit falling through letters; everything else stays quiet. */
+  :root {
+    --prussian: #14213d; --lemon: #ffd23f; --ink: #000000; --paper: #e5e5e5; --white: #ffffff; --lemon-ink: #876800; --mute: #4a5468;
+    --display: "Big Shoulders Display", "Google Sans", sans-serif;
+    --text: "Google Sans", "Anuphan", system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body { margin: 0; color: var(--prussian); font: 400 17px/1.55 var(--text); background: var(--paper); }
+  /* paper grain, like a printed poster */
+  body { position: relative; }
+  body::before { content: ""; position: absolute; inset: 0; pointer-events: none; z-index: 0; opacity: .32; mix-blend-mode: multiply;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .5 0 0 0 0 .5 0 0 0 0 .5 0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E"); }
+  a { color: inherit; }
+  :focus-visible { outline: 3px solid var(--prussian); outline-offset: 3px; }
+
+  .nav { position: relative; z-index: 2; display: flex; align-items: center; justify-content: space-between; gap: 16px;
+    max-width: 1280px; margin: 0 auto; padding: 22px clamp(16px, 4vw, 48px); }
+  .brand { display: flex; align-items: center; gap: 6px; font: 700 24px/1 var(--text); letter-spacing: -.03em; text-decoration: none; }
+  .brand img { width: 30px; height: 23px; }
+  .nav-r { display: flex; align-items: center; gap: 18px; font-size: 15px; }
+  .nav-r select { font: inherit; color: inherit; background: transparent; border: 0; padding: 4px; cursor: pointer; }
+  .signin { text-decoration: none; font-weight: 500; padding: 9px 16px; border: 1.5px solid var(--prussian); border-radius: 0 12px 0 12px; }
+
+  .hero { position: relative; z-index: 1; max-width: 1280px; margin: 0 auto; padding: 8px clamp(16px, 4vw, 48px) 40px;
+    display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr); gap: clamp(24px, 5vw, 72px); align-items: center; }
+
+  /* the poster */
+  .poster { position: relative; aspect-ratio: 4 / 5; isolation: isolate; }
+  .word { position: absolute; inset: 0; margin: 0; display: grid; grid-template-rows: 1fr 1fr; font: 900 clamp(150px, 27vw, 380px)/.78 var(--display);
+    letter-spacing: -.035em; color: var(--prussian); user-select: none; }
+  .word span { display: block; }
+  .word .r2 { justify-self: end; }
+  .lm { position: absolute; background: url(../brand/lemon.svg) center / contain no-repeat; filter: drop-shadow(0 18px 18px rgba(20, 33, 61, .28)); }
+  .lm.big { width: 64%; aspect-ratio: 760 / 590; left: 18%; top: 33%; z-index: -1; transform: rotate(-14deg); }
+  .lm.s1 { width: 15%; aspect-ratio: 760 / 590; left: 70%; top: 6%; transform: rotate(24deg); }
+  .lm.s2 { width: 11%; aspect-ratio: 760 / 590; left: 4%; top: 52%; transform: rotate(-30deg); }
+  .lm.s3 { width: 20%; aspect-ratio: 760 / 590; left: 66%; top: 84%; transform: rotate(8deg); }
+  /* the one motion: lemons drop in once, then rest */
+  @media (prefers-reduced-motion: no-preference) {
+    .lm { animation: drop .9s cubic-bezier(.3, 1.4, .5, 1) both; }
+    .lm.big { animation-delay: .15s; } .lm.s1 { animation-delay: .35s; } .lm.s2 { animation-delay: .5s; } .lm.s3 { animation-delay: .62s; }
+    @keyframes drop { from { opacity: 0; translate: 0 -120px; } to { opacity: 1; translate: 0 0; } }
+  }
+  .corner { position: absolute; font: 500 13px/1.35 var(--text); color: var(--prussian); }
+  .corner.tl { right: 0; top: 0; text-align: right; } .corner.br { left: 0; bottom: 0; }
+
+  .copy { max-width: 30rem; }
+  .copy h1 { margin: 0 0 18px; font: 700 clamp(34px, 4.2vw, 54px)/1.18 "Anuphan", var(--text); letter-spacing: -.01em; }
+  .copy p { margin: 0 0 28px; font-size: 18px; color: var(--mute); max-width: 26rem; }
+  .cta { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 22px; }
+  .go { display: inline-block; text-decoration: none; background: var(--prussian); color: var(--white); font: 700 18px/1 var(--text);
+    padding: 19px 30px; border-radius: 0 22px 0 22px; box-shadow: 6px 6px 0 var(--lemon); transition: transform .15s, box-shadow .15s; }
+  .go:hover { transform: translate(-2px, -2px); box-shadow: 8px 8px 0 var(--lemon); }
+  .go:active { transform: translate(2px, 2px); box-shadow: 3px 3px 0 var(--lemon); }
+  .note { font-size: 14px; color: var(--mute); }
+
+  /* receipt → entry: the product in one line */
+  .demo { margin-top: 40px; display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+  .rcpt { background: var(--white); padding: 12px 14px 16px; font: 500 12px/1.5 var(--text); color: #333; width: 128px; transform: rotate(-4deg);
+    clip-path: polygon(0 0, 100% 0, 100% 92%, 90% 100%, 80% 92%, 70% 100%, 60% 92%, 50% 100%, 40% 92%, 30% 100%, 20% 92%, 10% 100%, 0 92%); }
+  .rcpt b { display: flex; justify-content: space-between; border-top: 1px dashed #999; margin-top: 6px; padding-top: 4px; }
+  .arrow { width: 40px; height: 2px; background: var(--prussian); position: relative; }
+  .arrow::after { content: ""; position: absolute; right: -1px; top: -5px; border: 6px solid transparent; border-left: 9px solid var(--prussian); border-right: 0; }
+  .entry { background: var(--prussian); color: var(--white); border-radius: 0 16px 0 16px; padding: 12px 16px; display: grid; grid-template-columns: auto 1fr auto; gap: 2px 12px; align-items: center; min-width: 220px; }
+  .entry .ic { grid-row: span 2; width: 34px; height: 34px; border-radius: 50%; background: var(--lemon); display: grid; place-items: center; font-size: 17px; }
+  .entry .n { font-weight: 700; } .entry .a { font-weight: 700; grid-row: span 2; } .entry small { color: #9aa3b5; font-size: 12px; }
+
+  .facts { position: relative; z-index: 1; max-width: 1280px; margin: 0 auto; padding: 26px clamp(16px, 4vw, 48px) 56px;
+    display: flex; flex-wrap: wrap; gap: 10px 40px; font-size: 15px; border-top: 2px solid var(--prussian); }
+  .facts span { white-space: nowrap; }
+  .facts span::before { content: ""; display: inline-block; width: 9px; height: 9px; background: var(--lemon); border: 1.5px solid var(--prussian); border-radius: 0 4px 0 4px; margin-right: 9px; vertical-align: 1px; }
+
+  @media (max-width: 880px) {
+    .hero { grid-template-columns: 1fr; gap: 8px; }
+    .poster { max-width: 520px; width: 100%; margin: 0 auto; }
+    .word { font-size: clamp(150px, 64vw, 360px); }
+    .poster { aspect-ratio: 4 / 4.6; }
+    .demo { gap: 10px; } .arrow { width: 22px; } .rcpt { width: 112px; } .entry { min-width: 0; flex: 1; }
+    .copy { max-width: none; margin-top: 8px; }
+    .nav-r .lang { display: none; }
+  }
+</style>
+</head>
+<body>
+<header class="nav">
+  <a class="brand" href="#" aria-label="Daily">Daily<img src="../brand/lemon.svg" alt=""></a>
+  <nav class="nav-r">
+    <select class="lang" aria-label="ภาษา"><option>ไทย</option><option>English</option><option>日本語</option></select>
+    <a class="signin" href="#">เข้าสู่ระบบ</a>
+  </nav>
+</header>
+
+<main class="hero">
+  <div class="poster" aria-hidden="true">
+    <p class="word"><span class="r1">DAI</span><span class="r2">LY</span></p>
+    <i class="lm big"></i><i class="lm s1"></i><i class="lm s2"></i><i class="lm s3"></i>
+    <span class="corner tl">ฟรี<br>ไม่มีโฆษณา</span>
+    <span class="corner br">14 ภาษา<br>ทุกสกุลเงิน</span>
+  </div>
+
+  <div class="copy">
+    <h1>จดทุกบาท<br>อย่างมีสไตล์</h1>
+    <p>ถ่ายบิลแล้ว AI จดให้ ถามได้ว่าเดือนนี้เงินไปไหน ตั้งงบไว้ แล้วดูสรุปสวยๆ ทุกสิ้นเดือน</p>
+    <div class="cta">
+      <a class="go" href="#">เริ่มจดฟรี</a>
+      <span class="note">เปิดในเบราว์เซอร์ได้เลย ไม่ต้องลงแอป</span>
+    </div>
+    <div class="demo" aria-label="ตัวอย่าง: บิลกลายเป็นรายการ">
+      <div class="rcpt">ร้านข้าวมันไก่<br>ข้าวมันไก่ ×1<br>ชาเย็น ×1<b><span>รวม</span><span>฿75</span></b></div>
+      <i class="arrow" aria-hidden="true"></i>
+      <div class="entry"><span class="ic" aria-hidden="true">🍽</span><span class="n">อาหาร</span><span class="a">−฿75</span><small>ข้าวมันไก่ · ชาเย็น</small></div>
+    </div>
+  </div>
+</main>
+
+<footer class="facts">
+  <span>สแกนบิลด้วย AI</span><span>คุยกับ AI เรื่องเงินของคุณ</span><span>งบรายหมวด</span><span>Face ID และ 2FA</span><span>ใช้ได้ทุกเครื่อง</span>
+</footer>
+</body>
+</html>
