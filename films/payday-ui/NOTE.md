@@ -15,3 +15,5 @@ v5: no beat punch, no tilt kick, no zoom-through (owner: no jerky bounces). Came
 v6 (heavier, still smooth): 3D card swing-in on payday, slow 3D orbit on the app (perspective rotateY/rotateX), brand-shape bursts (payday, money leaving the card, Saved, CTA), full-screen category takeovers on the beats (Housing/Shopping/Bills/Entertainment/Food with real amounts). No screen shakes. Motion 7.9/255.
 
 v7 (clarity): date chip OCT 1 → OCT 25 flips on the cut; "$301.75 already gone."; three category takeovers, one full beat each (readable); "snap the receipt. / Daily logs it for you."; "logged."; "now you know. / where every coin goes."; end line "the money tracker · free · web app".
+
+v9 hook: 0–1.1 s on night: "where did" (already up on frame 0) → "$301.75" slams in on the first hit (0.51 s) → "go??"; then cut back to OCT 1 payday.

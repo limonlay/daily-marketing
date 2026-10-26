@@ -91,6 +91,12 @@ h3{font-size:17px;font-weight:700;margin:22px 0 12px;letter-spacing:-.02em}
   <div class="t a" id="f6" style="top:1320px;font-size:46px;font-weight:500;letter-spacing:0;color:#9a9890">the money tracker · free · web app</div>
 </div>
 
+<!-- HOOK (0 → beat 1): the number first -->
+<div class="a" id="s0" style="inset:0;background:var(--night)">
+  <div class="t a" id="h0a" style="top:560px;font-size:130px;color:var(--cream)">where did</div>
+  <div class="t a" id="h0b" style="top:740px;font-size:250px;color:var(--lemon);letter-spacing:-.05em">$301.75</div>
+  <div class="t a" id="h0c" style="top:1060px;font-size:130px;color:var(--cream)">go??</div>
+</div>
 <div class="a" id="take" style="inset:0"></div>
 <div class="a" id="fx" style="inset:0"></div>
 </div>
@@ -129,7 +135,7 @@ let T = 0;                                                                      
 const cam = (px, py, sx, sy, S, r) => { $('ui').style.transform = `perspective(2400px) translate(${sx}px,${sy}px) rotateY(${6 * Math.sin(T * .9)}deg) rotateX(${4 * Math.sin(T * .7 + 1)}deg) rotate(${r}deg) scale(${S}) translate(${-px}px,${-py}px)`; };
 
 // scene cuts (beat index) and camera keys [beat, px, py, sx, sy, S, tilt°]: each key SNAPS in 0.28 s, then the shot keeps creeping
-const CUT = { day25: 3, where: 6, snap: 10, saved: 12, know: 15, cta: 19 };
+const CUT = { payday: 1, day25: 3, where: 6, snap: 10, saved: 12, know: 15, cta: 19 };
 const CAM = [[0, 200, 190, 540, 1040, 2.55, 0], [3, 200, 190, 540, 1090, 2.55, 0], [4, 118, 168, 540, 1060, 3.7, -2],
   [5, 160, 190, 540, 1090, 2.9, 0], [6, 200, 380, 540, 1000, 2.55, -3], [8, 200, 395, 540, 1000, 2.85, 1.5],
   [12, 200, 560, 540, 760, 2.55, 0], [13, 200, 556, 540, 800, 2.85, -1.5], [15, 200, 410, 540, 860, 1.98, 0]];
@@ -154,7 +160,7 @@ function burst(beat, x, y, n, colors, { dist = 520, size = 70, a0 = 0, a1 = 360,
   for (let i = 0; i < n; i++) PARTS.push({ beat, x, y, dur: dur * (.75 + rnd() * .5), ang: (a0 + (a1 - a0) * rnd()) * Math.PI / 180,
     dist: dist * (.55 + rnd() * .6), r0, size: size * (.5 + rnd()), shape: SHAPES[i % 4], color: colors[i % colors.length], spin: (rnd() - .5) * 540 });
 }
-burst(0.05, 540, 1040, 18, ['#14213d', '#f2f0ea', '#fff'], { r0: 480, dist: 600 });                                  // payday
+burst(1.05, 540, 1040, 18, ['#14213d', '#f2f0ea', '#fff'], { r0: 480, dist: 600 });                                  // payday
 [3.2, 3.6, 4.0, 4.4, 4.8, 5.2].forEach((bb, i) => burst(bb, 300 + i * 90, 900, 3, ['#ffd23f'], { dist: 900, size: 46, a0: -120, a1: -60, dur: .8 }));  // money leaving the card
 burst(12, 540, 1460, 16, ['#ffd23f', '#f2f0ea', '#14213d'], { dist: 500, r0: 260, a0: 20, a1: 160 });                    // Saved
 burst(19, 540, 760, 22, ['#ffd23f', '#f2f0ea', '#000'], { dist: 760, size: 80 });              // CTA
@@ -188,25 +194,30 @@ function takeover(t) {
 window.CUTS = Object.values(CUT).map(tb);                                    // read by rec-blur.cjs
 window.render = t => {
   const b = beatOf(t), C = CUT;
-  show($('bgL'), b < C.day25); show($('ui'), b < C.snap || (b >= C.saved && b < C.cta)); show($('s4'), b >= C.snap && b < C.saved); show($('s6'), b >= C.cta);
-  show($('w1'), b < C.day25); show($('band'), b >= C.where && b < C.snap); show($('w2'), b >= C.day25 && b < C.where); show($('w3'), b >= C.where && b < C.snap);
+  show($('s0'), b < C.payday); show($('bgL'), b >= C.payday && b < C.day25); show($('ui'), (b >= C.payday && b < C.snap) || (b >= C.saved && b < C.cta)); show($('s4'), b >= C.snap && b < C.saved); show($('s6'), b >= C.cta);
+  show($('w1'), b >= C.payday && b < C.day25); show($('band'), b >= C.where && b < C.snap); show($('w2'), b >= C.day25 && b < C.where); show($('w3'), b >= C.where && b < C.snap);
   show($('saved'), b >= C.saved && b < C.know); show($('w4'), b >= C.saved && b < C.know); show($('w5'), b >= C.know && b < C.cta);
   T = t; cam(...camAt(t)); stage(t); fx(t); takeover(t);
   // payday: the card swings up into place in 3D
-  const ci = out(t / .5); $('hero').style.transform = b < C.day25 ? `perspective(1200px) rotateX(${(1 - ci) * 70}deg) translateY(${(1 - ci) * 120}px)` : 'none';
+  const ci = out((t - tb(C.payday)) / .45); $('hero').style.transform = b < C.day25 ? `perspective(1200px) rotateX(${(1 - ci) * 70}deg) translateY(${(1 - ci) * 120}px)` : 'none';
   $('hdr').style.opacity = $('mon').style.opacity = b < C.day25 ? 0 : 1;
   $('below').style.opacity = b < C.where ? 0 : 1;
 
   // numbers step per frame (sharp under motion blur): payday counts up, day 25 counts down (demo: $1,000 in, $301.75 out)
   const tf = Math.floor(t * 30 + 1e-6) / 30;
-  const up = k(tf, tb(0), 1.0), dn = k(tf, tb(3.15), 1.3);
+  const up = k(tf, tb(C.payday), .9), dn = k(tf, tb(3.15), 1.3);
   const inc = 1000 * up, exp = 301.75 * dn, bal = inc - exp;
   $('bal').textContent = money(Math.round(bal * 100) / 100); $('inc').textContent = money(Math.round(inc * 100) / 100); $('exp').textContent = money(Math.round(exp * 100) / 100);
   $('prog').style.width = (30 * dn) + '%';
-  const lj = k(t, tb(1), .4, spring); $('lem').style.transform = `translate(${(1 - lj) * 140}px,${(1 - lj) * -140}px) rotate(${(1 - lj) * 50}deg)`;
-  $('w1').style.transform = `scale(${lerp(1.6, 1, k(t, 0, .26, spring))})`;
+  const lj = k(t, tb(1.6), .4, spring); $('lem').style.transform = `translate(${(1 - lj) * 140}px,${(1 - lj) * -140}px) rotate(${(1 - lj) * 50}deg)`;
+  $('w1').style.transform = `scale(${lerp(1.6, 1, k(t, tb(C.payday), .26, spring))})`;
+  // hook: "where did" is already rising on frame 0, the number slams in on the first hit, "go??" half a beat later
+  rise($('h0a'), t, -.12, 60);
+  const h = k(t, tb(0), .3, spring); $('h0b').style.opacity = cl((t - tb(0)) / .05); $('h0b').style.transform = `scale(${lerp(2.6, 1, h)})`;
+  rise($('h0c'), t, tb(.5), 60);
+  $('s0').style.transform = `scale(${1 + .04 * cl(t / tb(1))})`;
   rise($('w2'), t, tb(4)); rise($('w2s'), t, tb(4.6), 40); rise($('w3'), t, tb(6.05));
-  show($('date'), b < C.where); show($('w2s'), b >= C.day25 && b < C.where); show($('w5s'), b >= C.know && b < C.cta); show($('band5'), b >= C.know && b < C.cta);
+  show($('date'), b >= C.payday && b < C.where); show($('w2s'), b >= C.day25 && b < C.where); show($('w5s'), b >= C.know && b < C.cta); show($('band5'), b >= C.know && b < C.cta);
   $('dateT').textContent = b < C.day25 ? 'OCT 1' : 'OCT 25';
   const fl = b < C.day25 ? 1 : out((t - tb(C.day25)) / .3);                   // the date flips on the cut
   $('date').style.transform = `scaleY(${fl})`; $('dateT').style.background = b < C.day25 ? 'var(--prussian)' : 'var(--lemon)'; $('dateT').style.color = b < C.day25 ? 'var(--lemon)' : 'var(--prussian)';
