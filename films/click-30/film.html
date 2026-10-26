@@ -1,0 +1,284 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;600;700&display=block" rel="stylesheet">
+<style>
+@font-face{font-family:"Daily Symbols";font-weight:400 600;font-display:block;src:url(material-symbols-rounded.woff2) format("woff2")}
+/* Daily dark theme tokens (limonlay/daily index.html) */
+:root{--bg:#000;--surface-2:#14213d;--text:#fff;--muted:#9aa3b5;--prussian:#14213d;--lemon:#ffd23f;--alabaster:#e5e5e5;--inc:#4ade80;--exp:#ffd23f;--night:#0a0d14;--cream:#f2f0ea}
+*{box-sizing:border-box;margin:0}
+html,body{width:1080px;height:1920px;overflow:hidden;background:var(--bg);font-family:"Google Sans",sans-serif}
+.ms{font-family:"Daily Symbols";font-weight:normal;font-style:normal;line-height:1;letter-spacing:normal;white-space:nowrap;-webkit-font-feature-settings:"liga";font-feature-settings:"liga";font-variation-settings:"FILL" 1,"wght" 500}
+.a{position:absolute}
+.L{position:absolute;inset:0;visibility:hidden}
+.t{position:absolute;left:0;right:0;text-align:center;font-weight:700;letter-spacing:-.03em}
+.cap{position:absolute;left:0;right:0;top:200px;text-align:center;font-size:96px;font-weight:700;letter-spacing:-.03em;color:var(--cream)}
+.ex{display:inline-block;font-size:30px;font-weight:600;letter-spacing:0;color:var(--prussian);background:var(--cream);padding:6px 16px;border-radius:0 14px 0 14px;vertical-align:middle}
+/* the app, authored at phone size and laid out at full size with CSS zoom (sharp) */
+#ui{position:absolute;left:0;top:0;width:400px;height:830px;color:var(--text);padding:0 20px;background:var(--bg)}
+.hdr{display:flex;justify-content:space-between;align-items:center;height:56px;font-weight:700;font-size:20px;letter-spacing:-.03em}
+.hdr .ms{font-size:22px;margin-left:14px}
+.mon{display:flex;justify-content:space-between;align-items:center;height:44px}
+.mon b{font-size:20px;letter-spacing:-.02em}
+.seg{display:flex;background:var(--surface-2);border-radius:0 12px 0 12px;font-size:12px;font-weight:600}
+.seg span{padding:7px 12px}.seg .on{background:var(--lemon);color:#000;border-radius:0 12px 0 12px}
+.hero{position:relative;overflow:hidden;background:var(--prussian);border-radius:0 32px 0 32px;padding:24px 20px 20px;margin-top:12px}
+.hero .lem{position:absolute;width:164px;right:-30px;top:-26px}
+.hero small{color:var(--alabaster);opacity:.75;font-size:13px}
+.bal{font-size:50px;font-weight:700;letter-spacing:-.045em;line-height:1.1;margin:4px 0 16px}
+.pills{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.pill small::before{content:'';display:inline-block;width:6px;height:6px;border-radius:50%;margin-right:4px;vertical-align:1px}
+.pill:first-child small::before{background:var(--inc)}.pill:nth-child(2) small::before{background:var(--exp)}
+.pill b{display:block;font-size:20px;font-weight:600;margin-top:2px;letter-spacing:-.02em}
+.prog{height:4px;background:rgba(255,255,255,.15);margin-top:16px;border-radius:2px}.prog i{display:block;height:100%;width:30%;background:var(--lemon);border-radius:2px}
+h3{font-size:17px;font-weight:700;margin:22px 0 12px;letter-spacing:-.02em}
+.lh{display:flex;justify-content:space-between;align-items:center}
+.lh a{font-size:13px;font-weight:600;color:var(--lemon);text-decoration:none}
+.cats{display:flex;gap:12px}
+.chip{width:58px;text-align:center;font-size:11px}
+.chip .sh{width:52px;height:52px;margin:0 auto 6px;display:grid;place-items:center}
+.chip .sh .ms{font-size:24px}
+.chip b{display:block;color:var(--muted);font-weight:500;font-size:11px}
+.sub{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);font-weight:600;margin:10px 0 4px}
+.tx{display:flex;align-items:center;gap:12px;padding:8px 0;position:relative}
+.tx .ico{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;flex:none}
+.tx .ico .ms{font-size:20px}
+.tx .info{flex:1}.tx .info div{font-weight:600;font-size:15px}.tx .info small{color:var(--muted);font-size:13px}
+.tx .amt{font-weight:600;letter-spacing:-.02em}
+.tx .hl{position:absolute;left:-20px;right:-20px;top:0;bottom:0;background:var(--lemon);opacity:0}
+.nav{position:absolute;left:0;right:0;bottom:0;height:64px;display:flex;justify-content:space-around;align-items:center;background:var(--bg);font-size:11px;color:var(--muted)}
+.nav div{display:grid;justify-items:center;gap:3px}.nav .ms{font-size:22px}
+.nav .fab{width:48px;height:48px;border-radius:50%;background:var(--lemon);color:#000;display:grid;place-items:center}
+.nav .fab .ms{font-size:28px;color:#000}
+/* budget + chat screens (rebuilt; illustrative layout) */
+.brow{display:flex;align-items:center;gap:30px;margin:0 70px 54px}
+.brow .ic{width:110px;height:110px;display:grid;place-items:center;flex:none}
+.brow .ic .ms{font-size:56px}
+.brow .bx{flex:1}.brow .nm{display:flex;justify-content:space-between;font-size:40px;font-weight:600;color:var(--cream)}
+.brow .nm small{font-size:32px;color:var(--muted);font-weight:500}
+.brow .bar{height:22px;background:rgba(255,255,255,.12);margin-top:14px;border-radius:0 11px 0 11px;overflow:hidden}
+.brow .bar i{display:block;height:100%;width:0;background:var(--lemon)}
+.bub{position:absolute;max-width:800px;font-size:50px;line-height:1.3;padding:34px 44px;font-weight:500}
+</style></head><body>
+<div id="stage" style="position:absolute;inset:0;overflow:hidden">
+
+<!-- HOOK -->
+<div class="L" id="s0" style="background:var(--night)">
+  <div class="t" id="h0a" style="top:560px;font-size:130px;color:var(--cream)">where did your</div>
+  <div class="t" id="h0b" style="top:740px;font-size:250px;color:var(--lemon);letter-spacing:-.05em">$301.75</div>
+  <div class="t" id="h0c" style="top:1060px;font-size:130px;color:var(--cream)">go??</div>
+</div>
+
+<!-- HOME (the app) -->
+<div class="L" id="home"><div id="ui">
+  <div class="hdr"><span>Daily <img src="lemon.svg" style="width:22px;vertical-align:-2px"></span><span><span class="ms">search</span><span class="ms">more_horiz</span></span></div>
+  <div class="mon"><b><span class="ms" style="font-size:20px;color:var(--muted)">chevron_left</span> October <span class="ms" style="font-size:20px;color:var(--muted)">chevron_right</span></b><div class="seg"><span class="on">Month</span><span>Year</span></div></div>
+  <div class="hero"><img class="lem" src="lemon.svg"><small>Balance</small><div class="bal">$698.25</div>
+    <div class="pills"><div class="pill"><small>Income</small><b>$1,000.00</b></div><div class="pill"><small>Expenses</small><b>$301.75</b></div></div><div class="prog"><i></i></div></div>
+  <div class="lh"><h3>Where it went</h3><a id="tBudget">Budgets ›</a></div>
+  <div class="cats" id="cats"></div>
+  <div class="lh"><h3>Transactions</h3><div class="seg"><span class="on">All</span><span>In</span><span>Out</span></div></div>
+  <div class="sub"><span>WED, OCT 14</span><span>−$8.25</span></div>
+  <div id="rows"></div>
+  <div class="nav"><div><span class="ms" style="color:#fff">receipt_long</span>Transactions</div><div id="tSum"><span class="ms">insights</span>Summary</div>
+    <div class="fab" id="tAdd"><span class="ms">add</span></div><div><span class="ms">document_scanner</span>Scan</div><div id="tAI"><span class="ms">forum</span>AI</div></div>
+</div>
+  <div class="a" id="band" style="left:0;top:1190px;width:1080px;height:730px;background:var(--bg)"></div>
+  <div class="a" id="saved" style="left:0;right:0;top:1250px;display:flex;justify-content:center;align-items:center;gap:30px">
+    <img src="lemon.svg" style="width:170px"><span style="background:var(--lemon);color:var(--prussian);font-size:80px;font-weight:700;padding:20px 46px;border-radius:0 44px 0 44px">Saved</span></div>
+  <div class="t" id="cSaved" style="top:1410px;font-size:96px;color:var(--cream)">snap. logged.</div>
+</div>
+
+<!-- 1 SUMMARY: categories burst out, one after another -->
+<div class="L" id="L1"><div id="takes"></div><div class="cap" id="c1" style="z-index:9">there it is.</div></div>
+
+<!-- 2 ADD: the receipt -->
+<div class="L" id="L2" style="background:var(--prussian)">
+  <div class="cap" id="c2">snap the receipt.</div>
+  <div class="a" id="rc" style="left:250px;top:560px;width:580px;background:#fff;padding:60px 56px;box-shadow:24px 24px 0 var(--lemon);border-radius:0 70px 0 70px;color:var(--prussian)">
+    <div style="font-size:56px;font-weight:700">Coffee House</div>
+    <div style="display:flex;justify-content:space-between;font-size:48px;margin-top:36px"><span>Latte</span><span>4.50</span></div>
+    <div style="display:flex;justify-content:space-between;font-size:60px;font-weight:700;margin-top:46px;background:var(--lemon);padding:18px 24px;border-radius:0 30px 0 30px"><span>Total</span><span>$4.50</span></div></div>
+  <div class="a" id="scan" style="left:220px;width:640px;height:18px;background:var(--lemon)"></div>
+</div>
+
+<!-- 3 BUDGETS -->
+<div class="L" id="L3" style="background:var(--night)">
+  <div class="cap" id="c3">set it once.</div>
+  <div class="a" style="left:0;right:0;top:420px" id="brows"></div>
+  <div class="t" id="b3ok" style="top:1340px;font-size:64px;color:var(--lemon)">under budget. every one.</div>
+</div>
+
+<!-- 4 AI CHAT -->
+<div class="L" id="L4" style="background:var(--prussian)">
+  <div class="cap" id="c4">just ask.</div>
+  <div class="bub" id="q" style="right:70px;top:480px;background:var(--lemon);color:var(--prussian);border-radius:44px 0 44px 44px">how much did I spend on food this month?</div>
+  <div class="bub" id="ans" style="left:70px;top:820px;background:var(--night);color:var(--cream);border-radius:0 44px 44px 44px">$31.40 on food this month. That's 18% less than October. <span class="ex">example</span></div>
+</div>
+
+<!-- 5 NEXT MONTH -->
+<div class="L" id="L5" style="background:var(--night)">
+  <div class="a" style="left:0;right:0;top:200px;text-align:center"><span id="nov" style="display:inline-block;font-size:56px;font-weight:700;padding:14px 36px;border-radius:0 30px 0 30px;background:var(--lemon);color:var(--prussian)">NOV 25</span></div>
+  <div class="t" id="c5a" style="top:320px;font-size:150px;color:var(--cream)">…day 25 again.</div>
+  <div class="a" id="card5" style="left:90px;width:900px;top:640px;background:var(--prussian);border-radius:0 72px 0 72px;padding:60px 56px;color:#fff;overflow:hidden">
+    <img src="lemon.svg" style="position:absolute;width:340px;right:-60px;top:-50px">
+    <div style="font-size:34px;color:var(--alabaster);opacity:.75">Balance</div>
+    <div id="bal5" style="font-size:150px;font-weight:700;letter-spacing:-.045em;line-height:1.1">$0.00</div>
+    <div style="font-size:36px;color:var(--muted);margin-top:16px">last month: $698.25 <span class="ex" style="margin-left:14px">example</span></div></div>
+  <div class="t" id="c5b" style="top:1220px;font-size:110px;color:var(--lemon)">same salary.</div>
+  <div class="t" id="c5c" style="top:1360px;font-size:110px;color:var(--cream)">more left.</div>
+</div>
+
+<!-- 6 CTA -->
+<div class="L" id="L6" style="background:var(--prussian)">
+  <img class="a" id="l6" src="lemon.svg" style="left:310px;top:520px;width:460px">
+  <div class="t" id="w6" style="top:960px;font-size:220px;color:var(--cream)">Daily</div>
+  <div class="a" style="left:0;right:0;top:1230px;text-align:center"><span id="u6" style="display:inline-block;font-size:58px;font-weight:600;color:var(--prussian);background:var(--lemon);padding:18px 44px;border-radius:0 36px 0 36px">daily.limonlay.com</span></div>
+  <div class="t" id="f6" style="top:1400px;font-size:50px;font-weight:500;letter-spacing:0;color:var(--cream)">no download needed</div>
+</div>
+
+<!-- cursor (drawn with its tip at the origin) -->
+<svg class="a" id="cur" width="90" height="120" viewBox="0 0 30 40" style="left:0;top:0;transform-origin:0 0"><path d="M2 2 L2 31 L10 24 L15 36 L21 33 L16 22 L26 22 Z" fill="#fff"/><path d="M5 9 L5 25 L10 20 Z" fill="#0a0d14" opacity=".0"/></svg>
+</div>
+
+<script>
+// Demo data = the app's English demo (limonlay/daily icons/shot-en-dark.webp). Budgets, chat answer and next month are illustrative.
+const CATS = [['home', 'Housing', 200, '#14213d', '50%', '#fff'], ['shopping_bag', 'Shopping', 57.5, '#ffd23f', '50%', '#000'],
+  ['lightbulb', 'Bills & utilities', 25, '#fff', '0', '#000'], ['movie', 'Entertainment', 9.75, '#e5e5e5', '50% 50% 0 50%', '#000'],
+  ['restaurant', 'Food', 8.25, '#14213d', '50%', '#fff']];
+const ROWS = [['restaurant', 'Food', 'Coffee', 4.5, '#ffd23f', '#000'], ['restaurant', 'Food', 'Chicken rice', 3.75, '#e5e5e5', '#000'],
+  ['directions_bus', 'Transport', 'Subway', 1.25, '#e5e5e5', '#000']];
+const BUD = [['home', 'Housing', 200, 250, '#ffd23f', '#14213d', '50%'], ['shopping_bag', 'Shopping', 57.5, 80, '#14213d', '#ffd23f', '50%'],
+  ['lightbulb', 'Bills', 25, 40, '#fff', '#000', '0'], ['movie', 'Fun', 9.75, 30, '#e5e5e5', '#000', '50% 50% 0 50%'], ['restaurant', 'Food', 31.4, 60, '#ffd23f', '#14213d', '50%']];
+const $ = id => document.getElementById(id);
+$('cats').innerHTML = CATS.map(([ic, n, v, bg, r, fg]) => `<div class="chip"><div class="sh" style="background:${bg};border-radius:${r}"><span class="ms" style="color:${fg}">${ic}</span></div><div style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${n}</div><b>$${v.toFixed(2)}</b></div>`).join('');
+$('rows').innerHTML = ROWS.map(([ic, n, s, v, bg, fg]) => `<div class="tx"><div class="hl"></div><div class="ico" style="background:${bg}"><span class="ms" style="color:${fg}">${ic}</span></div><div class="info"><div>${n}</div><small>${s}</small></div><div class="amt">−$${v.toFixed(2)}</div></div>`).join('');
+const TAKE_BG = ['#14213d', '#ffd23f', '#0a0d14', '#14213d', '#0a0d14'];
+$('takes').innerHTML = CATS.map(([ic, n, v, bg, r], i) => { const dark = i !== 1, ink = dark ? '#f2f0ea' : '#14213d';
+  return `<div class="a" style="inset:0;background:${TAKE_BG[i]};visibility:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:40px">
+    <div style="width:360px;height:360px;background:${dark ? '#ffd23f' : '#14213d'};border-radius:${r === '0' ? '0 120px 0 120px' : r};display:grid;place-items:center">
+      <span class="ms" style="font-size:190px;color:${dark ? '#14213d' : '#ffd23f'}">${ic}</span></div>
+    <div style="font-size:80px;font-weight:700;color:${ink};letter-spacing:-.03em;white-space:nowrap">${n}</div>
+    <div style="font-size:150px;font-weight:700;color:${ink};letter-spacing:-.04em">$${v.toFixed(2)}</div></div>`; }).join('');
+$('brows').innerHTML = BUD.map(([ic, n, s, l, bg, fg, r]) => `<div class="brow"><div class="ic" style="background:${bg};border-radius:${r}"><span class="ms" style="color:${fg}">${ic}</span></div>
+  <div class="bx"><div class="nm"><span>${n}</span><small>$${s.toFixed(2)} / $${l}</small></div><div class="bar"><i></i></div></div></div>`).join('');
+const takes = [...$('takes').children], rows = [...document.querySelectorAll('.tx')], bars = [...document.querySelectorAll('.brow .bar i')];
+
+// ---------- time: the song's real beats (Golf Clap 84.355 s → 114.355 s, librosa) ----------
+const BEATS = [0.514, 1.141, 1.768, 2.395, 3.022, 3.649, 4.299, 4.926, 5.553, 6.156, 6.807, 7.457, 8.084, 8.687, 9.338, 9.964, 10.615, 11.242, 11.892, 12.495, 13.146, 13.773, 14.399, 15.026, 15.677, 16.304, 16.931, 17.558, 18.181, 18.762, 19.459, 20.086, 20.713, 21.34, 21.99, 22.617, 23.244, 23.871, 24.498, 25.125, 25.752, 26.402, 27.029, 27.656, 28.307, 28.934, 29.561];
+const cl = x => Math.min(1, Math.max(0, x)), lerp = (a, b, x) => a + (b - a) * x;
+const tb = n => { const B = BEATS, i = Math.floor(n); if (i < 0) return B[0] + n * (B[1] - B[0]);
+  if (i >= B.length - 1) return B[B.length - 1] + (n - B.length + 1) * (B[1] - B[0]); return lerp(B[i], B[i + 1], n - i); };
+const beatOf = t => { const B = BEATS; if (t < B[0]) return (t - B[0]) / (B[1] - B[0]);
+  for (let i = 0; i < B.length - 1; i++) if (t < B[i + 1]) return i + (t - B[i]) / (B[i + 1] - B[i]); return B.length - 1 + (t - B[B.length - 1]) / (B[1] - B[0]); };
+const bez = (x1, y1, x2, y2) => x => { x = cl(x); let lo = 0, hi = 1, s = .5;
+  for (let i = 0; i < 24; i++) { s = (lo + hi) / 2; const bx = 3 * x1 * s * (1 - s) ** 2 + 3 * x2 * s * s * (1 - s) + s ** 3; bx < x ? lo = s : hi = s; }
+  return 3 * y1 * s * (1 - s) ** 2 + 3 * y2 * s * s * (1 - s) + s ** 3; };
+const out = bez(.2, .8, .2, 1), spring = bez(.34, 1.4, .64, 1), inout = bez(.45, 0, .25, 1);
+const k = (t, at, d, e = out) => e((t - at) / d);
+const money = v => '$' + v.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+const show = (el, on) => { el.style.visibility = on ? 'visible' : 'hidden'; };
+const typeText = (el, t, at, cps = 45) => {               // fast typing; the untyped rest stays invisible so the line never shifts
+  if (!el.dataset.full) el.dataset.full = el.innerHTML;
+  const full = el.dataset.full, plain = full.replace(/<[^>]+>/g, ''), n = Math.max(0, Math.min(plain.length, Math.floor((t - at) * cps)));
+  const caret = t >= at && t < at + plain.length / cps + .4 ? '<span style="display:inline-block;width:.09em;height:.82em;background:#ffd23f;vertical-align:-.06em;margin-left:.03em"></span>' : '';
+  if (n >= plain.length) { el.innerHTML = full + caret; } else {
+    const tagAt = full.indexOf('<'), cut = tagAt >= 0 && n >= tagAt ? tagAt : n;     // tags (the example chip) appear when typing reaches them
+    el.innerHTML = plain.slice(0, Math.min(n, cut)) + caret + '<span style="visibility:hidden">' + plain.slice(Math.min(n, cut)) + '</span>'; }
+  el.style.opacity = t >= at ? 1 : 0; };
+
+// ---------- scenes (beat indices) ----------
+const S = { home1: 3, sum: 4, home2: 9, add: 10, saved: 12, home3: 14.5, bud: 15, home4: 22, ai: 23, nov: 30, cta: 38 };
+window.CUTS = [S.home1, S.sum, S.home2, S.add, S.saved, S.bud, S.home4, S.ai, S.nov, S.cta].map(tb);
+// the app sits at zoom 2.15, centred
+const Z = 2.15, UX = (1080 - 400 * Z) / 2, UY = 120;
+function place() { const u = $('ui'); u.style.zoom = Z; u.style.left = (UX / Z) + 'px'; u.style.top = (UY / Z) + 'px'; }
+place();
+const at = id => { const r = $(id).getBoundingClientRect(); return [r.left + r.width / 2, r.top + r.height / 2]; };   // targets in frame px
+// a layer bursts out of the clicked point: a flat circle opens from it, the content scales up from 0.85
+function burst(el, t, from, x, y) { const q = k(t, from, .38); el.style.clipPath = `circle(${q * 2300}px at ${x}px ${y}px)`;
+  el.style.transformOrigin = `${x}px ${y}px`; el.style.transform = `scale(${lerp(.85, 1, q)})`; }
+// cursor: glides to the target, presses on the beat (squash 3 frames), the target answers a frame later
+let curPos = [760, 2000];
+function cursor(t, moves) {
+  let pos = [760, 2100], sc = 1, vis = false;
+  for (const m of moves) { const tc = tb(m.beat), t0 = tc - m.travel;
+    if (t >= t0 - .25 && t < tc + .22) { vis = true;
+      const q = inout((t - t0) / (m.travel - .06));
+      pos = [lerp(m.from[0], m.to[0], q), lerp(m.from[1], m.to[1], q)];
+      sc = t >= tc - .04 && t < tc + .1 ? .82 : 1; } }
+  const c = $('cur'); show(c, vis); c.style.transform = `translate(${pos[0]}px,${pos[1]}px) scale(${sc})`;
+}
+
+window.render = t => {
+  const b = beatOf(t);
+  const inS = (a, z) => b >= a && b < z;
+  show($('s0'), b < S.home1);
+  show($('home'), inS(S.home1, S.sum + .6) || inS(S.home2, S.add + .6) || inS(S.saved, S.bud + .6) || inS(S.home4, S.ai + .6));
+  show($('L1'), inS(S.sum, S.home2)); show($('L2'), inS(S.add, S.saved)); show($('L3'), inS(S.bud, S.home4));
+  show($('L4'), inS(S.ai, S.nov)); show($('L5'), inS(S.nov, S.cta)); show($('L6'), b >= S.cta);
+
+  // hook
+  typeText($('h0a'), t, -.12, 40); typeText($('h0b'), t, tb(0), 45); typeText($('h0c'), t, tb(.5), 40);
+  $('s0').style.transform = `scale(${1 + .04 * cl(t / tb(3))})`;
+
+  // home: slow push, the new row + Saved after the receipt
+  $('home').style.transform = `scale(${1 + .015 * Math.sin(t * .8)})`;
+  const sv = b >= S.saved && b < S.home3;
+  show($('band'), sv); show($('saved'), sv); show($('cSaved'), sv);
+  rows.forEach((el, i) => { const nr = b < S.saved ? 0 : k(t, tb(S.saved), .3);
+    el.style.transform = i === 0 ? `scale(${lerp(.9, 1, nr)})` : `translateY(${(1 - nr) * -56}px)`; if (i === 0) el.style.opacity = nr; });
+  rows[0].querySelector('.hl').style.opacity = b < S.saved ? 0 : .32 * (1 - cl((t - tb(S.saved)) / 1.2));
+  const svq = k(t, tb(S.saved), .35, spring); $('saved').style.transform = `scale(${lerp(.5, 1, svq)})`;
+  typeText($('cSaved'), t, tb(S.saved + .6));
+
+  // the clicks (positions from the live layout)
+  const [sx, sy] = at('tSum'), [ax, ay] = at('tAdd'), [bx, by] = at('tBudget'), [ix, iy] = at('tAI'), [ux, uy] = at('u6');
+  cursor(t, [{ beat: S.sum, travel: .55, from: [880, 1700], to: [sx, sy] }, { beat: S.add, travel: .5, from: [700, 1500], to: [ax, ay] },
+    { beat: S.bud, travel: .55, from: [600, 1300], to: [bx, by] }, { beat: S.ai, travel: .5, from: [700, 1500], to: [ix, iy] },
+    { beat: 43, travel: .7, from: [900, 1800], to: [ux, uy] }]);
+
+  // 1 summary: burst from the tab, categories replace each other on the beats
+  burst($('L1'), t, tb(S.sum), sx, sy);
+  const CB = [4, 5, 6, 7, 8];
+  takes.forEach((el, i) => { const tin = tb(CB[i]), tnext = i + 1 < CB.length ? tb(CB[i + 1]) + .2 : tb(S.home2);
+    show(el, t >= tin && t < tnext); el.style.zIndex = i + 1;
+    el.style.transform = i === 0 ? 'none' : `translateX(${(1 - out((t - tin) / .2)) * (i % 2 ? -1080 : 1080)}px)`;
+    el.children[0].style.transform = `rotate(${(1 - out((t - tin) / .35)) * (i % 2 ? 40 : -40)}deg) scale(${lerp(.6, 1, out((t - tin) / .3))})`; });
+  typeText($('c1'), t, tb(4.3));
+
+  // 2 add: burst from the + button, the receipt drops in, the scan line sweeps
+  burst($('L2'), t, tb(S.add), ax, ay); typeText($('c2'), t, tb(S.add) + .2);
+  const r = k(t, tb(S.add) + .1, .35); $('rc').style.transform = `translateY(${(1 - r) * 260}px) rotate(${(1 - r) * -6}deg)`;
+  const sc = cl((t - tb(S.add + .4)) / .9); $('scan').style.top = lerp(540, 1100, sc) + 'px'; $('scan').style.opacity = t > tb(S.add + .4) && sc < 1 ? 1 : 0;
+
+  // 3 budgets: burst from "Budgets ›", bars fill one per beat, all end under their limit
+  burst($('L3'), t, tb(S.bud), bx, by); typeText($('c3'), t, tb(S.bud) + .25);
+  bars.forEach((el, i) => { const [, , s, l] = BUD[i]; el.style.width = (100 * s / l * k(t, tb(16 + i * .6), .5)) + '%'; });
+  [...document.querySelectorAll('.brow')].forEach((el, i) => { const q = k(t, tb(S.bud) + .1 + i * .06, .35); el.style.opacity = q; el.style.transform = `translateY(${(1 - q) * 60}px)`; });
+  typeText($('b3ok'), t, tb(19));
+
+  // 4 AI: burst from the AI tab, the question types, then the answer
+  burst($('L4'), t, tb(S.ai), ix, iy); typeText($('c4'), t, tb(S.ai) + .25);
+  typeText($('q'), t, tb(23.8), 50); typeText($('ans'), t, tb(26), 45);
+  const qa = k(t, tb(23.7), .3, spring); $('q').style.transform = `scale(${lerp(.6, 1, qa)})`; $('q').style.transformOrigin = '100% 0';
+  const aa = k(t, tb(25.9), .3, spring); $('ans').style.transform = `scale(${lerp(.6, 1, aa)})`; $('ans').style.transformOrigin = '0 0';
+  $('ans').style.opacity = t >= tb(25.9) ? 1 : 0;
+
+  // 5 next month: date flips, balance counts to more than last month (example)
+  const fl = out((t - tb(S.nov)) / .3); $('nov').style.transform = `scaleY(${fl})`;
+  typeText($('c5a'), t, tb(S.nov) + .15);
+  const cq = k(t, tb(31), .4); $('card5').style.transform = `translateY(${(1 - cq) * 300}px) rotate(${(1 - cq) * -4}deg)`; $('card5').style.opacity = cl((t - tb(31)) / .08);
+  const tf = Math.floor(t * 30 + 1e-6) / 30; $('bal5').textContent = money(Math.round(843.1 * k(tf, tb(31.3), 1.4) * 100) / 100);
+  typeText($('c5b'), t, tb(34)); typeText($('c5c'), t, tb(35));
+  $('L5').style.transform = `scale(${1 + .02 * cl((b - S.nov) / 8)})`;
+
+  // 6 CTA: the lemon bursts out on the strongest hit, then the link gets clicked
+  burst($('L6'), t, tb(S.cta), 540, 960);
+  const l6 = k(t, tb(S.cta), .5, spring);
+  $('l6').style.transform = `scale(${lerp(3.2, 1, l6)}) rotate(${lerp(-30, 0, l6) + Math.sin(t * 1.6) * 2}deg) translateY(${Math.sin(t * 2.1) * 10}px)`;
+  typeText($('w6'), t, tb(39), 50);
+  $('u6').parentElement.style.opacity = t >= tb(40) ? 1 : 0;
+  const pr = t >= tb(43) && t < tb(43) + .12; $('u6').style.transform = `scale(${pr ? .94 : 1})`;
+  typeText($('f6'), t, tb(41), 55);
+};
+render(0);
+</script></body></html>

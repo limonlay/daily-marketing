@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="96 150 760 590"><defs>
+  <!-- peel: base colour -->
+  <radialGradient id="peel" cx="38%" cy="32%" r="75%">
+    <stop offset="0" stop-color="#fffbb8"/>
+    <stop offset=".22" stop-color="#ffee55"/>
+    <stop offset=".58" stop-color="#ffd60a"/>
+    <stop offset=".86" stop-color="#e8b400"/>
+    <stop offset="1" stop-color="#c49000"/>
+  </radialGradient>
+  <radialGradient id="greenish" cx="58%" cy="62%" r="30%">
+    <stop offset="0" stop-color="#a9b81c" stop-opacity=".35"/><stop offset="1" stop-color="#a9b81c" stop-opacity="0"/>
+  </radialGradient>
+  <radialGradient id="gloss" cx="34%" cy="26%" r="30%">
+    <stop offset="0" stop-color="#fff" stop-opacity=".85"/><stop offset=".4" stop-color="#fff" stop-opacity=".25"/><stop offset="1" stop-color="#fff" stop-opacity="0"/>
+  </radialGradient>
+  <!-- dimpled peel: noise → bump lighting -->
+  <filter id="pores" x="-5%" y="-5%" width="110%" height="110%">
+    <feTurbulence type="fractalNoise" baseFrequency=".32" numOctaves="2" seed="7" result="n"/>
+    <feDiffuseLighting in="n" surfaceScale="1.1" lighting-color="#fff" result="lit"><feDistantLight azimuth="225" elevation="62"/></feDiffuseLighting>
+    <feComponentTransfer in="lit" result="lit2"><feFuncR type="linear" slope=".45" intercept=".55"/><feFuncG type="linear" slope=".45" intercept=".55"/><feFuncB type="linear" slope=".45" intercept=".55"/></feComponentTransfer>
+    <feBlend in="SourceGraphic" in2="lit2" mode="multiply" result="m"/>
+    <feComposite in="m" in2="SourceGraphic" operator="in"/>
+  </filter>
+  <filter id="spec" x="-5%" y="-5%" width="110%" height="110%">
+    <feTurbulence type="fractalNoise" baseFrequency=".35" numOctaves="1" seed="3" result="n"/>
+    <feSpecularLighting in="n" surfaceScale="1.4" specularConstant=".8" specularExponent="30" lighting-color="#fffbe0" result="s">
+      <fePointLight x="330" y="250" z="260"/></feSpecularLighting>
+    <feComposite in="s" in2="SourceAlpha" operator="in"/>
+  </filter>
+  <filter id="soft" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="18"/></filter>
+  <filter id="soft2" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="4"/></filter>
+  <!-- pulp: juice vesicles -->
+  <filter id="vesicles" x="0" y="0" width="100%" height="100%">
+    <feTurbulence type="turbulence" baseFrequency=".045 .16" numOctaves="2" seed="11" result="t"/>
+    <feColorMatrix in="t" type="matrix" values="0 0 0 0 1  0 0 0 0 .93  0 0 0 0 .55  0 0 0 1.6 -.55" result="c"/>
+    <feComposite in="c" in2="SourceGraphic" operator="in" result="v"/>
+    <feMerge><feMergeNode in="SourceGraphic"/><feMergeNode in="v"/></feMerge>
+  </filter>
+  <radialGradient id="pulp" cx="50%" cy="50%" r="55%">
+    <stop offset="0" stop-color="#fff6b0"/><stop offset=".5" stop-color="#ffe45c"/><stop offset="1" stop-color="#f7cf1e"/>
+  </radialGradient>
+  <radialGradient id="pith" cx="50%" cy="50%" r="50%">
+    <stop offset=".86" stop-color="#fffbe6"/><stop offset="1" stop-color="#fff0b3"/>
+  </radialGradient>
+  <linearGradient id="cutRind" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0" stop-color="#ffe23a"/><stop offset="1" stop-color="#e2ad00"/>
+  </linearGradient>
+  <clipPath id="wholeClip"><use href="#wholeShape"/></clipPath>
+  <path id="wholeShape" d="M176 500 C170 486 150 482 132 482 C124 482 114 476 116 468 C118 460 128 456 140 452 C156 446 168 438 186 410 C240 300 352 214 480 214 C610 214 712 262 760 330 C772 348 790 362 812 370 C824 374 834 378 834 386 C834 394 822 400 808 404 C796 408 788 414 780 424 C752 576 630 676 470 676 C318 676 214 590 176 500 Z"/>
+</defs><g transform="rotate(-14 475 445)"><g>
+  <use href="#wholeShape" fill="url(#peel)" filter="url(#pores)"/>
+  <g clip-path="url(#wholeClip)">
+    <ellipse cx="520" cy="520" rx="260" ry="150" fill="url(#greenish)"/>
+    <!-- core shading to the lower right -->
+    <ellipse cx="560" cy="600" rx="330" ry="170" fill="#a87400" opacity=".22" filter="url(#soft)"/>
+    <rect width="1024" height="1024" fill="#fff" filter="url(#spec)" opacity=".55"/>
+    <ellipse cx="380" cy="300" rx="190" ry="90" fill="url(#gloss)" transform="rotate(-12 380 300)"/>
+    <ellipse cx="330" cy="285" rx="46" ry="16" fill="#fff" opacity=".7" filter="url(#soft2)" transform="rotate(-18 330 285)"/>
+  </g>
+  <!-- stem nub (right) -->
+  
+  <circle cx="832" cy="386" r="4" fill="#7a6a20"/>
+  <!-- blossom tip (left) -->
+  <circle cx="118" cy="468" r="3.5" fill="#8a7420" opacity=".8"/>
+</g></g></svg>
