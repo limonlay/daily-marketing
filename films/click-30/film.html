@@ -125,7 +125,7 @@ h3{font-size:17px;font-weight:700;margin:22px 0 12px;letter-spacing:-.02em}
 <!-- 5 NEXT MONTH -->
 <div class="L" id="L5" style="background:var(--night)">
   <div class="a" style="left:0;right:0;top:200px;text-align:center"><span id="nov" style="display:inline-block;font-size:56px;font-weight:700;padding:14px 36px;border-radius:0 30px 0 30px;background:var(--lemon);color:var(--prussian)">NOV 25</span></div>
-  <div class="t" id="c5a" style="top:320px;font-size:150px;color:var(--cream)">…day 25 again.</div>
+  <div class="t" id="c5a" style="top:330px;font-size:120px;color:var(--cream)">…day 25 again.</div>
   <div class="a" id="card5" style="left:90px;width:900px;top:640px;background:var(--prussian);border-radius:0 72px 0 72px;padding:60px 56px;color:#fff;overflow:hidden">
     <img src="lemon.svg" style="position:absolute;width:340px;right:-60px;top:-50px">
     <div style="font-size:34px;color:var(--alabaster);opacity:.75">Balance</div>
@@ -202,8 +202,12 @@ function place() { const u = $('ui'); u.style.zoom = Z; u.style.left = (UX / Z) 
 place();
 const at = id => { const r = $(id).getBoundingClientRect(); return [r.left + r.width / 2, r.top + r.height / 2]; };   // targets in frame px
 // a layer bursts out of the clicked point: a flat circle opens from it, the content scales up from 0.85
+// camera on a layer: glides (in-out) from pose A to pose B over [t0, t1]; poses {s, x, y, r}, origin in frame px
+function lcam(el, t, t0, t1, A, B, ox = 540, oy = 960) { const q = inout((t - t0) / (t1 - t0)), L = (a, b) => lerp(a ?? 0, b ?? 0, q);
+  el.style.transformOrigin = `${ox}px ${oy}px`;
+  el.style.transform = `translate(${L(A.x, B.x)}px,${L(A.y, B.y)}px) rotate(${L(A.r, B.r)}deg) scale(${lerp(A.s ?? 1, B.s ?? 1, q)})`; }
 function burst(el, t, from, x, y) { const q = k(t, from, .38); el.style.clipPath = `circle(${q * 2300}px at ${x}px ${y}px)`;
-  el.style.transformOrigin = `${x}px ${y}px`; el.style.transform = `scale(${lerp(.85, 1, q) * (1 + .03 * Math.max(0, t - from))})`; }   // then keeps creeping in
+  }
 // cursor: glides to the target, presses on the beat (squash 3 frames), the target answers a frame later
 let curPos = [760, 2000];
 function cursor(t, moves) {
@@ -229,7 +233,13 @@ window.render = t => {
   $('s0').style.transform = `scale(${1 + .04 * cl(t / tb(3))})`;
 
   // home: slow push, the new row + Saved after the receipt
-  $('home').style.transform = `scale(${1 + .015 * Math.sin(t * .8)})`;
+  $('home').style.transform = 'none';
+  const T0 = { sum: at('tSum'), add: at('tAdd'), bud: at('tBudget'), ai: at('tAI') };
+  let hs = 1, hx = 540, hy = 960;
+  for (const [key, beat] of [['sum', S.sum], ['add', S.add], ['bud', S.bud], ['ai', S.ai]]) { const tc = tb(beat);
+    if (t >= tc - 1.1 && t < tc + .5) { hs = lerp(1, 1.45, inout((t - (tc - 1.1)) / 1.1)); [hx, hy] = T0[key]; } }
+  if (b >= S.saved && b < S.bud - .5) { hs = lerp(1.25, 1.05, inout((t - tb(S.saved)) / (tb(S.bud - .5) - tb(S.saved)))); [hx, hy] = [540, 1000]; }
+  $('home').style.transformOrigin = `${hx}px ${hy}px`; $('home').style.transform = `scale(${hs})`;
   const sv = b >= S.saved && b < S.home3;
   const scroll = b >= S.saved && b < S.bud + .6 ? 460 * k(t, tb(S.saved) - .05, .3) : 0;                   // scroll the list up so the new rows sit above the Saved band
   $('ui').style.top = ((UY - scroll) / Z) + 'px';
@@ -247,7 +257,7 @@ window.render = t => {
     { beat: 43, travel: .7, from: [900, 1800], to: [ux, uy] }]);
 
   // 1 summary: burst from the tab, categories replace each other on the beats
-  burst($('L1'), t, tb(S.sum), sx, sy);
+  burst($('L1'), t, tb(S.sum), sx, sy); lcam($('L1'), t, tb(S.sum), tb(S.home2), { s: 1.08, r: -3, x: -30 }, { s: 1.22, r: 3, x: 30 });
   const CB = [4, 5, 6, 7, 8];
   takes.forEach((el, i) => { const tin = tb(CB[i]), tnext = i + 1 < CB.length ? tb(CB[i + 1]) + .2 : tb(S.home2);
     show(el, t >= tin && t < tnext); el.style.zIndex = i + 1;
@@ -256,25 +266,25 @@ window.render = t => {
   typeText($('c1'), t, tb(4.3));
 
   // 2 add: burst from the + button, the receipt drops in, the scan line sweeps
-  burst($('L2'), t, tb(S.add), ax, ay); typeText($('c2'), t, tb(S.add) + .2);
+  burst($('L2'), t, tb(S.add), ax, ay); lcam($('L2'), t, tb(S.add), tb(S.saved), { s: 1.3, x: 110, y: 60, r: 3 }, { s: 1.05, x: -60, y: -40, r: -2 }); typeText($('c2'), t, tb(S.add) + .2);
   // three receipts land one after another (one photo, several receipts), then one scan line sweeps them all
   [0, 1, 2].forEach(i => { const st = tb(S.add) + .05 + i * .15, q = k(t, st, .3), rot = [-8, 6, -3][i];
     const e = $('rc' + i); e.style.opacity = t >= st ? 1 : 0; e.style.transform = `translateY(${(1 - q) * 300}px) rotate(${rot + (1 - q) * -10}deg)`; });
   const sc = cl((t - tb(S.add) - .5) / .75); $('scan').style.top = lerp(420, 1560, sc) + 'px'; $('scan').style.opacity = t > tb(S.add) + .5 && sc < 1 ? 1 : 0;
 
   // 3 budgets: burst from "Budgets ›", bars fill one per beat, all end under their limit
-  burst($('L3'), t, tb(S.bud), bx, by); typeText($('c3'), t, tb(S.bud) + .25);
+  burst($('L3'), t, tb(S.bud), bx, by); lcam($('L3'), t, tb(S.bud), tb(S.home4), { s: 1.25, y: 260, r: -2 }, { s: 1.08, y: -40, r: 1 }, 540, 800); typeText($('c3'), t, tb(S.bud) + .25);
   bars.forEach((el, i) => { const [, , s, l] = BUD[i]; el.style.width = (100 * s / l * k(t, tb(16 + i * .6), .5)) + '%'; });
   [...document.querySelectorAll('.brow')].forEach((el, i) => { const q = k(t, tb(S.bud) + .1 + i * .06, .35); el.style.opacity = q; el.style.transform = `translateY(${(1 - q) * 60}px)`; });
   typeText($('b3ok'), t, tb(19));
 
   // 4 AI: burst from the AI tab, the question types, then the answer
-  burst($('L4'), t, tb(S.ai), ix, iy); typeText($('c4'), t, tb(S.ai) + .25);
+  burst($('L4'), t, tb(S.ai), ix, iy); lcam($('L4'), t, tb(S.ai), tb(S.nov), { s: 1.06, x: 30, r: 2 }, { s: 1.16, x: 0, y: -30, r: -1 }, 540, 900); typeText($('c4'), t, tb(S.ai) + .25);
   typeText($('q'), t, tb(23.8), 50); typeText($('ans'), t, tb(25.4), 45);
   const qa = k(t, tb(23.7), .3, spring); $('q').style.transform = `scale(${lerp(.6, 1, qa)})`; $('q').style.transformOrigin = '100% 0';
   const aa = k(t, tb(25.3), .3, spring); $('ans').style.transform = `scale(${lerp(.6, 1, aa)})`; $('ans').style.transformOrigin = '0 0';
   $('ans').style.opacity = t >= tb(25.3) ? 1 : 0;
-  $('q').style.transform += ` translateY(${Math.sin(t * 1.5) * 10}px)`; $('ans').style.transform += ` translateY(${Math.sin(t * 1.2 + 1) * 12}px)`;
+
 
   // 5 next month: date flips, balance counts to more than last month (example)
   const fl = out((t - tb(S.nov)) / .3); $('nov').style.transform = `scaleY(${fl})`;
@@ -282,13 +292,13 @@ window.render = t => {
   const cq = k(t, tb(31), .4); $('card5').style.transform = `translateY(${(1 - cq) * 300}px) rotate(${(1 - cq) * -4}deg)`; $('card5').style.opacity = cl((t - tb(31)) / .08);
   const tf = Math.floor(t * 30 + 1e-6) / 30; $('bal5').textContent = money(Math.round(843.1 * k(tf, tb(31.3), 1.4) * 100) / 100);
   typeText($('c5b'), t, tb(34)); typeText($('c5c'), t, tb(35));
-  $('L5').style.transformOrigin = '540px 900px'; $('L5').style.transform = `scale(${1 + .07 * cl((b - S.nov) / 8)})`;
-  $('card5').style.transform += ` translateY(${Math.sin(t * 1.3) * 14}px)`;
+  lcam($('L5'), t, tb(S.nov), tb(S.cta), { s: 1.04, r: -2, y: 40 }, { s: 1.16, r: 1, y: -10 }, 540, 820);   // push into the balance
 
   // 6 CTA: the lemon bursts out on the strongest hit, then the link gets clicked
   burst($('L6'), t, tb(S.cta), 540, 960);
   const l6 = k(t, tb(S.cta), .5, spring);
-  $('l6').style.transform = `scale(${lerp(3.2, 1, l6) * (1 + .04 * Math.sin(t * 1.4))}) rotate(${lerp(-30, 0, l6) + Math.sin(t * 1.6) * 6}deg) translateY(${Math.sin(t * 2.1) * 26}px)`;
+  $('l6').style.transform = `scale(${lerp(3.2, 1, l6)}) rotate(${lerp(-30, 0, l6)}deg)`;
+  lcam($('L6'), t, tb(S.cta), 30, { s: 1.35, r: 3 }, { s: 1.0, r: 0 }, 540, 900);   // pull back to the end card
   typeText($('w6'), t, tb(39), 50);
   $('u6').parentElement.style.opacity = t >= tb(40) ? 1 : 0;
   const pr = t >= tb(43) && t < tb(43) + .12; $('u6').style.transform = `scale(${pr ? .94 : 1})`;
