@@ -86,10 +86,10 @@ h3{font-size:17px;font-weight:700;margin:22px 0 12px;letter-spacing:-.02em}
 <div class="t a" id="w5s" style="top:400px;font-size:54px;font-weight:500;letter-spacing:0;color:var(--cream)">where every coin goes.</div>
 
 <div class="a" id="s6" style="inset:0;background:var(--prussian)">
-  <img class="a" id="l6" src="lemon.svg" style="left:300px;top:520px;width:480px">
-  <div class="t a" id="w6" style="top:960px;font-size:220px;color:var(--cream)">Daily</div>
-  <div class="t a" id="u6" style="top:1220px;font-size:60px;font-weight:500;letter-spacing:0;color:var(--lemon)">daily.limonlay.com</div>
-  <div class="t a" id="f6" style="top:1320px;font-size:46px;font-weight:500;letter-spacing:0;color:#9a9890">free · no download · works in your browser</div>
+  <img class="a" id="l6" src="lemon.svg" style="left:310px;top:600px;width:460px">
+  <div class="t a" id="w6" style="top:1040px;font-size:220px;color:var(--cream)">Daily</div>
+  <div class="t a" id="u6" style="top:1300px;font-size:60px;font-weight:500;letter-spacing:0;color:var(--lemon)">daily.limonlay.com</div>
+  <div class="t a" id="f6" style="top:1400px;font-size:50px;font-weight:500;letter-spacing:0;color:#f2f0ea">free · no download needed</div>
 </div>
 
 <!-- HOOK (0 → beat 1): the number first -->
@@ -254,7 +254,7 @@ window.render = t => {
   // CTA on the strongest hit
   const l6 = k(t, tb(C.cta), .45, spring);
   $('l6').style.transform = `scale(${lerp(3.4, 1, l6)}) rotate(${lerp(-30, 0, l6) + Math.sin(t * 1.6) * 2}deg) translateY(${Math.sin(t * 2.1) * 10}px)`;
-  [['w6', 20], ['u6', 21], ['f6', 21.5]].forEach(([id, bb]) => rise($(id), t, tb(bb), 60));
+  [['w6', 19.5], ['u6', 20], ['f6', 20.5]].forEach(([id, bb]) => typeText($(id), t, tb(bb), 55));   // all typed by ~14 s, then a short hold
   $('s6').style.transform = `scale(${1 - cl((t - tb(C.cta)) / 3) * .05})`;
 };
 render(0);
