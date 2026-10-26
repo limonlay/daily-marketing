@@ -68,7 +68,7 @@ h3{font-size:17px;font-weight:700;margin:22px 0 12px;letter-spacing:-.02em}
 </div>
 
 <!-- HOME (the app) -->
-<div class="L" id="home"><div id="ui">
+<div class="L" id="home"><div id="uiw" style="position:absolute;left:0;top:0;transform-origin:0 0"><div id="ui">
   <div class="hdr"><span>Daily <img src="lemon.svg" style="width:22px;vertical-align:-2px"></span><span><span class="ms">search</span><span class="ms">more_horiz</span></span></div>
   <div class="mon"><b><span class="ms" style="font-size:20px;color:var(--muted)">chevron_left</span> October <span class="ms" style="font-size:20px;color:var(--muted)">chevron_right</span></b><div class="seg"><span class="on">Month</span><span>Year</span></div></div>
   <div class="hero"><img class="lem" src="lemon.svg"><small>Balance</small><div class="bal">$698.25</div>
@@ -80,7 +80,7 @@ h3{font-size:17px;font-weight:700;margin:22px 0 12px;letter-spacing:-.02em}
   <div id="rows"></div>
   <div class="nav"><div><span class="ms" style="color:#fff">receipt_long</span>Transactions</div><div id="tSum"><span class="ms">insights</span>Summary</div>
     <div class="fab" id="tAdd"><span class="ms">add</span></div><div><span class="ms">document_scanner</span>Scan</div><div id="tAI"><span class="ms">forum</span>AI</div></div>
-</div>
+</div></div>
   <div class="a" id="band" style="left:0;top:1190px;width:1080px;height:730px;background:var(--bg)"></div>
   <div class="a" id="saved" style="left:0;right:0;top:1250px;display:flex;justify-content:center;align-items:center;gap:30px">
     <img src="lemon.svg" style="width:170px"><span style="background:var(--lemon);color:var(--prussian);font-size:80px;font-weight:700;padding:20px 46px;border-radius:0 44px 0 44px">Saved</span></div>
@@ -197,9 +197,20 @@ const typeText = (el, t, at, cps = 45) => {               // fast typing; the un
 const S = { home1: 3, sum: 4, home2: 9, add: 10, saved: 12, home3: 14.5, bud: 15, home4: 22, ai: 23, nov: 30, cta: 38 };
 window.CUTS = [S.home1, S.sum, S.home2, S.add, S.saved, S.bud, S.home4, S.ai, S.nov, S.cta].map(tb);
 // the app sits at zoom 2.15, centred
-const Z = 2.15, UX = (1080 - 400 * Z) / 2, UY = 120;
-function place() { const u = $('ui'); u.style.zoom = Z; u.style.left = (UX / Z) + 'px'; u.style.top = (UY / Z) + 'px'; }
-place();
+// camera INSIDE the app (as in the 15 s film): the UI is laid out at full size with CSS zoom (sharp),
+// a wrapper carries the move + a slow 3D orbit; keys glide 0.5 s with the app's ease-out
+const uiPos = id => { let e = $(id), x = e.offsetWidth / 2, y = e.offsetHeight / 2; while (e && e.id !== 'ui') { x += e.offsetLeft; y += e.offsetTop; e = e.offsetParent; } return [x, y]; };
+const P = { sum: uiPos('tSum'), add: uiPos('tAdd'), bud: uiPos('tBudget'), ai: uiPos('tAI'), rows: uiPos('rows') };
+let T = 0;
+const cam = (px, py, sx, sy, Sz, r) => { $('ui').style.zoom = Sz; $('uiw').style.transform = `perspective(2400px) translate(${sx}px,${sy}px) rotateY(${6 * Math.sin(T * .9)}deg) rotateX(${4 * Math.sin(T * .7 + 1)}deg) rotate(${r}deg) translate(${-px * Sz}px,${-py * Sz}px)`; };
+const WIDE = [200, 300, 540, 1000, 2.3, 0];
+const CAM = [[3, ...WIDE], [3.4, ...P.sum, 540, 1250, 3.2, -2],
+  [9, ...WIDE], [9.4, ...P.add, 540, 1250, 3.3, 2],
+  [12, 200, P.rows[1], 540, 760, 2.55, 0], [13, 200, P.rows[1], 540, 740, 2.75, -1.5], [14.3, P.bud[0] - 40, P.bud[1], 540, 1000, 3.0, 0],
+  [22, ...WIDE], [22.4, ...P.ai, 540, 1250, 3.2, -2]];
+function camAt(t) { let i = 0; while (i < CAM.length - 1 && t >= tb(CAM[i + 1][0])) i++;
+  const A = CAM[Math.max(0, i - 1)], B = CAM[i], q = i === 0 ? 1 : out((t - tb(B[0])) / .5);
+  const v = B.slice(1).map((x, j) => lerp(A[j + 1], x, q)); v[4] *= 1 + .025 * Math.max(0, t - tb(B[0])); return v; }
 const at = id => { const r = $(id).getBoundingClientRect(); return [r.left + r.width / 2, r.top + r.height / 2]; };   // targets in frame px
 // a layer bursts out of the clicked point: a flat circle opens from it, the content scales up from 0.85
 // camera on a layer: glides (in-out) from pose A to pose B over [t0, t1]; poses {s, x, y, r}, origin in frame px
@@ -233,16 +244,8 @@ window.render = t => {
   $('s0').style.transform = `scale(${1 + .04 * cl(t / tb(3))})`;
 
   // home: slow push, the new row + Saved after the receipt
-  $('home').style.transform = 'none';
-  const T0 = { sum: at('tSum'), add: at('tAdd'), bud: at('tBudget'), ai: at('tAI') };
-  let hs = 1, hx = 540, hy = 960;
-  for (const [key, beat] of [['sum', S.sum], ['add', S.add], ['bud', S.bud], ['ai', S.ai]]) { const tc = tb(beat);
-    if (t >= tc - 1.1 && t < tc + .5) { hs = lerp(1, 1.45, inout((t - (tc - 1.1)) / 1.1)); [hx, hy] = T0[key]; } }
-  if (b >= S.saved && b < S.bud - .5) { hs = lerp(1.25, 1.05, inout((t - tb(S.saved)) / (tb(S.bud - .5) - tb(S.saved)))); [hx, hy] = [540, 1000]; }
-  $('home').style.transformOrigin = `${hx}px ${hy}px`; $('home').style.transform = `scale(${hs})`;
+  T = t; cam(...camAt(t));
   const sv = b >= S.saved && b < S.home3;
-  const scroll = b >= S.saved && b < S.bud + .6 ? 460 * k(t, tb(S.saved) - .05, .3) : 0;                   // scroll the list up so the new rows sit above the Saved band
-  $('ui').style.top = ((UY - scroll) / Z) + 'px';
   show($('band'), sv); show($('saved'), sv); show($('cSaved'), sv);
   rows.forEach((el, i) => { const st = tb(S.saved) + i * .12, nr = t < st ? 0 : k(t, st, .3);
     el.style.opacity = b < S.home3 && b >= S.saved ? nr : (b >= S.home3 ? 1 : 0); el.style.transform = `scale(${lerp(.9, 1, nr)})`;
