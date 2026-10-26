@@ -68,14 +68,14 @@ h3{font-size:17px;font-weight:700;margin:22px 0 12px;letter-spacing:-.02em}
 <div class="t a" id="w3" style="top:170px;font-size:120px;color:var(--cream)">where did it go?</div>
 
 <!-- receipt scan scene -->
-<div class="a" id="s4" style="inset:0;background:var(--cream)">
-  <div class="a" id="rc" style="left:250px;top:460px;width:580px;background:#fff;padding:60px 56px;box-shadow:24px 24px 0 var(--prussian);border-radius:0 70px 0 70px;color:var(--prussian)">
+<div class="a" id="s4" style="inset:0;background:var(--prussian)">
+  <div class="a" id="rc" style="left:250px;top:460px;width:580px;background:#fff;padding:60px 56px;box-shadow:24px 24px 0 var(--lemon);border-radius:0 70px 0 70px;color:var(--prussian)">
     <div style="font-size:56px;font-weight:700">Coffee House</div>
     <div style="display:flex;justify-content:space-between;font-size:48px;margin-top:36px"><span>Latte</span><span>4.50</span></div>
     <div style="display:flex;justify-content:space-between;font-size:60px;font-weight:700;margin-top:46px;background:var(--lemon);padding:18px 24px;border-radius:0 30px 0 30px"><span>Total</span><span>$4.50</span></div></div>
   <div class="a" id="scan" style="left:220px;width:640px;height:18px;background:var(--lemon)"></div>
-  <div class="t" style="top:1440px;font-size:96px;color:var(--prussian)">snap the receipt.</div>
-  <div class="t" style="top:1580px;font-size:54px;font-weight:500;letter-spacing:0;color:var(--prussian)">Daily logs it for you.</div>
+  <div class="t" style="top:1440px;font-size:96px;color:var(--cream)">snap the receipt.</div>
+  <div class="t" style="top:1580px;font-size:54px;font-weight:500;letter-spacing:0;color:var(--lemon)">Daily logs it for you.</div>
 </div>
 <div class="a" id="saved" style="left:0;right:0;top:1400px;display:flex;justify-content:center;align-items:center;gap:30px">
   <img src="lemon.svg" style="width:170px"><span style="background:var(--lemon);color:var(--prussian);font-size:80px;font-weight:700;padding:20px 46px;border-radius:0 44px 0 44px">Saved</span></div>
@@ -168,11 +168,11 @@ function fx(t) {
       transform: `translate(${p.x + Math.cos(p.ang) * d - sz / 2}px,${p.y + Math.sin(p.ang) * d - sz / 2}px) rotate(${p.spin * q}deg)` }); });
 }
 // 2) category takeovers: each category fills the screen on its beat, then slides away
-const TAKE_BG = ['#14213d', '#ffd23f', '#ffffff', '#e5e5e5', '#0a0d14'];
-$('take').innerHTML = CATS.map(([ic, n, v, bg, r, fg], i) => { const ink = i === 0 || i === 4 ? '#f2f0ea' : '#14213d';
+const TAKE_BG = ['#14213d', '#ffd23f', '#0a0d14', '#14213d', '#0a0d14'];   // no white/cream grounds (owner)
+$('take').innerHTML = CATS.map(([ic, n, v, bg, r, fg], i) => { const dark = i !== 1, ink = dark ? '#f2f0ea' : '#14213d';
   return `<div class="a" style="inset:0;background:${TAKE_BG[i]};visibility:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:40px">
-    <div style="width:360px;height:360px;background:${i === 0 || i === 4 ? '#ffd23f' : '#14213d'};border-radius:${r === '0' ? '0 120px 0 120px' : r};display:grid;place-items:center">
-      <span class="ms" style="font-size:190px;color:${i === 0 || i === 4 ? '#14213d' : '#ffd23f'}">${ic}</span></div>
+    <div style="width:360px;height:360px;background:${dark ? '#ffd23f' : '#14213d'};border-radius:${r === '0' ? '0 120px 0 120px' : r};display:grid;place-items:center">
+      <span class="ms" style="font-size:190px;color:${dark ? '#14213d' : '#ffd23f'}">${ic}</span></div>
     <div style="font-size:80px;font-weight:700;color:${ink};letter-spacing:-.03em;white-space:nowrap">${n}</div>
     <div style="font-size:150px;font-weight:700;color:${ink};letter-spacing:-.04em">$${v.toFixed(2)}</div></div>`; }).join('');
 const takes = [...$('take').children];
