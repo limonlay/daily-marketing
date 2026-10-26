@@ -76,7 +76,7 @@ h3{font-size:17px;font-weight:700;margin:22px 0 12px;letter-spacing:-.02em}
   <div class="lh"><h3>Where it went</h3><a id="tBudget">Budgets ›</a></div>
   <div class="cats" id="cats"></div>
   <div class="lh"><h3>Transactions</h3><div class="seg"><span class="on">All</span><span>In</span><span>Out</span></div></div>
-  <div class="sub"><span>WED, OCT 14</span><span>−$8.25</span></div>
+  <div class="sub"><span>WED, OCT 14</span><span>−$40.30</span></div>
   <div id="rows"></div>
   <div class="nav"><div><span class="ms" style="color:#fff">receipt_long</span>Transactions</div><div id="tSum"><span class="ms">insights</span>Summary</div>
     <div class="fab" id="tAdd"><span class="ms">add</span></div><div><span class="ms">document_scanner</span>Scan</div><div id="tAI"><span class="ms">forum</span>AI</div></div>
@@ -84,7 +84,7 @@ h3{font-size:17px;font-weight:700;margin:22px 0 12px;letter-spacing:-.02em}
   <div class="a" id="band" style="left:0;top:1190px;width:1080px;height:730px;background:var(--bg)"></div>
   <div class="a" id="saved" style="left:0;right:0;top:1250px;display:flex;justify-content:center;align-items:center;gap:30px">
     <img src="lemon.svg" style="width:170px"><span style="background:var(--lemon);color:var(--prussian);font-size:80px;font-weight:700;padding:20px 46px;border-radius:0 44px 0 44px">Saved</span></div>
-  <div class="t" id="cSaved" style="top:1410px;font-size:96px;color:var(--cream)">snap. logged.</div>
+  <div class="t" id="cSaved" style="top:1410px;font-size:96px;color:var(--cream)">3 receipts. logged.</div>
 </div>
 
 <!-- 1 SUMMARY: categories burst out, one after another -->
@@ -92,12 +92,20 @@ h3{font-size:17px;font-weight:700;margin:22px 0 12px;letter-spacing:-.02em}
 
 <!-- 2 ADD: the receipt -->
 <div class="L" id="L2" style="background:var(--prussian)">
-  <div class="cap" id="c2">snap the receipt.</div>
-  <div class="a" id="rc" style="left:250px;top:560px;width:580px;background:#fff;padding:60px 56px;box-shadow:24px 24px 0 var(--lemon);border-radius:0 70px 0 70px;color:var(--prussian)">
-    <div style="font-size:56px;font-weight:700">Coffee House</div>
-    <div style="display:flex;justify-content:space-between;font-size:48px;margin-top:36px"><span>Latte</span><span>4.50</span></div>
-    <div style="display:flex;justify-content:space-between;font-size:60px;font-weight:700;margin-top:46px;background:var(--lemon);padding:18px 24px;border-radius:0 30px 0 30px"><span>Total</span><span>$4.50</span></div></div>
-  <div class="a" id="scan" style="left:220px;width:640px;height:18px;background:var(--lemon)"></div>
+  <div class="cap" id="c2">snap them all.</div>
+  <div class="a rc" id="rc0" style="left:80px;top:430px;width:440px;background:#fff;padding:44px 42px;box-shadow:20px 20px 0 var(--lemon);border-radius:0 56px 0 56px;color:var(--prussian)">
+    <div style="font-size:44px;font-weight:700">Coffee House</div>
+    <div style="display:flex;justify-content:space-between;font-size:38px;margin-top:26px"><span>Latte</span><span>4.50</span></div>
+    <div style="display:flex;justify-content:space-between;font-size:46px;font-weight:700;margin-top:34px;background:var(--lemon);padding:14px 20px;border-radius:0 24px 0 24px"><span>Total</span><span>$4.50</span></div></div>
+  <div class="a rc" id="rc1" style="left:560px;top:520px;width:440px;background:#fff;padding:44px 42px;box-shadow:20px 20px 0 var(--lemon);border-radius:0 56px 0 56px;color:var(--prussian)">
+    <div style="font-size:44px;font-weight:700">Fresh Market</div>
+    <div style="display:flex;justify-content:space-between;font-size:38px;margin-top:26px"><span>Groceries</span><span>23.80</span></div>
+    <div style="display:flex;justify-content:space-between;font-size:46px;font-weight:700;margin-top:34px;background:var(--lemon);padding:14px 20px;border-radius:0 24px 0 24px"><span>Total</span><span>$23.80</span></div></div>
+  <div class="a rc" id="rc2" style="left:300px;top:960px;width:440px;background:#fff;padding:44px 42px;box-shadow:20px 20px 0 var(--lemon);border-radius:0 56px 0 56px;color:var(--prussian)">
+    <div style="font-size:44px;font-weight:700">City Taxi</div>
+    <div style="display:flex;justify-content:space-between;font-size:38px;margin-top:26px"><span>Ride</span><span>12.00</span></div>
+    <div style="display:flex;justify-content:space-between;font-size:46px;font-weight:700;margin-top:34px;background:var(--lemon);padding:14px 20px;border-radius:0 24px 0 24px"><span>Total</span><span>$12.00</span></div></div>
+  <div class="a" id="scan" style="left:40px;width:1000px;height:18px;background:var(--lemon)"></div>
 </div>
 
 <!-- 3 BUDGETS -->
@@ -144,8 +152,8 @@ h3{font-size:17px;font-weight:700;margin:22px 0 12px;letter-spacing:-.02em}
 const CATS = [['home', 'Housing', 200, '#14213d', '50%', '#fff'], ['shopping_bag', 'Shopping', 57.5, '#ffd23f', '50%', '#000'],
   ['lightbulb', 'Bills & utilities', 25, '#fff', '0', '#000'], ['movie', 'Entertainment', 9.75, '#e5e5e5', '50% 50% 0 50%', '#000'],
   ['restaurant', 'Food', 8.25, '#14213d', '50%', '#fff']];
-const ROWS = [['restaurant', 'Food', 'Coffee', 4.5, '#ffd23f', '#000'], ['restaurant', 'Food', 'Chicken rice', 3.75, '#e5e5e5', '#000'],
-  ['directions_bus', 'Transport', 'Subway', 1.25, '#e5e5e5', '#000']];
+const ROWS = [['restaurant', 'Food', 'Coffee', 4.5, '#ffd23f', '#000'], ['shopping_bag', 'Shopping', 'Groceries', 23.8, '#14213d', '#fff'],
+  ['directions_bus', 'Transport', 'Taxi', 12, '#e5e5e5', '#000']];   // the three receipts just scanned (illustrative)
 const BUD = [['home', 'Housing', 200, 250, '#ffd23f', '#14213d', '50%'], ['shopping_bag', 'Shopping', 57.5, 80, '#14213d', '#ffd23f', '50%'],
   ['lightbulb', 'Bills', 25, 40, '#fff', '#000', '0'], ['movie', 'Fun', 9.75, 30, '#e5e5e5', '#000', '50% 50% 0 50%'], ['restaurant', 'Food', 31.4, 60, '#ffd23f', '#14213d', '50%']];
 const $ = id => document.getElementById(id);
@@ -223,10 +231,12 @@ window.render = t => {
   // home: slow push, the new row + Saved after the receipt
   $('home').style.transform = `scale(${1 + .015 * Math.sin(t * .8)})`;
   const sv = b >= S.saved && b < S.home3;
+  const scroll = b >= S.saved && b < S.bud + .6 ? 460 * k(t, tb(S.saved) - .05, .3) : 0;                   // scroll the list up so the new rows sit above the Saved band
+  $('ui').style.top = ((UY - scroll) / Z) + 'px';
   show($('band'), sv); show($('saved'), sv); show($('cSaved'), sv);
-  rows.forEach((el, i) => { const nr = b < S.saved ? 0 : k(t, tb(S.saved), .3);
-    el.style.transform = i === 0 ? `scale(${lerp(.9, 1, nr)})` : `translateY(${(1 - nr) * -56}px)`; if (i === 0) el.style.opacity = nr; });
-  rows[0].querySelector('.hl').style.opacity = b < S.saved ? 0 : .32 * (1 - cl((t - tb(S.saved)) / 1.2));
+  rows.forEach((el, i) => { const st = tb(S.saved) + i * .12, nr = t < st ? 0 : k(t, st, .3);
+    el.style.opacity = b < S.home3 && b >= S.saved ? nr : (b >= S.home3 ? 1 : 0); el.style.transform = `scale(${lerp(.9, 1, nr)})`;
+    el.querySelector('.hl').style.opacity = t < st ? 0 : .32 * (1 - cl((t - st) / 1.2)); });
   const svq = k(t, tb(S.saved), .35, spring); $('saved').style.transform = `scale(${lerp(.5, 1, svq)})`;
   typeText($('cSaved'), t, tb(S.saved + .6));
 
@@ -247,8 +257,10 @@ window.render = t => {
 
   // 2 add: burst from the + button, the receipt drops in, the scan line sweeps
   burst($('L2'), t, tb(S.add), ax, ay); typeText($('c2'), t, tb(S.add) + .2);
-  const r = k(t, tb(S.add) + .1, .35); $('rc').style.transform = `translateY(${(1 - r) * 260}px) rotate(${(1 - r) * -6}deg)`;
-  const sc = cl((t - tb(S.add + .4)) / .9); $('scan').style.top = lerp(540, 1100, sc) + 'px'; $('scan').style.opacity = t > tb(S.add + .4) && sc < 1 ? 1 : 0;
+  // three receipts land one after another (one photo, several receipts), then one scan line sweeps them all
+  [0, 1, 2].forEach(i => { const st = tb(S.add) + .05 + i * .15, q = k(t, st, .3), rot = [-8, 6, -3][i];
+    const e = $('rc' + i); e.style.opacity = t >= st ? 1 : 0; e.style.transform = `translateY(${(1 - q) * 300}px) rotate(${rot + (1 - q) * -10}deg)`; });
+  const sc = cl((t - tb(S.add) - .5) / .75); $('scan').style.top = lerp(420, 1560, sc) + 'px'; $('scan').style.opacity = t > tb(S.add) + .5 && sc < 1 ? 1 : 0;
 
   // 3 budgets: burst from "Budgets ›", bars fill one per beat, all end under their limit
   burst($('L3'), t, tb(S.bud), bx, by); typeText($('c3'), t, tb(S.bud) + .25);
