@@ -204,12 +204,12 @@ const P = { sum: uiPos('tSum'), add: uiPos('tAdd'), bud: uiPos('tBudget'), ai: u
 let T = 0;
 const cam = (px, py, sx, sy, Sz, r) => { $('ui').style.zoom = Sz; $('uiw').style.transform = `perspective(2400px) translate(${sx}px,${sy}px) rotateY(${6 * Math.sin(T * .9)}deg) rotateX(${4 * Math.sin(T * .7 + 1)}deg) rotate(${r}deg) translate(${-px * Sz}px,${-py * Sz}px)`; };
 const WIDE = [200, 300, 540, 1000, 2.3, 0];
-const CAM = [[3, ...WIDE], [3.4, ...P.sum, 540, 1250, 3.2, -2],
-  [9, ...WIDE], [9.4, ...P.add, 540, 1250, 3.3, 2],
-  [12, 200, P.rows[1], 540, 760, 2.55, 0], [13, 200, P.rows[1], 540, 740, 2.75, -1.5], [14.3, P.bud[0] - 40, P.bud[1], 540, 1000, 3.0, 0],
-  [22, ...WIDE], [22.4, ...P.ai, 540, 1250, 3.2, -2]];
+const CAM = [[2.9, ...WIDE], [3, ...P.sum, 540, 1250, 3.2, -2],
+  [8.9, ...WIDE], [9, ...P.add, 540, 1250, 3.3, 2],
+  [12, 200, P.rows[1], 540, 760, 2.55, 0], [13, 200, P.rows[1], 540, 740, 2.75, -1.5], [14, P.bud[0] - 40, P.bud[1], 540, 1000, 3.0, 0],
+  [21.9, ...WIDE], [22, ...P.ai, 540, 1250, 3.2, -2]];
 function camAt(t) { let i = 0; while (i < CAM.length - 1 && t >= tb(CAM[i + 1][0])) i++;
-  const A = CAM[Math.max(0, i - 1)], B = CAM[i], q = i === 0 ? 1 : out((t - tb(B[0])) / .5);
+  const A = CAM[Math.max(0, i - 1)], B = CAM[i], q = i === 0 ? 1 : inout((t - tb(B[0])) / .85);
   const v = B.slice(1).map((x, j) => lerp(A[j + 1], x, q)); v[4] *= 1 + .025 * Math.max(0, t - tb(B[0])); return v; }
 const at = id => { const r = $(id).getBoundingClientRect(); return [r.left + r.width / 2, r.top + r.height / 2]; };   // targets in frame px
 // a layer bursts out of the clicked point: a flat circle opens from it, the content scales up from 0.85
