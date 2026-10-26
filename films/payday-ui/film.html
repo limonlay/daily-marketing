@@ -44,7 +44,7 @@ h3{font-size:17px;font-weight:700;margin:22px 0 12px;letter-spacing:-.02em}
 </style></head><body>
 <div id="stage" style="position:absolute;inset:0;overflow:hidden;transform-origin:540px 960px">
 <div id="bgL"></div>
-<div id="ui">
+<div id="uiw" style="position:absolute;left:0;top:0;transform-origin:0 0"><div id="ui">
   <div class="hdr" id="hdr"><span>Daily <img src="lemon.svg" style="width:22px;vertical-align:-2px"></span><span><span class="ms">search</span><span class="ms">more_horiz</span></span></div>
   <div class="mon" id="mon"><b><span class="ms" style="font-size:20px;color:var(--muted)">chevron_left</span> October <span class="ms" style="font-size:20px;color:var(--muted)">chevron_right</span></b><div class="seg"><span class="on">Month</span><span>Year</span></div></div>
   <div class="hero" id="hero"><img class="lem" id="lem" src="lemon.svg">
@@ -59,7 +59,7 @@ h3{font-size:17px;font-weight:700;margin:22px 0 12px;letter-spacing:-.02em}
     <div id="rows"></div>
   </div>
 </div>
-
+</div>
 <div class="a" id="band" style="left:0;top:0;width:1080px;height:500px;background:var(--bg)"></div>
 <div class="a" id="date" style="left:0;right:0;top:170px;text-align:center"><span id="dateT" style="display:inline-block;font-size:56px;font-weight:700;padding:14px 36px;border-radius:0 30px 0 30px;background:var(--prussian);color:var(--lemon)">OCT 1</span></div>
 <div class="t a" id="w1" style="top:340px;font-size:200px;color:var(--prussian)">payday.</div>
@@ -143,7 +143,8 @@ const typeText = (el, t, at, cps = 40) => {
   el.innerHTML = esc(full.slice(0, n)) + caret + '<span style="visibility:hidden">' + esc(full.slice(n)) + '</span>';
   el.style.opacity = t >= at ? 1 : 0; el.style.transform = 'none'; };
 const rise = (el, t, at) => typeText(el, t, at);
-const cam = (px, py, sx, sy, S, r) => { $('ui').style.transform = `perspective(2400px) translate(${sx}px,${sy}px) rotateY(${6 * Math.sin(T * .9)}deg) rotateX(${4 * Math.sin(T * .7 + 1)}deg) rotate(${r}deg) scale(${S}) translate(${-px}px,${-py}px)`; };
+// sharp: the app is laid out at full size with CSS zoom (re-rendered, not a scaled bitmap); the 3D/rotation sits on a wrapper
+const cam = (px, py, sx, sy, S, r) => { $('ui').style.zoom = S; $('uiw').style.transform = `perspective(2400px) translate(${sx}px,${sy}px) rotateY(${6 * Math.sin(T * .9)}deg) rotateX(${4 * Math.sin(T * .7 + 1)}deg) rotate(${r}deg) translate(${-px * S}px,${-py * S}px)`; };
 
 // scene cuts (beat index) and camera keys [beat, px, py, sx, sy, S, tilt°]: each key SNAPS in 0.28 s, then the shot keeps creeping
 const CUT = { payday: 1, day25: 3, where: 6, snap: 10, saved: 12, know: 15, cta: 19 };
