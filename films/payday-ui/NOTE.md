@@ -9,3 +9,5 @@ Motion follows DESIGN.md tokens: ease-out cubic-bezier(.2,.8,.2,1), ~6% overshoo
 Motion blur: `node rec-blur.cjs <dir> 6` renders 6 sub-frames per frame over a 180° shutter (never across a cut); ffmpeg `tmix=frames=6` averages them. Counters step per frame so digits stay sharp.
 
 Camera (v4): no beat punch (owner removed it); a small alternating tilt on every beat (stronger on hits 4, 7, 12, 19, 21); camera keys SNAP in 0.28 s (expo-out) and creep after; zoom-through on every cut; snap-zoom onto the balance on the first strong hit; dutch tilt on "where did it go?". Gates: 14/14 cuts on a beat, motion 4.6/255.
+
+v5: no beat punch, no tilt kick, no zoom-through (owner: no jerky bounces). Camera moves glide with the app ease-out over 0.5 s.
