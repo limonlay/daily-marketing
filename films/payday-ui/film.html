@@ -42,6 +42,7 @@ h3{font-size:17px;font-weight:700;margin:22px 0 12px;letter-spacing:-.02em}
 .tx .amt{font-weight:600;letter-spacing:-.02em}
 .tx .hl{position:absolute;left:-20px;right:-20px;top:0;bottom:0;background:var(--lemon);opacity:0}
 </style></head><body>
+<div id="stage" style="position:absolute;inset:0;overflow:hidden;transform-origin:540px 960px">
 <div id="bgL"></div>
 <div id="ui">
   <div class="hdr" id="hdr"><span>Daily <img src="lemon.svg" style="width:22px;vertical-align:-2px"></span><span><span class="ms">search</span><span class="ms">more_horiz</span></span></div>
@@ -85,6 +86,7 @@ h3{font-size:17px;font-weight:700;margin:22px 0 12px;letter-spacing:-.02em}
   <div class="t a" id="f6" style="top:1320px;font-size:46px;font-weight:500;letter-spacing:0;color:#9a9890">free · no ads · web app</div>
 </div>
 
+</div>
 <script>
 // Demo data = the app's English demo screenshot (limonlay/daily icons/shot-en-dark.webp).
 const CATS = [['home', 'Housing', 200, '#14213d', '50%', '#fff'], ['shopping_bag', 'Shopping', 57.5, '#ffd23f', '50%', '#000'],
@@ -97,70 +99,92 @@ $('cats').innerHTML = CATS.map(([ic, n, v, bg, r, fg]) => `<div class="chip"><di
 $('rows').innerHTML = ROWS.map(([ic, n, s, v, bg, fg]) => `<div class="tx"><div class="hl"></div><div class="ico" style="background:${bg}"><span class="ms" style="color:${fg}">${ic}</span></div><div class="info"><div>${n}</div><small>${s}</small></div><div class="amt">−$${v.toFixed(2)}</div></div>`).join('');
 const chips = [...document.querySelectorAll('.chip')], rows = [...document.querySelectorAll('.tx')];
 
-// 128 BPM; motion = the app's tokens: ease-out cubic-bezier(.2,.8,.2,1), ~6% overshoot only for things that "happen".
-const BEAT = 60 / 129.2, tb = n => n * BEAT, cl = x => Math.min(1, Math.max(0, x)), lerp = (a, b, x) => a + (b - a) * x;
+// Real beats of "Golf Clap" (librosa via beat-synced-edit, 95.7 BPM) in film time, song start 84.355 s.
+// Strong hits: beat 4 (3.02 s), 7 (4.93), 12 (8.08), 19 (12.49), 21 (13.77) — the key moments land there.
+const BEATS = [0.514,  1.141,  1.768,  2.395,  3.022,  3.649,  4.299,  4.926,  5.553,  6.156,  6.807,  7.457,  8.084,  8.687,  9.338,  9.964,  10.615,  11.242,  11.892,  12.495,  13.146,  13.773,  14.399];
+const cl = x => Math.min(1, Math.max(0, x)), lerp = (a, b, x) => a + (b - a) * x;
+const tb = n => { const B = BEATS, i = Math.floor(n);                                  // beat index (fractional) -> seconds
+  if (i < 0) return B[0] + n * (B[1] - B[0]); if (i >= B.length - 1) return B[B.length - 1] + (n - B.length + 1) * (B[1] - B[0]);
+  return lerp(B[i], B[i + 1], n - i); };
+const beatOf = t => { const B = BEATS; if (t < B[0]) return (t - B[0]) / (B[1] - B[0]);
+  for (let i = 0; i < B.length - 1; i++) if (t < B[i + 1]) return i + (t - B[i]) / (B[i + 1] - B[i]);
+  return B.length - 1 + (t - B[B.length - 1]) / (B[1] - B[0]); };
 const bez = (x1, y1, x2, y2) => x => { x = cl(x); let lo = 0, hi = 1, s = .5;
   for (let i = 0; i < 24; i++) { s = (lo + hi) / 2; const bx = 3 * x1 * s * (1 - s) ** 2 + 3 * x2 * s * s * (1 - s) + s ** 3; bx < x ? lo = s : hi = s; }
   return 3 * y1 * s * (1 - s) ** 2 + 3 * y2 * s * s * (1 - s) + s ** 3; };
-const out = bez(.2, .8, .2, 1), spring = bez(.34, 1.4, .64, 1), io = bez(.45, 0, .25, 1);
+// app tokens: ease-out (.2,.8,.2,1); ~6% overshoot only for things that "happen". Camera snaps use a sharper expo-out.
+const out = bez(.2, .8, .2, 1), spring = bez(.34, 1.4, .64, 1), snap = x => x >= 1 ? 1 : 1 - Math.pow(2, -11 * cl(x));
 const k = (t, at, d, e = out) => e((t - at) / d);
 const money = v => '$' + v.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 const show = (el, on) => { el.style.visibility = on ? 'visible' : 'hidden'; };
-const rise = (el, t, at, dist = 70) => { const q = k(t, at, .32); el.style.opacity = q; el.style.transform = `translateY(${(1 - q) * dist}px)`; };
-// camera: put screen point (px,py) at frame point (sx,sy), scale S
-const cam = (px, py, sx, sy, S) => { $('ui').style.transform = `translate(${sx - px * S}px,${sy - py * S}px) scale(${S})`; };
-// camera keys [beat, px, py, sx, sy, S]
-const CAM = [[0, 200, 190, 540, 1040, 2.55], [4, 200, 190, 540, 1090, 2.55], [7.6, 200, 190, 540, 1090, 2.62],
-  [8.6, 200, 380, 540, 1000, 2.55], [16, 200, 400, 540, 1000, 2.6], [19, 200, 560, 540, 760, 2.55], [22, 200, 560, 540, 760, 2.5],
-  [23.5, 200, 400, 540, 860, 2.05], [27, 200, 410, 540, 860, 1.98]];
-function camAt(b) {
-  let i = 0; while (i < CAM.length - 2 && b >= CAM[i + 1][0]) i++;
-  const A = CAM[i], B = CAM[i + 1], x = io((b - A[0]) / (B[0] - A[0]));
-  return A.slice(1).map((v, j) => lerp(v, B[j + 1], x));
+const rise = (el, t, at, dist = 90) => { const q = k(t, at, .26); el.style.opacity = cl((t - at) / .08); el.style.transform = `translateY(${(1 - q) * dist}px) scale(${lerp(1.25, 1, q)})`; };
+const cam = (px, py, sx, sy, S, r) => { $('ui').style.transform = `translate(${sx}px,${sy}px) rotate(${r}deg) scale(${S}) translate(${-px}px,${-py}px)`; };
+
+// scene cuts (beat index) and camera keys [beat, px, py, sx, sy, S, tilt°]: each key SNAPS in 0.28 s, then the shot keeps creeping
+const CUT = { day25: 3, where: 6, snap: 10, saved: 12, know: 15, cta: 19 };
+const CAM = [[0, 200, 190, 540, 1040, 2.55, 0], [3, 200, 190, 540, 1090, 2.55, 0], [4, 118, 168, 540, 1060, 3.7, -2],
+  [5, 160, 190, 540, 1090, 2.9, 0], [6, 200, 380, 540, 1000, 2.55, -3], [8, 200, 395, 540, 1000, 2.85, 1.5],
+  [12, 200, 560, 540, 760, 2.55, 0], [13, 200, 556, 540, 800, 2.85, -1.5], [15, 200, 410, 540, 860, 1.98, 0]];
+function camAt(t) {
+  let i = 0; while (i < CAM.length - 1 && t >= tb(CAM[i + 1][0])) i++;
+  const A = CAM[Math.max(0, i - 1)], B = CAM[i], q = i === 0 ? 1 : snap((t - tb(B[0])) / .28);
+  const v = B.slice(1).map((x, j) => lerp(A[j + 1], x, q));
+  v[4] *= 1 + .025 * Math.max(0, t - tb(B[0]));                                         // never freeze: slow creep in
+  return v;
+}
+// whole-stage hits: a punch on every beat (stronger on the strong ones), a tilt kick, zoom-through at every cut
+const STRONG = new Set([4, 7, 12, 19, 21]);
+function stage(t) {
+  const bi = Math.floor(beatOf(t)), dt = t - tb(bi), amp = bi < 0 ? 0 : (STRONG.has(bi) ? .09 : .035);
+  let s = 1 + amp * Math.exp(-dt * 11), r = (bi % 2 ? 1 : -1) * (STRONG.has(bi) ? 2.2 : .8) * Math.exp(-dt * 9) * (bi < 0 ? 0 : 1);
+  for (const c of Object.values(CUT)) { const ct = tb(c);
+    if (t >= ct - .13 && t < ct) s *= 1 + .18 * ((t - (ct - .13)) / .13) ** 2;          // accelerate into the cut
+    if (t >= ct && t < ct + .22) s *= 1 + .18 * (1 - snap((t - ct) / .22)); }           // and land out of it
+  $('stage').style.transform = `scale(${s}) rotate(${r}deg)`;
 }
 
+window.CUTS = Object.values(CUT).map(tb);                                    // read by rec-blur.cjs
 window.render = t => {
-  const b = t / BEAT;
-  // scenes by beat
-  show($('bgL'), b < 4); show($('ui'), b < 16 || (b >= 19 && b < 27)); show($('s4'), b >= 16 && b < 19); show($('s6'), b >= 27);
-  show($('w1'), b < 4); show($('band'), b >= 8 && b < 16); show($('w2'), b >= 4 && b < 8); show($('w3'), b >= 8 && b < 16);
-  show($('saved'), b >= 19 && b < 22); show($('w4'), b >= 19 && b < 22); show($('w5'), b >= 22 && b < 27);
-  const [px, py, sx, sy, S] = camAt(b); cam(px, py, sx, sy, S);
-  $('hdr').style.opacity = $('mon').style.opacity = b < 4 ? 0 : 1;          // payday shot = the card alone on lemon
-  $('below').style.opacity = b < 8 ? 0 : 1;
+  const b = beatOf(t), C = CUT;
+  show($('bgL'), b < C.day25); show($('ui'), b < C.snap || (b >= C.saved && b < C.cta)); show($('s4'), b >= C.snap && b < C.saved); show($('s6'), b >= C.cta);
+  show($('w1'), b < C.day25); show($('band'), b >= C.where && b < C.snap); show($('w2'), b >= C.day25 && b < C.where); show($('w3'), b >= C.where && b < C.snap);
+  show($('saved'), b >= C.saved && b < C.know); show($('w4'), b >= C.saved && b < C.know); show($('w5'), b >= C.know && b < C.cta);
+  cam(...camAt(t)); stage(t);
+  $('hdr').style.opacity = $('mon').style.opacity = b < C.day25 ? 0 : 1;
+  $('below').style.opacity = b < C.where ? 0 : 1;
 
-  // numbers: payday counts income + balance up; day 25 counts expenses up and balance down (demo month: $1,000 in, $301.75 out)
-  const tf = Math.floor(t * 30 + 1e-6) / 30;                                  // counters step per frame (stay sharp under motion blur)
-  const up = k(tf, tb(.5), 1.1), dn = k(tf, tb(4.5), 1.4);
+  // numbers step per frame (sharp under motion blur): payday counts up, day 25 counts down (demo: $1,000 in, $301.75 out)
+  const tf = Math.floor(t * 30 + 1e-6) / 30;
+  const up = k(tf, tb(0), 1.0), dn = k(tf, tb(3.15), 1.3);
   const inc = 1000 * up, exp = 301.75 * dn, bal = inc - exp;
   $('bal').textContent = money(Math.round(bal * 100) / 100); $('inc').textContent = money(Math.round(inc * 100) / 100); $('exp').textContent = money(Math.round(exp * 100) / 100);
   $('prog').style.width = (30 * dn) + '%';
-  $('hero').style.transform = `scale(${1 + .04 * Math.exp(-((b * 1) % 1) * 10) * (b < 8 ? 1 : 0)})`;   // beat pulse on the card
-  const lj = k(t, tb(1), .45, spring); $('lem').style.transform = `translate(${(1 - lj) * 120}px,${(1 - lj) * -120}px) rotate(${(1 - lj) * 40}deg)`;
-  $('w1').style.transform = `scale(${lerp(1.5, 1, k(t, 0, .32, spring))})`;
-  rise($('w2'), t, tb(4.3)); rise($('w3'), t, tb(8.5));
+  const lj = k(t, tb(1), .4, spring); $('lem').style.transform = `translate(${(1 - lj) * 140}px,${(1 - lj) * -140}px) rotate(${(1 - lj) * 50}deg)`;
+  $('w1').style.transform = `scale(${lerp(1.6, 1, k(t, 0, .26, spring))})`;
+  rise($('w2'), t, tb(4)); rise($('w3'), t, tb(6.05));
 
-  // categories pop one per beat (the thing "happens": ~6% overshoot)
-  chips.forEach((c, i) => { const q = k(t, tb(10 + i), .35, spring); c.style.opacity = cl((t - tb(10 + i)) / .1); c.style.transform = `scale(${lerp(.4, 1, q)})`; });
+  // categories pop on the beats
+  const CB = [6.5, 7, 8, 9, 9.5];
+  chips.forEach((c, i) => { const q = k(t, tb(CB[i]), .3, spring); c.style.opacity = cl((t - tb(CB[i])) / .06); c.style.transform = `scale(${lerp(.3, 1, q)})`; });
 
-  // receipt scan
-  const r = k(t, tb(16), .35); $('rc').style.transform = `translateY(${(1 - r) * 140}px) rotate(${(1 - r) * -4}deg)`;
-  const sc = cl((t - tb(16.5)) / 1.2); $('scan').style.top = lerp(440, 1000, sc) + 'px'; $('scan').style.opacity = t > tb(16.5) && sc < 1 ? 1 : 0;
+  // receipt: lands on the cut, the scan line sweeps in ~1 s
+  const r = k(t, tb(C.snap), .3); $('rc').style.transform = `translateY(${(1 - r) * 200}px) rotate(${(1 - r) * -6}deg)`;
+  const sc = cl((t - tb(C.snap + .25)) / 1.0); $('scan').style.top = lerp(440, 1000, sc) + 'px'; $('scan').style.opacity = t > tb(C.snap + .25) && sc < 1 ? 1 : 0;
 
-  // new row: the list makes room, the coffee row grows in with the lemon highlight fading over 1.2 s
-  const nr = k(t, tb(19), .38);
+  // the drop: new row appears with the app's lemon highlight (fades in 1.2 s); lemon + Saved
+  const nr = k(t, tb(C.saved), .3);
   rows.forEach((el, i) => { el.style.transform = i === 0 ? `scale(${lerp(.9, 1, nr)})` : `translateY(${(1 - nr) * -56}px)`; });
-  rows[0].style.opacity = b < 19 ? 0 : nr;
-  rows[0].querySelector('.hl').style.opacity = b < 19 ? 0 : .32 * (1 - cl((t - tb(19)) / 1.2));
-  const sv = k(t, tb(20), .4, spring); $('saved').style.transform = `scale(${lerp(.6, 1, sv)})`; $('saved').style.opacity = cl((t - tb(20)) / .12);
-  rise($('w4'), t, tb(20.5));
-  rise($('w5'), t, tb(23));
+  rows[0].style.opacity = b < C.saved ? 0 : nr;
+  rows[0].querySelector('.hl').style.opacity = b < C.saved ? 0 : .32 * (1 - cl((t - tb(C.saved)) / 1.2));
+  const sv = k(t, tb(C.saved), .35, spring); $('saved').style.transform = `scale(${lerp(.5, 1, sv)})`; $('saved').style.opacity = cl((t - tb(C.saved)) / .08);
+  rise($('w4'), t, tb(13));
+  rise($('w5'), t, tb(15.2));
 
-  // CTA
-  const l6 = k(t, tb(27), .5, spring);
-  $('l6').style.transform = `scale(${lerp(3, 1, l6)}) rotate(${lerp(-25, 0, l6) + Math.sin(t * 1.6) * 2}deg) translateY(${Math.sin(t * 2.1) * 10}px)`;
-  [['w6', 28], ['u6', 29], ['f6', 29.5]].forEach(([id, bb]) => rise($(id), t, tb(bb), 60));
-  $('s6').style.transform = `scale(${1 - cl((b - 27) / 5) * .05})`;
+  // CTA on the strongest hit
+  const l6 = k(t, tb(C.cta), .45, spring);
+  $('l6').style.transform = `scale(${lerp(3.4, 1, l6)}) rotate(${lerp(-30, 0, l6) + Math.sin(t * 1.6) * 2}deg) translateY(${Math.sin(t * 2.1) * 10}px)`;
+  [['w6', 20], ['u6', 21], ['f6', 21.5]].forEach(([id, bb]) => rise($(id), t, tb(bb), 60));
+  $('s6').style.transform = `scale(${1 - cl((t - tb(C.cta)) / 3) * .05})`;
 };
 render(0);
 </script></body></html>
