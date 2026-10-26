@@ -7,7 +7,7 @@
 *{box-sizing:border-box;margin:0}
 html,body{width:1080px;height:1920px;overflow:hidden;background:var(--bg);font-family:"Google Sans",sans-serif}
 .ms{font-family:"Daily Symbols";font-weight:normal;font-style:normal;line-height:1;letter-spacing:normal;white-space:nowrap;direction:ltr;-webkit-font-feature-settings:"liga";font-feature-settings:"liga";font-variation-settings:"FILL" 1,"wght" 500}
-.a{position:absolute;will-change:transform}
+.a{position:absolute}   /* no will-change: layers would raster at 1x and blur when scaled */
 .t{position:absolute;left:0;right:0;text-align:center;font-weight:700;letter-spacing:-.03em}
 #bgL{position:absolute;inset:0;background:var(--lemon)}
 /* the app screen, authored at 400 px wide (phone scale), moved by one camera transform */
@@ -60,12 +60,12 @@ h3{font-size:17px;font-weight:700;margin:22px 0 12px;letter-spacing:-.02em}
   </div>
 </div>
 
-<div class="a" id="band" style="left:0;top:0;width:1080px;height:440px;background:var(--bg)"></div>
-<div class="a" id="date" style="left:0;right:0;top:110px;text-align:center"><span id="dateT" style="display:inline-block;font-size:56px;font-weight:700;padding:14px 36px;border-radius:0 30px 0 30px;background:var(--prussian);color:var(--lemon)">OCT 1</span></div>
-<div class="t a" id="w1" style="top:250px;font-size:200px;color:var(--prussian)">payday.</div>
-<div class="t a" id="w2" style="top:220px;font-size:170px;color:var(--cream)">…day 25.</div>
-<div class="t a" id="w2s" style="top:420px;font-size:58px;font-weight:500;letter-spacing:0;color:var(--lemon)">$301.75 already gone.</div>
-<div class="t a" id="w3" style="top:170px;font-size:120px;color:var(--cream)">where did it go?</div>
+<div class="a" id="band" style="left:0;top:0;width:1080px;height:500px;background:var(--bg)"></div>
+<div class="a" id="date" style="left:0;right:0;top:170px;text-align:center"><span id="dateT" style="display:inline-block;font-size:56px;font-weight:700;padding:14px 36px;border-radius:0 30px 0 30px;background:var(--prussian);color:var(--lemon)">OCT 1</span></div>
+<div class="t a" id="w1" style="top:340px;font-size:200px;color:var(--prussian)">payday.</div>
+<div class="t a" id="w2" style="top:300px;font-size:170px;color:var(--cream)">…day 25.</div>
+<div class="t a" id="w2s" style="top:500px;font-size:58px;font-weight:500;letter-spacing:0;color:var(--lemon)">$301.75 already gone.</div>
+<div class="t a" id="w3" style="top:300px;font-size:120px;color:var(--cream)">where did it go?</div>
 
 <!-- receipt scan scene -->
 <div class="a" id="s4" style="inset:0;background:var(--prussian)">
@@ -74,31 +74,32 @@ h3{font-size:17px;font-weight:700;margin:22px 0 12px;letter-spacing:-.02em}
     <div style="display:flex;justify-content:space-between;font-size:48px;margin-top:36px"><span>Latte</span><span>4.50</span></div>
     <div style="display:flex;justify-content:space-between;font-size:60px;font-weight:700;margin-top:46px;background:var(--lemon);padding:18px 24px;border-radius:0 30px 0 30px"><span>Total</span><span>$4.50</span></div></div>
   <div class="a" id="scan" style="left:220px;width:640px;height:18px;background:var(--lemon)"></div>
-  <div class="t" style="top:1440px;font-size:96px;color:var(--cream)">snap the receipt.</div>
-  <div class="t" style="top:1580px;font-size:54px;font-weight:500;letter-spacing:0;color:var(--lemon)">Daily logs it for you.</div>
+  <div class="t" id="sn1" style="top:1250px;font-size:96px;color:var(--cream)">snap the receipt.</div>
+  <div class="t" id="sn2" style="top:1385px;font-size:54px;font-weight:500;letter-spacing:0;color:var(--lemon)">Daily logs it for you.</div>
 </div>
-<div class="a" id="saved" style="left:0;right:0;top:1400px;display:flex;justify-content:center;align-items:center;gap:30px">
+<div class="a" id="band6" style="left:0;top:1190px;width:1080px;height:730px;background:var(--bg)"></div>
+<div class="a" id="saved" style="left:0;right:0;top:1250px;display:flex;justify-content:center;align-items:center;gap:30px">
   <img src="lemon.svg" style="width:170px"><span style="background:var(--lemon);color:var(--prussian);font-size:80px;font-weight:700;padding:20px 46px;border-radius:0 44px 0 44px">Saved</span></div>
-<div class="t a" id="w4" style="top:1640px;font-size:110px;color:var(--cream)">logged.</div>
-<div class="a" id="band5" style="left:0;top:1560px;width:1080px;height:360px;background:var(--bg)"></div>
-<div class="t a" id="w5" style="top:1600px;font-size:120px;color:var(--lemon)">now you know.</div>
-<div class="t a" id="w5s" style="top:1760px;font-size:54px;font-weight:500;letter-spacing:0;color:var(--cream)">where every coin goes.</div>
+<div class="t a" id="w4" style="top:1400px;font-size:110px;color:var(--cream)">logged.</div>
+<div class="a" id="band5" style="left:0;top:0;width:1080px;height:520px;background:var(--bg)"></div>
+<div class="t a" id="w5" style="top:250px;font-size:120px;color:var(--lemon)">now you know.</div>
+<div class="t a" id="w5s" style="top:400px;font-size:54px;font-weight:500;letter-spacing:0;color:var(--cream)">where every coin goes.</div>
 
 <div class="a" id="s6" style="inset:0;background:var(--prussian)">
   <img class="a" id="l6" src="lemon.svg" style="left:300px;top:520px;width:480px">
   <div class="t a" id="w6" style="top:960px;font-size:220px;color:var(--cream)">Daily</div>
   <div class="t a" id="u6" style="top:1220px;font-size:60px;font-weight:500;letter-spacing:0;color:var(--lemon)">daily.limonlay.com</div>
-  <div class="t a" id="f6" style="top:1320px;font-size:46px;font-weight:500;letter-spacing:0;color:#9a9890">the money tracker · free · web app</div>
+  <div class="t a" id="f6" style="top:1320px;font-size:46px;font-weight:500;letter-spacing:0;color:#9a9890">free · no download · works in your browser</div>
 </div>
 
 <!-- HOOK (0 → beat 1): the number first -->
 <div class="a" id="s0" style="inset:0;background:var(--night)">
-  <div class="t a" id="h0a" style="top:560px;font-size:130px;color:var(--cream)">where did</div>
+  <div class="t a" id="h0a" style="top:560px;font-size:130px;color:var(--cream)">where did your</div>
   <div class="t a" id="h0b" style="top:740px;font-size:250px;color:var(--lemon);letter-spacing:-.05em">$301.75</div>
   <div class="t a" id="h0c" style="top:1060px;font-size:130px;color:var(--cream)">go??</div>
 </div>
 <div class="a" id="take" style="inset:0"></div>
-<div class="a" id="fx" style="inset:0"></div>
+<div class="a" id="fx" style="inset:0;display:none"></div>
 </div>
 <script>
 // Demo data = the app's English demo screenshot (limonlay/daily icons/shot-en-dark.webp).
@@ -130,15 +131,25 @@ const out = bez(.2, .8, .2, 1), spring = bez(.34, 1.4, .64, 1), snap = x => x >=
 const k = (t, at, d, e = out) => e((t - at) / d);
 const money = v => '$' + v.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 const show = (el, on) => { el.style.visibility = on ? 'visible' : 'hidden'; };
-const rise = (el, t, at, dist = 90) => { const q = k(t, at, .26); el.style.opacity = cl((t - at) / .08); el.style.transform = `translateY(${(1 - q) * dist}px) scale(${lerp(1.25, 1, q)})`; };
+const rise_old = (el, t, at, dist = 90) => { const q = k(t, at, .26); el.style.opacity = cl((t - at) / .08); el.style.transform = `translateY(${(1 - q) * dist}px) scale(${lerp(1.25, 1, q)})`; };
 let T = 0;                                                                          // current time, for the slow orbit
+// fast typing: characters appear one by one (~40/s) with a lemon caret; the untyped rest is kept invisible so the line never shifts
+const typeText = (el, t, at, cps = 40) => {
+  if (!el.dataset.full) el.dataset.full = el.textContent;
+  const full = el.dataset.full, n = Math.max(0, Math.min(full.length, Math.floor((t - at) * cps)));
+  const esc = x => x.replace(/&/g, '&amp;').replace(/</g, '&lt;');
+  const caret = t >= at && (n < full.length || Math.floor((t - at) * 4) % 2 === 0) && t < at + full.length / cps + .5
+    ? '<span style="display:inline-block;width:.09em;height:.82em;background:#ffd23f;vertical-align:-.06em;margin-left:.03em"></span>' : '';
+  el.innerHTML = esc(full.slice(0, n)) + caret + '<span style="visibility:hidden">' + esc(full.slice(n)) + '</span>';
+  el.style.opacity = t >= at ? 1 : 0; el.style.transform = 'none'; };
+const rise = (el, t, at) => typeText(el, t, at);
 const cam = (px, py, sx, sy, S, r) => { $('ui').style.transform = `perspective(2400px) translate(${sx}px,${sy}px) rotateY(${6 * Math.sin(T * .9)}deg) rotateX(${4 * Math.sin(T * .7 + 1)}deg) rotate(${r}deg) scale(${S}) translate(${-px}px,${-py}px)`; };
 
 // scene cuts (beat index) and camera keys [beat, px, py, sx, sy, S, tilt°]: each key SNAPS in 0.28 s, then the shot keeps creeping
 const CUT = { payday: 1, day25: 3, where: 6, snap: 10, saved: 12, know: 15, cta: 19 };
 const CAM = [[0, 200, 190, 540, 1040, 2.55, 0], [3, 200, 190, 540, 1090, 2.55, 0], [4, 118, 168, 540, 1060, 3.7, -2],
   [5, 160, 190, 540, 1090, 2.9, 0], [6, 200, 380, 540, 1000, 2.55, -3], [8, 200, 395, 540, 1000, 2.85, 1.5],
-  [12, 200, 560, 540, 760, 2.55, 0], [13, 200, 556, 540, 800, 2.85, -1.5], [15, 200, 410, 540, 860, 1.98, 0]];
+  [12, 200, 560, 540, 640, 2.55, 0], [13, 200, 556, 540, 660, 2.75, -1.5], [15, 200, 400, 540, 1110, 1.9, 0]];
 function camAt(t) {
   let i = 0; while (i < CAM.length - 1 && t >= tb(CAM[i + 1][0])) i++;
   const A = CAM[Math.max(0, i - 1)], B = CAM[i], q = i === 0 ? 1 : out((t - tb(B[0])) / .5);
@@ -196,8 +207,8 @@ window.render = t => {
   const b = beatOf(t), C = CUT;
   show($('s0'), b < C.payday); show($('bgL'), b >= C.payday && b < C.day25); show($('ui'), (b >= C.payday && b < C.snap) || (b >= C.saved && b < C.cta)); show($('s4'), b >= C.snap && b < C.saved); show($('s6'), b >= C.cta);
   show($('w1'), b >= C.payday && b < C.day25); show($('band'), b >= C.where && b < C.snap); show($('w2'), b >= C.day25 && b < C.where); show($('w3'), b >= C.where && b < C.snap);
-  show($('saved'), b >= C.saved && b < C.know); show($('w4'), b >= C.saved && b < C.know); show($('w5'), b >= C.know && b < C.cta);
-  T = t; cam(...camAt(t)); stage(t); fx(t); takeover(t);
+  show($('saved'), b >= C.saved && b < C.know); show($('band6'), b >= C.saved && b < C.know); show($('w4'), b >= C.saved && b < C.know); show($('w5'), b >= C.know && b < C.cta);
+  T = t; cam(...camAt(t)); stage(t); takeover(t);   // particles removed (owner)
   // payday: the card swings up into place in 3D
   const ci = out((t - tb(C.payday)) / .45); $('hero').style.transform = b < C.day25 ? `perspective(1200px) rotateX(${(1 - ci) * 70}deg) translateY(${(1 - ci) * 120}px)` : 'none';
   $('hdr').style.opacity = $('mon').style.opacity = b < C.day25 ? 0 : 1;
@@ -210,10 +221,10 @@ window.render = t => {
   $('bal').textContent = money(Math.round(bal * 100) / 100); $('inc').textContent = money(Math.round(inc * 100) / 100); $('exp').textContent = money(Math.round(exp * 100) / 100);
   $('prog').style.width = (30 * dn) + '%';
   const lj = k(t, tb(1.6), .4, spring); $('lem').style.transform = `translate(${(1 - lj) * 140}px,${(1 - lj) * -140}px) rotate(${(1 - lj) * 50}deg)`;
-  $('w1').style.transform = `scale(${lerp(1.6, 1, k(t, tb(C.payday), .26, spring))})`;
+  typeText($('w1'), t, tb(C.payday));
   // hook: "where did" is already rising on frame 0, the number slams in on the first hit, "go??" half a beat later
   rise($('h0a'), t, -.12, 60);
-  const h = k(t, tb(0), .3, spring); $('h0b').style.opacity = cl((t - tb(0)) / .05); $('h0b').style.transform = `scale(${lerp(2.6, 1, h)})`;
+  typeText($('h0b'), t, tb(0), 45);
   rise($('h0c'), t, tb(.5), 60);
   $('s0').style.transform = `scale(${1 + .04 * cl(t / tb(1))})`;
   rise($('w2'), t, tb(4)); rise($('w2s'), t, tb(4.6), 40); rise($('w3'), t, tb(6.05));
@@ -236,7 +247,7 @@ window.render = t => {
   rows[0].style.opacity = b < C.saved ? 0 : nr;
   rows[0].querySelector('.hl').style.opacity = b < C.saved ? 0 : .32 * (1 - cl((t - tb(C.saved)) / 1.2));
   const sv = k(t, tb(C.saved), .35, spring); $('saved').style.transform = `scale(${lerp(.5, 1, sv)})`; $('saved').style.opacity = cl((t - tb(C.saved)) / .08);
-  rise($('w4'), t, tb(13));
+  rise($('w4'), t, tb(13)); typeText($('sn1'), t, tb(C.snap) + .05); typeText($('sn2'), t, tb(C.snap) + .55, 50);
   rise($('w5'), t, tb(15.2)); rise($('w5s'), t, tb(16), 40);
 
   // CTA on the strongest hit
