@@ -61,8 +61,10 @@ h3{font-size:17px;font-weight:700;margin:22px 0 12px;letter-spacing:-.02em}
 </div>
 
 <div class="a" id="band" style="left:0;top:0;width:1080px;height:440px;background:var(--bg)"></div>
+<div class="a" id="date" style="left:0;right:0;top:110px;text-align:center"><span id="dateT" style="display:inline-block;font-size:56px;font-weight:700;padding:14px 36px;border-radius:0 30px 0 30px;background:var(--prussian);color:var(--lemon)">OCT 1</span></div>
 <div class="t a" id="w1" style="top:250px;font-size:200px;color:var(--prussian)">payday.</div>
-<div class="t a" id="w2" style="top:200px;font-size:170px;color:var(--cream)">…day 25.</div>
+<div class="t a" id="w2" style="top:220px;font-size:170px;color:var(--cream)">…day 25.</div>
+<div class="t a" id="w2s" style="top:420px;font-size:58px;font-weight:500;letter-spacing:0;color:var(--lemon)">$301.75 already gone.</div>
 <div class="t a" id="w3" style="top:170px;font-size:120px;color:var(--cream)">where did it go?</div>
 
 <!-- receipt scan scene -->
@@ -72,18 +74,21 @@ h3{font-size:17px;font-weight:700;margin:22px 0 12px;letter-spacing:-.02em}
     <div style="display:flex;justify-content:space-between;font-size:48px;margin-top:36px"><span>Latte</span><span>4.50</span></div>
     <div style="display:flex;justify-content:space-between;font-size:60px;font-weight:700;margin-top:46px;background:var(--lemon);padding:18px 24px;border-radius:0 30px 0 30px"><span>Total</span><span>$4.50</span></div></div>
   <div class="a" id="scan" style="left:220px;width:640px;height:18px;background:var(--lemon)"></div>
-  <div class="t" style="top:1480px;font-size:110px;color:var(--prussian)">snap it.</div>
+  <div class="t" style="top:1440px;font-size:96px;color:var(--prussian)">snap the receipt.</div>
+  <div class="t" style="top:1580px;font-size:54px;font-weight:500;letter-spacing:0;color:var(--prussian)">Daily logs it for you.</div>
 </div>
 <div class="a" id="saved" style="left:0;right:0;top:1400px;display:flex;justify-content:center;align-items:center;gap:30px">
   <img src="lemon.svg" style="width:170px"><span style="background:var(--lemon);color:var(--prussian);font-size:80px;font-weight:700;padding:20px 46px;border-radius:0 44px 0 44px">Saved</span></div>
-<div class="t a" id="w4" style="top:1640px;font-size:110px;color:var(--cream)">done.</div>
-<div class="t a" id="w5" style="top:1680px;font-size:120px;color:var(--lemon)">now you know.</div>
+<div class="t a" id="w4" style="top:1640px;font-size:110px;color:var(--cream)">logged.</div>
+<div class="a" id="band5" style="left:0;top:1560px;width:1080px;height:360px;background:var(--bg)"></div>
+<div class="t a" id="w5" style="top:1600px;font-size:120px;color:var(--lemon)">now you know.</div>
+<div class="t a" id="w5s" style="top:1760px;font-size:54px;font-weight:500;letter-spacing:0;color:var(--cream)">where every coin goes.</div>
 
 <div class="a" id="s6" style="inset:0;background:var(--prussian)">
   <img class="a" id="l6" src="lemon.svg" style="left:300px;top:520px;width:480px">
   <div class="t a" id="w6" style="top:960px;font-size:220px;color:var(--cream)">Daily</div>
   <div class="t a" id="u6" style="top:1220px;font-size:60px;font-weight:500;letter-spacing:0;color:var(--lemon)">daily.limonlay.com</div>
-  <div class="t a" id="f6" style="top:1320px;font-size:46px;font-weight:500;letter-spacing:0;color:#9a9890">free · no ads · web app</div>
+  <div class="t a" id="f6" style="top:1320px;font-size:46px;font-weight:500;letter-spacing:0;color:#9a9890">the money tracker · free · web app</div>
 </div>
 
 <div class="a" id="take" style="inset:0"></div>
@@ -172,8 +177,8 @@ $('take').innerHTML = CATS.map(([ic, n, v, bg, r, fg], i) => { const ink = i ===
     <div style="font-size:150px;font-weight:700;color:${ink};letter-spacing:-.04em">$${v.toFixed(2)}</div></div>`; }).join('');
 const takes = [...$('take').children];
 function takeover(t) {
-  const CB = [6.5, 7, 8, 9, 9.5], NX = [7, 8, 9, 9.5, 10];
-  takes.forEach((el, i) => { const tin = tb(CB[i]), tout = tb(NX[i]) - .2;     // slide-out ends exactly on the next beat
+  const CB = [6.5, 7.5, 8.5], NX = [7.5, 8.5, 9.5];
+  takes.forEach((el, i) => { if (i >= CB.length) { el.style.visibility = 'hidden'; return; } const tin = tb(CB[i]), tout = tb(NX[i]) - .2;     // slide-out ends exactly on the next beat
     if (t < tin || t >= tout + .2) { el.style.visibility = 'hidden'; return; }
     el.style.visibility = 'visible';
     const xin = (1 - out((t - tin) / .2)) * (i % 2 ? -1080 : 1080), xout = t > tout ? Math.pow(cl((t - tout) / .2), 2) * (i % 2 ? 1080 : -1080) : 0;
@@ -200,7 +205,11 @@ window.render = t => {
   $('prog').style.width = (30 * dn) + '%';
   const lj = k(t, tb(1), .4, spring); $('lem').style.transform = `translate(${(1 - lj) * 140}px,${(1 - lj) * -140}px) rotate(${(1 - lj) * 50}deg)`;
   $('w1').style.transform = `scale(${lerp(1.6, 1, k(t, 0, .26, spring))})`;
-  rise($('w2'), t, tb(4)); rise($('w3'), t, tb(6.05));
+  rise($('w2'), t, tb(4)); rise($('w2s'), t, tb(4.6), 40); rise($('w3'), t, tb(6.05));
+  show($('date'), b < C.where); show($('w2s'), b >= C.day25 && b < C.where); show($('w5s'), b >= C.know && b < C.cta); show($('band5'), b >= C.know && b < C.cta);
+  $('dateT').textContent = b < C.day25 ? 'OCT 1' : 'OCT 25';
+  const fl = b < C.day25 ? 1 : out((t - tb(C.day25)) / .3);                   // the date flips on the cut
+  $('date').style.transform = `scaleY(${fl})`; $('dateT').style.background = b < C.day25 ? 'var(--prussian)' : 'var(--lemon)'; $('dateT').style.color = b < C.day25 ? 'var(--lemon)' : 'var(--prussian)';
 
   // categories pop on the beats
   const CB = [6.5, 7, 8, 9, 9.5];
@@ -217,7 +226,7 @@ window.render = t => {
   rows[0].querySelector('.hl').style.opacity = b < C.saved ? 0 : .32 * (1 - cl((t - tb(C.saved)) / 1.2));
   const sv = k(t, tb(C.saved), .35, spring); $('saved').style.transform = `scale(${lerp(.5, 1, sv)})`; $('saved').style.opacity = cl((t - tb(C.saved)) / .08);
   rise($('w4'), t, tb(13));
-  rise($('w5'), t, tb(15.2));
+  rise($('w5'), t, tb(15.2)); rise($('w5s'), t, tb(16), 40);
 
   // CTA on the strongest hit
   const l6 = k(t, tb(C.cta), .45, spring);
