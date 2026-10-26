@@ -177,7 +177,7 @@ $('take').innerHTML = CATS.map(([ic, n, v, bg, r, fg], i) => { const ink = i ===
     <div style="font-size:150px;font-weight:700;color:${ink};letter-spacing:-.04em">$${v.toFixed(2)}</div></div>`; }).join('');
 const takes = [...$('take').children];
 function takeover(t) {
-  const CB = [6.5, 7.5, 8.5], NX = [7.5, 8.5, 9.5];
+  const CB = [7, 8, 9], NX = [8, 9, 10];
   takes.forEach((el, i) => { if (i >= CB.length) { el.style.visibility = 'hidden'; return; } const tin = tb(CB[i]), tout = tb(NX[i]) - .2;     // slide-out ends exactly on the next beat
     if (t < tin || t >= tout + .2) { el.style.visibility = 'hidden'; return; }
     el.style.visibility = 'visible';
