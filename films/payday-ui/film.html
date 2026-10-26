@@ -130,7 +130,8 @@ window.render = t => {
   $('below').style.opacity = b < 8 ? 0 : 1;
 
   // numbers: payday counts income + balance up; day 25 counts expenses up and balance down (demo month: $1,000 in, $301.75 out)
-  const up = k(t, tb(.5), 1.1), dn = k(t, tb(4.5), 1.4);
+  const tf = Math.floor(t * 30 + 1e-6) / 30;                                  // counters step per frame (stay sharp under motion blur)
+  const up = k(tf, tb(.5), 1.1), dn = k(tf, tb(4.5), 1.4);
   const inc = 1000 * up, exp = 301.75 * dn, bal = inc - exp;
   $('bal').textContent = money(Math.round(bal * 100) / 100); $('inc').textContent = money(Math.round(inc * 100) / 100); $('exp').textContent = money(Math.round(exp * 100) / 100);
   $('prog').style.width = (30 * dn) + '%';

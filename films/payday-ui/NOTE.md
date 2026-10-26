@@ -5,3 +5,5 @@ The Daily home screen is rebuilt in HTML with the app's own dark-theme tokens, i
 Timing: 129.2 BPM grid to match "Golf Clap" (Frak / Nef the Pharaoh). Song section used for the preview: 84.36–99.36 s → the 2-beat dip lands on "…day 25.", the drop (93.18 s) lands on "Saved" (beat 19).
 The song is NOT in this repo (copyright): `payday-ui.mp4` is silent. Add the sound in TikTok/IG from their library, starting at ~1:24.
 Motion follows DESIGN.md tokens: ease-out cubic-bezier(.2,.8,.2,1), ~6% overshoot only on things that happen.
+
+Motion blur: `node rec-blur.cjs <dir> 6` renders 6 sub-frames per frame over a 180° shutter (never across a cut); ffmpeg `tmix=frames=6` averages them. Counters step per frame so digits stay sharp.
