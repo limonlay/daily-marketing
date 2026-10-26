@@ -195,12 +195,12 @@ $('take').innerHTML = CATS.map(([ic, n, v, bg, r, fg], i) => { const dark = i !=
     <div style="font-size:150px;font-weight:700;color:${ink};letter-spacing:-.04em">$${v.toFixed(2)}</div></div>`; }).join('');
 const takes = [...$('take').children];
 function takeover(t) {
-  const CB = [7, 8, 9], NX = [8, 9, 10];
-  takes.forEach((el, i) => { if (i >= CB.length) { el.style.visibility = 'hidden'; return; } const tin = tb(CB[i]), tout = tb(NX[i]) - .2;     // slide-out ends exactly on the next beat
-    if (t < tin || t >= tout + .2) { el.style.visibility = 'hidden'; return; }
-    el.style.visibility = 'visible';
-    const xin = (1 - out((t - tin) / .2)) * (i % 2 ? -1080 : 1080), xout = t > tout ? Math.pow(cl((t - tout) / .2), 2) * (i % 2 ? 1080 : -1080) : 0;
-    el.style.transform = `translateX(${xin + xout}px)`;
+  // categories replace each other back to back (no app in between): each new one slides in over the last, the last stays until the cut
+  const CB = [7, 8, 8.5, 9, 9.5], END = tb(10);
+  takes.forEach((el, i) => { const tin = tb(CB[i]), tnext = i + 1 < CB.length ? tb(CB[i + 1]) + .2 : END;
+    if (t < tin || t >= tnext) { el.style.visibility = 'hidden'; return; }
+    el.style.visibility = 'visible'; el.style.zIndex = i + 1;
+    el.style.transform = `translateX(${(1 - out((t - tin) / .2)) * (i % 2 ? -1080 : 1080)}px)`;
     el.children[0].style.transform = `rotate(${(1 - out((t - tin) / .35)) * (i % 2 ? 40 : -40)}deg) scale(${lerp(.6, 1, out((t - tin) / .3))})`; });
 }
 window.CUTS = Object.values(CUT).map(tb);                                    // read by rec-blur.cjs
