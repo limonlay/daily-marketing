@@ -27,7 +27,7 @@ HTML page with a pure `render(t)` → Playwright screenshots per frame (Chromium
 (Higgsfield, Novoads, Gemini, ElevenLabs were checked and rejected: not free).
 
 ## Making a video
-Use the repo skill **`daily-video`** (`.claude/skills/daily-video/`): brief → beat map → stills → render → gates (`check.py`) → NOTE.md. New films go in `films/<name>/`.
+**Reels (TikTok/Reels/Shorts): use `daily-reel`** (`.claude/skills/daily-reel/`, from the approved film `films/payday-ui`). The older `daily-video` skill (`.claude/skills/daily-video/`): (brief → beat map → stills → render → gates) is kept for reference. New films go in `films/<name>/`.
 
 ## Skills tried (user-level, `~/.claude/skills`; reinstall in a new session)
 motionmaxxing (storyboard + gates), ruic-motion-reel (code music), beat-synced-edit (beat detection, Python/librosa),

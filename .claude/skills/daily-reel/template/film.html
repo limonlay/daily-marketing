@@ -1,0 +1,261 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;600;700&display=block" rel="stylesheet">
+<style>
+@font-face{font-family:"Daily Symbols";font-weight:400 600;font-display:block;src:url(material-symbols-rounded.woff2) format("woff2")}
+/* Daily dark theme tokens (limonlay/daily index.html) */
+:root{--bg:#000;--surface-2:#14213d;--text:#fff;--muted:#9aa3b5;--prussian:#14213d;--lemon:#ffd23f;--alabaster:#e5e5e5;--inc:#4ade80;--exp:#ffd23f;--night:#0a0d14;--cream:#f2f0ea}
+*{box-sizing:border-box;margin:0}
+html,body{width:1080px;height:1920px;overflow:hidden;background:var(--bg);font-family:"Google Sans",sans-serif}
+.ms{font-family:"Daily Symbols";font-weight:normal;font-style:normal;line-height:1;letter-spacing:normal;white-space:nowrap;direction:ltr;-webkit-font-feature-settings:"liga";font-feature-settings:"liga";font-variation-settings:"FILL" 1,"wght" 500}
+.a{position:absolute}   /* no will-change: layers would raster at 1x and blur when scaled */
+.t{position:absolute;left:0;right:0;text-align:center;font-weight:700;letter-spacing:-.03em}
+#bgL{position:absolute;inset:0;background:var(--lemon)}
+/* the app screen, authored at 400 px wide (phone scale), moved by one camera transform */
+#ui{position:absolute;left:0;top:0;width:400px;height:900px;transform-origin:0 0;color:var(--text);padding:0 20px}
+.hdr{display:flex;justify-content:space-between;align-items:center;height:56px;font-weight:700;font-size:20px;letter-spacing:-.03em}
+.hdr .ms{font-size:22px;color:var(--text);margin-left:14px}
+.mon{display:flex;justify-content:space-between;align-items:center;height:44px}
+.mon b{font-size:20px;letter-spacing:-.02em}
+.seg{display:flex;background:var(--surface-2);border-radius:0 12px 0 12px;font-size:12px;font-weight:600}
+.seg span{padding:7px 12px}.seg .on{background:var(--lemon);color:#000;border-radius:0 12px 0 12px}
+.hero{position:relative;overflow:hidden;background:var(--prussian);border-radius:0 32px 0 32px;padding:24px 20px 20px;margin-top:12px}
+.hero .lem{position:absolute;width:164px;right:-30px;top:-26px}
+.hero small{color:var(--alabaster);opacity:.75;font-size:13px}
+.bal{font-size:50px;font-weight:700;letter-spacing:-.045em;line-height:1.1;margin:4px 0 16px;font-variant-numeric:tabular-nums}
+.pills{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.pill small::before{content:'';display:inline-block;width:6px;height:6px;border-radius:50%;margin-right:4px;vertical-align:1px}
+.pill:first-child small::before{background:var(--inc)}.pill:nth-child(2) small::before{background:var(--exp)}
+.pill b{display:block;font-size:20px;font-weight:600;margin-top:2px;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.prog{height:4px;background:rgba(255,255,255,.15);margin-top:16px;border-radius:2px}.prog i{display:block;height:100%;background:var(--lemon);border-radius:2px}
+h3{font-size:17px;font-weight:700;margin:22px 0 12px;letter-spacing:-.02em}
+.cats{display:flex;gap:12px}
+.chip{width:58px;text-align:center;font-size:11px}
+.chip .sh{width:52px;height:52px;margin:0 auto 6px;display:grid;place-items:center}
+.chip .sh .ms{font-size:24px}
+.chip b{display:block;color:var(--muted);font-weight:500;font-size:11px}
+.lh{display:flex;justify-content:space-between;align-items:center}
+.sub{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);font-weight:600;margin:10px 0 4px}
+.tx{display:flex;align-items:center;gap:12px;padding:8px 0;position:relative}
+.tx .ico{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;flex:none}
+.tx .ico .ms{font-size:20px}
+.tx .info{flex:1}.tx .info div{font-weight:600;font-size:15px}.tx .info small{color:var(--muted);font-size:13px}
+.tx .amt{font-weight:600;letter-spacing:-.02em}
+.tx .hl{position:absolute;left:-20px;right:-20px;top:0;bottom:0;background:var(--lemon);opacity:0}
+</style></head><body>
+<div id="stage" style="position:absolute;inset:0;overflow:hidden;transform-origin:540px 960px">
+<div id="bgL"></div>
+<div id="uiw" style="position:absolute;left:0;top:0;transform-origin:0 0"><div id="ui">
+  <div class="hdr" id="hdr"><span>Daily <img src="lemon.svg" style="width:22px;vertical-align:-2px"></span><span><span class="ms">search</span><span class="ms">more_horiz</span></span></div>
+  <div class="mon" id="mon"><b><span class="ms" style="font-size:20px;color:var(--muted)">chevron_left</span> October <span class="ms" style="font-size:20px;color:var(--muted)">chevron_right</span></b><div class="seg"><span class="on">Month</span><span>Year</span></div></div>
+  <div class="hero" id="hero"><img class="lem" id="lem" src="lemon.svg">
+    <small>Balance</small><div class="bal" id="bal">$0.00</div>
+    <div class="pills"><div class="pill"><small>Income</small><b id="inc">$0.00</b></div><div class="pill"><small>Expenses</small><b id="exp">$0.00</b></div></div>
+    <div class="prog"><i id="prog" style="width:0"></i></div></div>
+  <div id="below">
+    <h3>Where it went</h3>
+    <div class="cats" id="cats"></div>
+    <div class="lh"><h3>Transactions</h3><div class="seg"><span class="on">All</span><span>In</span><span>Out</span></div></div>
+    <div class="sub"><span>WED, OCT 14</span><span>−$8.25</span></div>
+    <div id="rows"></div>
+  </div>
+</div>
+</div>
+<div class="a" id="band" style="left:0;top:0;width:1080px;height:500px;background:var(--bg)"></div>
+<div class="a" id="date" style="left:0;right:0;top:170px;text-align:center"><span id="dateT" style="display:inline-block;font-size:56px;font-weight:700;padding:14px 36px;border-radius:0 30px 0 30px;background:var(--prussian);color:var(--lemon)">OCT 1</span></div>
+<div class="t a" id="w1" style="top:340px;font-size:200px;color:var(--prussian)">payday.</div>
+<div class="t a" id="w2" style="top:300px;font-size:170px;color:var(--cream)">…day 25.</div>
+<div class="t a" id="w2s" style="top:500px;font-size:58px;font-weight:500;letter-spacing:0;color:var(--lemon)">$301.75 already gone.</div>
+<div class="t a" id="w3" style="top:300px;font-size:120px;color:var(--cream)">where did it go?</div>
+
+<!-- receipt scan scene -->
+<div class="a" id="s4" style="inset:0;background:var(--prussian)">
+  <div class="a" id="rc" style="left:250px;top:460px;width:580px;background:#fff;padding:60px 56px;box-shadow:24px 24px 0 var(--lemon);border-radius:0 70px 0 70px;color:var(--prussian)">
+    <div style="font-size:56px;font-weight:700">Coffee House</div>
+    <div style="display:flex;justify-content:space-between;font-size:48px;margin-top:36px"><span>Latte</span><span>4.50</span></div>
+    <div style="display:flex;justify-content:space-between;font-size:60px;font-weight:700;margin-top:46px;background:var(--lemon);padding:18px 24px;border-radius:0 30px 0 30px"><span>Total</span><span>$4.50</span></div></div>
+  <div class="a" id="scan" style="left:220px;width:640px;height:18px;background:var(--lemon)"></div>
+  <div class="t" id="sn1" style="top:1250px;font-size:96px;color:var(--cream)">snap the receipt.</div>
+  <div class="t" id="sn2" style="top:1385px;font-size:54px;font-weight:500;letter-spacing:0;color:var(--lemon)">Daily logs it for you.</div>
+</div>
+<div class="a" id="band6" style="left:0;top:1190px;width:1080px;height:730px;background:var(--bg)"></div>
+<div class="a" id="saved" style="left:0;right:0;top:1250px;display:flex;justify-content:center;align-items:center;gap:30px">
+  <img src="lemon.svg" style="width:170px"><span style="background:var(--lemon);color:var(--prussian);font-size:80px;font-weight:700;padding:20px 46px;border-radius:0 44px 0 44px">Saved</span></div>
+<div class="t a" id="w4" style="top:1400px;font-size:110px;color:var(--cream)">logged.</div>
+<div class="a" id="band5" style="left:0;top:0;width:1080px;height:520px;background:var(--bg)"></div>
+<div class="t a" id="w5" style="top:250px;font-size:120px;color:var(--lemon)">now you know.</div>
+<div class="t a" id="w5s" style="top:400px;font-size:54px;font-weight:500;letter-spacing:0;color:var(--cream)">where every coin goes.</div>
+
+<div class="a" id="s6" style="inset:0;background:var(--prussian)">
+  <img class="a" id="l6" src="lemon.svg" style="left:310px;top:600px;width:460px">
+  <div class="t a" id="w6" style="top:1040px;font-size:220px;color:var(--cream)">Daily</div>
+  <div class="t a" id="u6" style="top:1300px;font-size:60px;font-weight:500;letter-spacing:0;color:var(--lemon)">daily.limonlay.com</div>
+  <div class="t a" id="f6" style="top:1400px;font-size:50px;font-weight:500;letter-spacing:0;color:#f2f0ea">no download needed</div>
+</div>
+
+<!-- HOOK (0 → beat 1): the number first -->
+<div class="a" id="s0" style="inset:0;background:var(--night)">
+  <div class="t a" id="h0a" style="top:560px;font-size:130px;color:var(--cream)">where did your</div>
+  <div class="t a" id="h0b" style="top:740px;font-size:250px;color:var(--lemon);letter-spacing:-.05em">$301.75</div>
+  <div class="t a" id="h0c" style="top:1060px;font-size:130px;color:var(--cream)">go??</div>
+</div>
+<div class="a" id="take" style="inset:0"></div>
+<div class="a" id="fx" style="inset:0;display:none"></div>
+</div>
+<script>
+// Demo data = the app's English demo screenshot (limonlay/daily icons/shot-en-dark.webp).
+const CATS = [['home', 'Housing', 200, '#14213d', '50%', '#fff'], ['shopping_bag', 'Shopping', 57.5, '#ffd23f', '50%', '#000'],
+  ['lightbulb', 'Bills & utilities', 25, '#fff', '0', '#000'], ['movie', 'Entertainment', 9.75, '#e5e5e5', '50% 50% 0 50%', '#000'],
+  ['restaurant', 'Food', 8.25, '#14213d', '50%', '#fff']];
+const ROWS = [['restaurant', 'Food', 'Coffee', 4.5, '#ffd23f', '#000'], ['restaurant', 'Food', 'Chicken rice', 3.75, '#e5e5e5', '#000'],
+  ['directions_bus', 'Transport', 'Subway', 1.25, '#e5e5e5', '#000'], ['movie', 'Entertainment', 'Movie', 9.75, '#ffd23f', '#000']];
+const $ = id => document.getElementById(id);
+$('cats').innerHTML = CATS.map(([ic, n, v, bg, r, fg]) => `<div class="chip"><div class="sh" style="background:${bg};border-radius:${r}"><span class="ms" style="color:${fg}">${ic}</span></div><div style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${n}</div><b>$${v.toFixed(2)}</b></div>`).join('');
+$('rows').innerHTML = ROWS.map(([ic, n, s, v, bg, fg]) => `<div class="tx"><div class="hl"></div><div class="ico" style="background:${bg}"><span class="ms" style="color:${fg}">${ic}</span></div><div class="info"><div>${n}</div><small>${s}</small></div><div class="amt">−$${v.toFixed(2)}</div></div>`).join('');
+const chips = [...document.querySelectorAll('.chip')], rows = [...document.querySelectorAll('.tx')];
+
+// Real beats of "Golf Clap" (librosa via beat-synced-edit, 95.7 BPM) in film time, song start 84.355 s.
+// Strong hits: beat 4 (3.02 s), 7 (4.93), 12 (8.08), 19 (12.49), 21 (13.77) — the key moments land there.
+const BEATS = [0.514,  1.141,  1.768,  2.395,  3.022,  3.649,  4.299,  4.926,  5.553,  6.156,  6.807,  7.457,  8.084,  8.687,  9.338,  9.964,  10.615,  11.242,  11.892,  12.495,  13.146,  13.773,  14.399];
+const cl = x => Math.min(1, Math.max(0, x)), lerp = (a, b, x) => a + (b - a) * x;
+const tb = n => { const B = BEATS, i = Math.floor(n);                                  // beat index (fractional) -> seconds
+  if (i < 0) return B[0] + n * (B[1] - B[0]); if (i >= B.length - 1) return B[B.length - 1] + (n - B.length + 1) * (B[1] - B[0]);
+  return lerp(B[i], B[i + 1], n - i); };
+const beatOf = t => { const B = BEATS; if (t < B[0]) return (t - B[0]) / (B[1] - B[0]);
+  for (let i = 0; i < B.length - 1; i++) if (t < B[i + 1]) return i + (t - B[i]) / (B[i + 1] - B[i]);
+  return B.length - 1 + (t - B[B.length - 1]) / (B[1] - B[0]); };
+const bez = (x1, y1, x2, y2) => x => { x = cl(x); let lo = 0, hi = 1, s = .5;
+  for (let i = 0; i < 24; i++) { s = (lo + hi) / 2; const bx = 3 * x1 * s * (1 - s) ** 2 + 3 * x2 * s * s * (1 - s) + s ** 3; bx < x ? lo = s : hi = s; }
+  return 3 * y1 * s * (1 - s) ** 2 + 3 * y2 * s * s * (1 - s) + s ** 3; };
+// app tokens: ease-out (.2,.8,.2,1); ~6% overshoot only for things that "happen". Camera snaps use a sharper expo-out.
+const out = bez(.2, .8, .2, 1), spring = bez(.34, 1.4, .64, 1), snap = x => x >= 1 ? 1 : 1 - Math.pow(2, -11 * cl(x));
+const k = (t, at, d, e = out) => e((t - at) / d);
+const money = v => '$' + v.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+const show = (el, on) => { el.style.visibility = on ? 'visible' : 'hidden'; };
+const rise_old = (el, t, at, dist = 90) => { const q = k(t, at, .26); el.style.opacity = cl((t - at) / .08); el.style.transform = `translateY(${(1 - q) * dist}px) scale(${lerp(1.25, 1, q)})`; };
+let T = 0;                                                                          // current time, for the slow orbit
+// fast typing: characters appear one by one (~40/s) with a lemon caret; the untyped rest is kept invisible so the line never shifts
+const typeText = (el, t, at, cps = 40) => {
+  if (!el.dataset.full) el.dataset.full = el.textContent;
+  const full = el.dataset.full, n = Math.max(0, Math.min(full.length, Math.floor((t - at) * cps)));
+  const esc = x => x.replace(/&/g, '&amp;').replace(/</g, '&lt;');
+  const caret = t >= at && (n < full.length || Math.floor((t - at) * 4) % 2 === 0) && t < at + full.length / cps + .5
+    ? '<span style="display:inline-block;width:.09em;height:.82em;background:#ffd23f;vertical-align:-.06em;margin-left:.03em"></span>' : '';
+  el.innerHTML = esc(full.slice(0, n)) + caret + '<span style="visibility:hidden">' + esc(full.slice(n)) + '</span>';
+  el.style.opacity = t >= at ? 1 : 0; el.style.transform = 'none'; };
+const rise = (el, t, at) => typeText(el, t, at);
+// sharp: the app is laid out at full size with CSS zoom (re-rendered, not a scaled bitmap); the 3D/rotation sits on a wrapper
+const cam = (px, py, sx, sy, S, r) => { $('ui').style.zoom = S; $('uiw').style.transform = `perspective(2400px) translate(${sx}px,${sy}px) rotateY(${6 * Math.sin(T * .9)}deg) rotateX(${4 * Math.sin(T * .7 + 1)}deg) rotate(${r}deg) translate(${-px * S}px,${-py * S}px)`; };
+
+// scene cuts (beat index) and camera keys [beat, px, py, sx, sy, S, tilt°]: each key SNAPS in 0.28 s, then the shot keeps creeping
+const CUT = { payday: 1, day25: 3, where: 6, snap: 10, saved: 12, know: 15, cta: 19 };
+const CAM = [[0, 200, 190, 540, 1040, 2.55, 0], [3, 200, 190, 540, 1230, 2.4, 0], [4, 118, 168, 540, 1200, 3.5, -2],
+  [5, 160, 190, 540, 1230, 2.7, 0], [6, 200, 380, 540, 1180, 2.45, -3], [8, 200, 395, 540, 1180, 2.7, 1.5],
+  [12, 200, 560, 540, 640, 2.55, 0], [13, 200, 556, 540, 660, 2.75, -1.5], [15, 200, 400, 540, 1110, 1.9, 0]];
+function camAt(t) {
+  let i = 0; while (i < CAM.length - 1 && t >= tb(CAM[i + 1][0])) i++;
+  const A = CAM[Math.max(0, i - 1)], B = CAM[i], q = i === 0 ? 1 : out((t - tb(B[0])) / .5);
+  const v = B.slice(1).map((x, j) => lerp(A[j + 1], x, q));
+  v[4] *= 1 + .025 * Math.max(0, t - tb(B[0]));                                         // never freeze: slow creep in
+  return v;
+}
+// whole-stage hits: a tilt kick on every beat (stronger on the strong ones), zoom-through at every cut (no beat punch: owner removed it)
+const STRONG = new Set([4, 7, 12, 19, 21]);
+function stage(t) { $('stage').style.transform = 'none'; }   // no beat punch / tilt kick / zoom-through: owner removed the jerky bounces
+
+
+// ---------- heavier animation (smooth, no shakes) ----------
+// 1) brand-shape bursts: flat circles / squares / drops / leaves fly out and shrink away
+const SHAPES = ['50%', '0', '50% 50% 0 50%', '0 50% 0 50%'];
+let seed = 7; const rnd = () => { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let x = Math.imul(seed ^ seed >>> 15, 1 | seed); x = x + Math.imul(x ^ x >>> 7, 61 | x) ^ x; return ((x ^ x >>> 14) >>> 0) / 4294967296; };
+const PARTS = [];
+function burst(beat, x, y, n, colors, { dist = 520, size = 70, a0 = 0, a1 = 360, dur = .9, r0 = 0 } = {}) {
+  for (let i = 0; i < n; i++) PARTS.push({ beat, x, y, dur: dur * (.75 + rnd() * .5), ang: (a0 + (a1 - a0) * rnd()) * Math.PI / 180,
+    dist: dist * (.55 + rnd() * .6), r0, size: size * (.5 + rnd()), shape: SHAPES[i % 4], color: colors[i % colors.length], spin: (rnd() - .5) * 540 });
+}
+burst(1.05, 540, 1040, 18, ['#14213d', '#f2f0ea', '#fff'], { r0: 480, dist: 600 });                                  // payday
+[3.2, 3.6, 4.0, 4.4, 4.8, 5.2].forEach((bb, i) => burst(bb, 300 + i * 90, 900, 3, ['#ffd23f'], { dist: 900, size: 46, a0: -120, a1: -60, dur: .8 }));  // money leaving the card
+burst(12, 540, 1460, 16, ['#ffd23f', '#f2f0ea', '#14213d'], { dist: 500, r0: 260, a0: 20, a1: 160 });                    // Saved
+burst(19, 540, 760, 22, ['#ffd23f', '#f2f0ea', '#000'], { dist: 760, size: 80 });              // CTA
+$('fx').innerHTML = PARTS.map(() => '<div class="a" style="left:0;top:0"></div>').join('');
+const partEls = [...$('fx').children];
+function fx(t) {
+  PARTS.forEach((p, i) => { const e = partEls[i], dt = t - tb(p.beat), q = dt / p.dur;
+    if (q < 0 || q > 1) { e.style.visibility = 'hidden'; return; }
+    const d = p.r0 + p.dist * out(q), sz = p.size * (1 - q * q);
+    Object.assign(e.style, { visibility: 'visible', width: sz + 'px', height: sz + 'px', background: p.color, borderRadius: p.shape,
+      transform: `translate(${p.x + Math.cos(p.ang) * d - sz / 2}px,${p.y + Math.sin(p.ang) * d - sz / 2}px) rotate(${p.spin * q}deg)` }); });
+}
+// 2) category takeovers: each category fills the screen on its beat, then slides away
+const TAKE_BG = ['#14213d', '#ffd23f', '#0a0d14', '#14213d', '#0a0d14'];   // no white/cream grounds (owner)
+$('take').innerHTML = CATS.map(([ic, n, v, bg, r, fg], i) => { const dark = i !== 1, ink = dark ? '#f2f0ea' : '#14213d';
+  return `<div class="a" style="inset:0;background:${TAKE_BG[i]};visibility:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:40px">
+    <div style="width:360px;height:360px;background:${dark ? '#ffd23f' : '#14213d'};border-radius:${r === '0' ? '0 120px 0 120px' : r};display:grid;place-items:center">
+      <span class="ms" style="font-size:190px;color:${dark ? '#14213d' : '#ffd23f'}">${ic}</span></div>
+    <div style="font-size:80px;font-weight:700;color:${ink};letter-spacing:-.03em;white-space:nowrap">${n}</div>
+    <div style="font-size:150px;font-weight:700;color:${ink};letter-spacing:-.04em">$${v.toFixed(2)}</div></div>`; }).join('');
+const takes = [...$('take').children];
+function takeover(t) {
+  const CB = [7, 8, 9], NX = [8, 9, 10];
+  takes.forEach((el, i) => { if (i >= CB.length) { el.style.visibility = 'hidden'; return; } const tin = tb(CB[i]), tout = tb(NX[i]) - .2;     // slide-out ends exactly on the next beat
+    if (t < tin || t >= tout + .2) { el.style.visibility = 'hidden'; return; }
+    el.style.visibility = 'visible';
+    const xin = (1 - out((t - tin) / .2)) * (i % 2 ? -1080 : 1080), xout = t > tout ? Math.pow(cl((t - tout) / .2), 2) * (i % 2 ? 1080 : -1080) : 0;
+    el.style.transform = `translateX(${xin + xout}px)`;
+    el.children[0].style.transform = `rotate(${(1 - out((t - tin) / .35)) * (i % 2 ? 40 : -40)}deg) scale(${lerp(.6, 1, out((t - tin) / .3))})`; });
+}
+window.CUTS = Object.values(CUT).map(tb);                                    // read by rec-blur.cjs
+window.render = t => {
+  const b = beatOf(t), C = CUT;
+  show($('s0'), b < C.payday); show($('bgL'), b >= C.payday && b < C.day25); show($('ui'), (b >= C.payday && b < C.snap) || (b >= C.saved && b < C.cta)); show($('s4'), b >= C.snap && b < C.saved); show($('s6'), b >= C.cta);
+  show($('w1'), b >= C.payday && b < C.day25); show($('band'), b >= C.where && b < C.snap); show($('w2'), b >= C.day25 && b < C.where); show($('w3'), b >= C.where && b < C.snap);
+  show($('saved'), b >= C.saved && b < C.know); show($('band6'), b >= C.saved && b < C.know); show($('w4'), b >= C.saved && b < C.know); show($('w5'), b >= C.know && b < C.cta);
+  T = t; cam(...camAt(t)); stage(t); takeover(t);   // particles removed (owner)
+  // payday: the card swings up into place in 3D
+  const ci = out((t - tb(C.payday)) / .45); $('hero').style.transform = b < C.day25 ? `perspective(1200px) rotateX(${(1 - ci) * 70}deg) translateY(${(1 - ci) * 120}px)` : 'none';
+  $('hdr').style.opacity = $('mon').style.opacity = b < C.day25 ? 0 : 1;
+  $('below').style.opacity = b < C.where ? 0 : 1;
+
+  // numbers step per frame (sharp under motion blur): payday counts up, day 25 counts down (demo: $1,000 in, $301.75 out)
+  const tf = Math.floor(t * 30 + 1e-6) / 30;
+  const up = k(tf, tb(C.payday), .9), dn = k(tf, tb(3.15), 1.3);
+  const inc = 1000 * up, exp = 301.75 * dn, bal = inc - exp;
+  $('bal').textContent = money(Math.round(bal * 100) / 100); $('inc').textContent = money(Math.round(inc * 100) / 100); $('exp').textContent = money(Math.round(exp * 100) / 100);
+  $('prog').style.width = (30 * dn) + '%';
+  const lj = k(t, tb(1.6), .4, spring); $('lem').style.transform = `translate(${(1 - lj) * 140}px,${(1 - lj) * -140}px) rotate(${(1 - lj) * 50}deg)`;
+  typeText($('w1'), t, tb(C.payday));
+  // hook: "where did" is already rising on frame 0, the number slams in on the first hit, "go??" half a beat later
+  rise($('h0a'), t, -.12, 60);
+  typeText($('h0b'), t, tb(0), 45);
+  rise($('h0c'), t, tb(.5), 60);
+  $('s0').style.transform = `scale(${1 + .04 * cl(t / tb(1))})`;
+  rise($('w2'), t, tb(4)); rise($('w2s'), t, tb(4.6), 40); rise($('w3'), t, tb(6.05));
+  show($('date'), b >= C.payday && b < C.where); show($('w2s'), b >= C.day25 && b < C.where); show($('w5s'), b >= C.know && b < C.cta); show($('band5'), b >= C.know && b < C.cta);
+  $('dateT').textContent = b < C.day25 ? 'OCT 1' : 'OCT 25';
+  const fl = b < C.day25 ? 1 : out((t - tb(C.day25)) / .3);                   // the date flips on the cut
+  $('date').style.transform = `scaleY(${fl})`; $('dateT').style.background = b < C.day25 ? 'var(--prussian)' : 'var(--lemon)'; $('dateT').style.color = b < C.day25 ? 'var(--lemon)' : 'var(--prussian)';
+
+  // categories pop on the beats
+  const CB = [6.5, 7, 8, 9, 9.5];
+  chips.forEach((c, i) => { const q = k(t, tb(CB[i]), .3, spring); c.style.opacity = cl((t - tb(CB[i])) / .06); c.style.transform = `scale(${lerp(.3, 1, q)})`; });
+
+  // receipt: lands on the cut, the scan line sweeps in ~1 s
+  const r = k(t, tb(C.snap), .3); $('rc').style.transform = `translateY(${(1 - r) * 200}px) rotate(${(1 - r) * -6}deg)`;
+  const sc = cl((t - tb(C.snap + .25)) / 1.0); $('scan').style.top = lerp(440, 1000, sc) + 'px'; $('scan').style.opacity = t > tb(C.snap + .25) && sc < 1 ? 1 : 0;
+
+  // the drop: new row appears with the app's lemon highlight (fades in 1.2 s); lemon + Saved
+  const nr = k(t, tb(C.saved), .3);
+  rows.forEach((el, i) => { el.style.transform = i === 0 ? `scale(${lerp(.9, 1, nr)})` : `translateY(${(1 - nr) * -56}px)`; });
+  rows[0].style.opacity = b < C.saved ? 0 : nr;
+  rows[0].querySelector('.hl').style.opacity = b < C.saved ? 0 : .32 * (1 - cl((t - tb(C.saved)) / 1.2));
+  const sv = k(t, tb(C.saved), .35, spring); $('saved').style.transform = `scale(${lerp(.5, 1, sv)})`; $('saved').style.opacity = cl((t - tb(C.saved)) / .08);
+  rise($('w4'), t, tb(13)); typeText($('sn1'), t, tb(C.snap) + .05); typeText($('sn2'), t, tb(C.snap) + .55, 50);
+  rise($('w5'), t, tb(15.2)); rise($('w5s'), t, tb(16), 40);
+
+  // CTA on the strongest hit
+  const l6 = k(t, tb(C.cta), .45, spring);
+  $('l6').style.transform = `scale(${lerp(3.4, 1, l6)}) rotate(${lerp(-30, 0, l6) + Math.sin(t * 1.6) * 2}deg) translateY(${Math.sin(t * 2.1) * 10}px)`;
+  [['w6', 19.5], ['u6', 20], ['f6', 20.5]].forEach(([id, bb]) => typeText($(id), t, tb(bb), 55));   // all typed by ~14 s, then a short hold
+  $('s6').style.transform = `scale(${1 - cl((t - tb(C.cta)) / 3) * .05})`;
+};
+render(0);
+</script></body></html>
