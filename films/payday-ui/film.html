@@ -86,6 +86,8 @@ h3{font-size:17px;font-weight:700;margin:22px 0 12px;letter-spacing:-.02em}
   <div class="t a" id="f6" style="top:1320px;font-size:46px;font-weight:500;letter-spacing:0;color:#9a9890">free · no ads · web app</div>
 </div>
 
+<div class="a" id="take" style="inset:0"></div>
+<div class="a" id="fx" style="inset:0"></div>
 </div>
 <script>
 // Demo data = the app's English demo screenshot (limonlay/daily icons/shot-en-dark.webp).
@@ -118,7 +120,8 @@ const k = (t, at, d, e = out) => e((t - at) / d);
 const money = v => '$' + v.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 const show = (el, on) => { el.style.visibility = on ? 'visible' : 'hidden'; };
 const rise = (el, t, at, dist = 90) => { const q = k(t, at, .26); el.style.opacity = cl((t - at) / .08); el.style.transform = `translateY(${(1 - q) * dist}px) scale(${lerp(1.25, 1, q)})`; };
-const cam = (px, py, sx, sy, S, r) => { $('ui').style.transform = `translate(${sx}px,${sy}px) rotate(${r}deg) scale(${S}) translate(${-px}px,${-py}px)`; };
+let T = 0;                                                                          // current time, for the slow orbit
+const cam = (px, py, sx, sy, S, r) => { $('ui').style.transform = `perspective(2400px) translate(${sx}px,${sy}px) rotateY(${6 * Math.sin(T * .9)}deg) rotateX(${4 * Math.sin(T * .7 + 1)}deg) rotate(${r}deg) scale(${S}) translate(${-px}px,${-py}px)`; };
 
 // scene cuts (beat index) and camera keys [beat, px, py, sx, sy, S, tilt°]: each key SNAPS in 0.28 s, then the shot keeps creeping
 const CUT = { day25: 3, where: 6, snap: 10, saved: 12, know: 15, cta: 19 };
@@ -136,13 +139,56 @@ function camAt(t) {
 const STRONG = new Set([4, 7, 12, 19, 21]);
 function stage(t) { $('stage').style.transform = 'none'; }   // no beat punch / tilt kick / zoom-through: owner removed the jerky bounces
 
+
+// ---------- heavier animation (smooth, no shakes) ----------
+// 1) brand-shape bursts: flat circles / squares / drops / leaves fly out and shrink away
+const SHAPES = ['50%', '0', '50% 50% 0 50%', '0 50% 0 50%'];
+let seed = 7; const rnd = () => { seed |= 0; seed = seed + 0x6D2B79F5 | 0; let x = Math.imul(seed ^ seed >>> 15, 1 | seed); x = x + Math.imul(x ^ x >>> 7, 61 | x) ^ x; return ((x ^ x >>> 14) >>> 0) / 4294967296; };
+const PARTS = [];
+function burst(beat, x, y, n, colors, { dist = 520, size = 70, a0 = 0, a1 = 360, dur = .9, r0 = 0 } = {}) {
+  for (let i = 0; i < n; i++) PARTS.push({ beat, x, y, dur: dur * (.75 + rnd() * .5), ang: (a0 + (a1 - a0) * rnd()) * Math.PI / 180,
+    dist: dist * (.55 + rnd() * .6), r0, size: size * (.5 + rnd()), shape: SHAPES[i % 4], color: colors[i % colors.length], spin: (rnd() - .5) * 540 });
+}
+burst(0.05, 540, 1040, 18, ['#14213d', '#f2f0ea', '#fff'], { r0: 480, dist: 600 });                                  // payday
+[3.2, 3.6, 4.0, 4.4, 4.8, 5.2].forEach((bb, i) => burst(bb, 300 + i * 90, 900, 3, ['#ffd23f'], { dist: 900, size: 46, a0: -120, a1: -60, dur: .8 }));  // money leaving the card
+burst(12, 540, 1460, 16, ['#ffd23f', '#f2f0ea', '#14213d'], { dist: 500, r0: 260, a0: 20, a1: 160 });                    // Saved
+burst(19, 540, 760, 22, ['#ffd23f', '#f2f0ea', '#000'], { dist: 760, size: 80 });              // CTA
+$('fx').innerHTML = PARTS.map(() => '<div class="a" style="left:0;top:0"></div>').join('');
+const partEls = [...$('fx').children];
+function fx(t) {
+  PARTS.forEach((p, i) => { const e = partEls[i], dt = t - tb(p.beat), q = dt / p.dur;
+    if (q < 0 || q > 1) { e.style.visibility = 'hidden'; return; }
+    const d = p.r0 + p.dist * out(q), sz = p.size * (1 - q * q);
+    Object.assign(e.style, { visibility: 'visible', width: sz + 'px', height: sz + 'px', background: p.color, borderRadius: p.shape,
+      transform: `translate(${p.x + Math.cos(p.ang) * d - sz / 2}px,${p.y + Math.sin(p.ang) * d - sz / 2}px) rotate(${p.spin * q}deg)` }); });
+}
+// 2) category takeovers: each category fills the screen on its beat, then slides away
+const TAKE_BG = ['#14213d', '#ffd23f', '#ffffff', '#e5e5e5', '#0a0d14'];
+$('take').innerHTML = CATS.map(([ic, n, v, bg, r, fg], i) => { const ink = i === 0 || i === 4 ? '#f2f0ea' : '#14213d';
+  return `<div class="a" style="inset:0;background:${TAKE_BG[i]};visibility:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:40px">
+    <div style="width:360px;height:360px;background:${i === 0 || i === 4 ? '#ffd23f' : '#14213d'};border-radius:${r === '0' ? '0 120px 0 120px' : r};display:grid;place-items:center">
+      <span class="ms" style="font-size:190px;color:${i === 0 || i === 4 ? '#14213d' : '#ffd23f'}">${ic}</span></div>
+    <div style="font-size:80px;font-weight:700;color:${ink};letter-spacing:-.03em;white-space:nowrap">${n}</div>
+    <div style="font-size:150px;font-weight:700;color:${ink};letter-spacing:-.04em">$${v.toFixed(2)}</div></div>`; }).join('');
+const takes = [...$('take').children];
+function takeover(t) {
+  const CB = [6.5, 7, 8, 9, 9.5], NX = [7, 8, 9, 9.5, 10];
+  takes.forEach((el, i) => { const tin = tb(CB[i]), tout = tb(NX[i]) - .2;     // slide-out ends exactly on the next beat
+    if (t < tin || t >= tout + .2) { el.style.visibility = 'hidden'; return; }
+    el.style.visibility = 'visible';
+    const xin = (1 - out((t - tin) / .2)) * (i % 2 ? -1080 : 1080), xout = t > tout ? Math.pow(cl((t - tout) / .2), 2) * (i % 2 ? 1080 : -1080) : 0;
+    el.style.transform = `translateX(${xin + xout}px)`;
+    el.children[0].style.transform = `rotate(${(1 - out((t - tin) / .35)) * (i % 2 ? 40 : -40)}deg) scale(${lerp(.6, 1, out((t - tin) / .3))})`; });
+}
 window.CUTS = Object.values(CUT).map(tb);                                    // read by rec-blur.cjs
 window.render = t => {
   const b = beatOf(t), C = CUT;
   show($('bgL'), b < C.day25); show($('ui'), b < C.snap || (b >= C.saved && b < C.cta)); show($('s4'), b >= C.snap && b < C.saved); show($('s6'), b >= C.cta);
   show($('w1'), b < C.day25); show($('band'), b >= C.where && b < C.snap); show($('w2'), b >= C.day25 && b < C.where); show($('w3'), b >= C.where && b < C.snap);
   show($('saved'), b >= C.saved && b < C.know); show($('w4'), b >= C.saved && b < C.know); show($('w5'), b >= C.know && b < C.cta);
-  cam(...camAt(t)); stage(t);
+  T = t; cam(...camAt(t)); stage(t); fx(t); takeover(t);
+  // payday: the card swings up into place in 3D
+  const ci = out(t / .5); $('hero').style.transform = b < C.day25 ? `perspective(1200px) rotateX(${(1 - ci) * 70}deg) translateY(${(1 - ci) * 120}px)` : 'none';
   $('hdr').style.opacity = $('mon').style.opacity = b < C.day25 ? 0 : 1;
   $('below').style.opacity = b < C.where ? 0 : 1;
 
