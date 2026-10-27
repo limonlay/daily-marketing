@@ -155,12 +155,6 @@ h3{font-size:17px;font-weight:700;margin:22px 0 12px;letter-spacing:-.02em}
 
 </div>
 
-<!-- tap marks: where the finger presses -->
-<div class="a" id="tdot" style="left:0;top:0;width:120px;height:120px;border-radius:50%;background:var(--cream);z-index:60;opacity:0"></div>
-<div class="a" id="trip" style="left:0;top:0;width:120px;height:120px;border-radius:50%;background:var(--lemon);z-index:59;opacity:0"></div>
-<div class="a" id="tlab" style="left:0;top:0;z-index:60;opacity:0;text-align:center;width:160px">
-  <div style="display:inline-block;background:var(--lemon);color:var(--prussian);font-size:52px;font-weight:700;padding:10px 30px;border-radius:0 30px 0 30px">tap</div>
-  <svg width="40" height="26" viewBox="0 0 40 26" style="display:block;margin:-2px auto 0"><path d="M0 0 H40 L20 26 Z" fill="#ffd23f"/></svg></div>
 <script>
 // Demo data = the app's English demo (limonlay/daily icons/shot-en-dark.webp). Budgets, chat answer and next month are illustrative.
 const CATS = [['home', 'Housing', 200, '#14213d', '50%', '#fff'], ['shopping_bag', 'Shopping', 57.5, '#ffd23f', '50%', '#000'],
@@ -267,7 +261,6 @@ window.render = t => {
 
   // the taps: the button presses in on the beat, the burst opens from it
   const [sx, sy] = at('tSum'), [ax, ay] = at('tAdd'), [bx, by] = at('tBudget'), [ix, iy] = at('tAI');
-  [['tSum', S.sum], ['tAdd', S.add], ['tBudget', S.bud], ['tAI', S.ai]].forEach(([id, bb]) => { const p = t >= tb(bb) - .1 && t < tb(bb) + .04; $(id).style.transform = p ? 'scale(.86)' : 'none'; });
 
   // 1 summary: burst from the tab, categories replace each other on the beats
   burst($('L1'), t, tb(S.sum), sx, sy); lcam($('L1'), t, tb(S.sum), tb(S.home2), { s: 1.08, r: -3, x: -30 }, { s: 1.22, r: 3, x: 30 });
@@ -302,7 +295,6 @@ window.render = t => {
   // like the real chat: the question is typed in the input bar, sent (the bubble flies up), dots, the answer types out, the result lights up
   typeText($('qin'), t, tb(23.2), 62); $('ph4').style.opacity = t >= tb(23.2) ? 0 : 1;
   const sent = t >= tb(24.5); $('qin').style.visibility = sent ? 'hidden' : 'visible';
-  $('snd4').style.transform = t >= tb(24.5) - .1 && t < tb(24.5) + .04 ? 'scale(.84)' : 'none';
   const fly = k(t, tb(24.5), .3); $('q').style.opacity = sent ? 1 : 0; $('q').style.transformOrigin = '100% 0';
   $('q').style.transform = `translateY(${(1 - fly) * 820}px) scale(${lerp(.7, 1, fly)})`;
   const dotsOn = t >= tb(24.5) + .2 && t < tb(25.6); show($('dots4'), dotsOn);
@@ -333,16 +325,15 @@ window.render = t => {
   // the tapped link opens: night spreads from the pill behind the card (steady, so the end never sits still)
   const [gx, gy] = at('u6'); $('g6').style.clipPath = `circle(${1450 * cl((t - tb(43) - .05) / 1.2)}px at ${gx}px ${gy}px)`;
 
-  // tap marks (choosing the style: #a = finger dot + lemon ripple, #b = "tap" label)
-  const TAPS = [['tSum', S.sum], ['tAdd', S.add], ['tBudget', S.bud], ['tAI', S.ai], ['snd4', 24.5], ['u6', 43]];
-  const tst = location.hash.slice(1) || 'a', dot = $('tdot'), rip = $('trip'), lab = $('tlab');
-  [dot, rip, lab].forEach(e => { e.style.opacity = 0; });
-  const cur = TAPS.find(([, bb]) => t >= tb(bb) - .35 && t < tb(bb) + .4);
-  if (cur) { const [id, bb] = cur, [x, y] = at(id), d = t - tb(bb);
-    if (tst === 'a') {
-      if (d < .06) { const q = cl((d + .35) / .12); dot.style.opacity = .6 * q; dot.style.transform = `translate(${x - 60}px,${y - 60}px) scale(${(d > -.1 ? .78 : 1) * lerp(1.5, 1, out(q))})`; }
-    } else if (d < .05) { const q = out(cl((d + .35) / .15)); lab.style.opacity = q; lab.style.transform = `translate(${x - 80}px,${y - 200 - (1 - q) * 40}px)`; }
-  }
+  // the button tells you: it turns lemon and lifts (hard offset shadow) just before the beat, presses in on it, the burst opens from it
+  [['tSum', S.sum], ['tAdd', S.add], ['tBudget', S.bud], ['tAI', S.ai], ['snd4', 24.5], ['u6', 43]].forEach(([id, bb]) => {
+    const e = $(id), d = t - tb(bb); if (id === 'u6' && d >= 0) return;   // the link's own press state takes over on the beat
+    const on = d >= -.45 && d < .04, q = out(cl((d + .45) / .2)), press = d >= -.1 && d < .04;
+    e.style.transform = on ? `scale(${press ? .86 : lerp(1, 1.15, q)})` : 'none';
+    const lemonBtn = ['tAdd', 'snd4', 'u6'].includes(id);   // already lemon: they turn cream instead
+    e.style.background = on ? (lemonBtn ? 'var(--cream)' : 'var(--lemon)') : ''; e.style.color = on ? 'var(--prussian)' : '';
+    e.style.boxShadow = on && !lemonBtn ? '0 0 0 18px var(--lemon)' : 'none';   // hard spread = padding without moving the layout
+    if (!lemonBtn) e.style.borderRadius = on ? '0 24px 0 24px' : ''; });
 };
 render(0);
 </script></body></html>
