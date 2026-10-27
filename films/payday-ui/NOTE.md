@@ -17,3 +17,8 @@ v6 (heavier, still smooth): 3D card swing-in on payday, slow 3D orbit on the app
 v7 (clarity): date chip OCT 1 → OCT 25 flips on the cut; "$301.75 already gone."; three category takeovers, one full beat each (readable); "snap the receipt. / Daily logs it for you."; "logged."; "now you know. / where every coin goes."; end line "no download needed" (owner removed "free").
 
 v9 hook: 0–1.1 s on night: "where did" (already up on frame 0) → "$301.75" slams in on the first hit (0.51 s) → "go??"; then cut back to OCT 1 payday.
+
+## Sound-effects version (2026-10-27)
+`payday-ui-sfx.mp4` = the same picture with code-made sound effects instead of a song (owner asked). Cues in `sfx.json`
+(on the film's beats) + a key tick per typed letter; built with the daily-reel `cues.cjs` + `sfx.py`. -14 LUFS, all gates pass.
+No samples or licences: safe to post as is, or to add a quiet TikTok song under it.

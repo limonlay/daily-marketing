@@ -1,0 +1,33 @@
+{
+ "dur": 15,
+ "type": {"g": 0.45},
+ "cues": [
+  {"beat": 0, "k": "impact", "g": 1.0},
+  {"beat": 1, "k": "whoosh", "dur": 0.35, "g": 0.7, "pan": -0.7},
+  {"beat": 1, "k": "count", "dur": 0.9, "up": true, "g": 0.35},
+  {"beat": 1.6, "k": "pop", "p": 1.2, "g": 0.6},
+  {"beat": 3, "k": "flip", "g": 0.8},
+  {"beat": 3.15, "k": "count", "dur": 1.3, "up": false, "g": 0.35},
+  {"beat": 6, "k": "whoosh", "dur": 0.3, "g": 0.6, "pan": 0.7},
+  {"beat": 6.5, "k": "pop", "p": 0.9, "g": 0.6},
+  {"beat": 7, "k": "whoosh", "dur": 0.22, "g": 0.6, "pan": 0.8},
+  {"beat": 7, "k": "pop", "p": 1.0, "g": 0.7},
+  {"beat": 8, "k": "whoosh", "dur": 0.22, "g": 0.6, "pan": -0.8},
+  {"beat": 8, "k": "pop", "p": 1.12, "g": 0.7},
+  {"beat": 8.5, "k": "whoosh", "dur": 0.2, "g": 0.6, "pan": 0.8},
+  {"beat": 8.5, "k": "pop", "p": 1.25, "g": 0.7},
+  {"beat": 9, "k": "whoosh", "dur": 0.2, "g": 0.6, "pan": -0.8},
+  {"beat": 9, "k": "pop", "p": 1.4, "g": 0.7},
+  {"beat": 9.5, "k": "whoosh", "dur": 0.2, "g": 0.6, "pan": 0.8},
+  {"beat": 9.5, "k": "pop", "p": 1.6, "g": 0.75},
+  {"beat": 10, "k": "shutter", "g": 0.9},
+  {"beat": 10, "k": "paper", "g": 0.6},
+  {"beat": 10.25, "k": "scan", "dur": 1.0, "g": 0.8},
+  {"beat": 12, "k": "impact", "g": 0.6},
+  {"beat": 12, "k": "ding", "g": 0.9},
+  {"beat": 15, "k": "whoosh", "dur": 0.4, "g": 0.6, "pan": -0.6},
+  {"beat": 19, "k": "whoosh", "dur": 0.45, "g": 0.7, "pan": 0.6},
+  {"beat": 19, "k": "impact", "g": 1.0},
+  {"beat": 19.1, "k": "chime", "g": 0.9}
+ ]
+}
