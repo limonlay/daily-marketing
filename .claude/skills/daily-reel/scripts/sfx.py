@@ -10,6 +10,11 @@ Kinds (each cue: {"t": s, "k": kind, "g": gain 0-1, ...}):
   count    counter running ("dur", "up": true/false)          flip    date card flips
   shutter  camera click (snap a receipt)                      paper   receipt lands
   scan     scanner sweep ("dur")
+Calm "Apple-like" set (soft, tonal, spacious; pair with "reverb" in the cue sheet):
+  key      very soft typed letter                            tap     soft tonal UI tap ("f" Hz)
+  air      gentle low airy whoosh ("dur", "pan")              glass   pure glass bells ("notes" Hz list, "gap" s, "decay" s)
+  sub      soft low swell under a key moment                  rise / fall  soft gliding tone pair ("dur") for counters
+Every cue may set "wet" (0-1, send to the shared reverb); the sheet may set {"reverb": {"rt": s, "mix": 0-1}}.
 """
 import json, sys, wave
 import numpy as np
@@ -99,18 +104,81 @@ def scan(c):
     return .22 * np.sin(2 * np.pi * np.cumsum(f) / SR) * (.6 + .4 * np.sin(2 * np.pi * 28 * t)) * np.minimum(1, t / .03) * np.minimum(1, (d - t) / .08)
 
 
-KINDS = dict(tick=tick, whoosh=whoosh, pop=pop, impact=impact, ding=ding, chime=chime, count=count, flip=flip, shutter=shutter, paper=paper, scan=scan)
+def soft_on(n, a=.004):   # click-free attack
+    e = np.ones(n); k = min(n, int(a * SR)); e[:k] = .5 - .5 * np.cos(np.pi * np.arange(k) / max(1, k)); return e
+
+
+def key(c):
+    t = ts(.025); f = 1700 * rng.uniform(.9, 1.1)
+    return (.35 * bp(rng.standard_normal(len(t)), 400, 3500) * np.exp(-t / .0018) + .25 * np.sin(2 * np.pi * f * t) * np.exp(-t / .004)) * soft_on(len(t), .0007)
+
+
+def tap(c):
+    f = c.get('f', 1100); t = ts(.35)
+    y = np.sin(2 * np.pi * f * t) * np.exp(-t / .07) + .18 * np.sin(2 * np.pi * f * 2.005 * t) * np.exp(-t / .035)
+    y += .15 * bp(rng.standard_normal(len(t)), 300, 2500) * np.exp(-t / .002)
+    return .6 * y * soft_on(len(t), .0015)
+
+
+def air(c):
+    d = c.get('dur', .5); n = int(d * SR); x = rng.standard_normal(n); y = np.zeros(n); seg = 12; L = n // seg * 2
+    for i in range(seg * 2 - 1):
+        s = i * L // 2; e = min(n, s + L); q = i / (seg * 2 - 2); c0 = 250 * (6 ** q)
+        if e - s < 64: break
+        y[s:e] += bp(x[s:e], c0 * .5, c0 * 1.6) * np.hanning(e - s)
+    t = np.arange(n) / n; return 1.6 * y * np.sin(np.pi * t ** .8) ** 2
+
+
+def glass(c):
+    notes = c.get('notes', [1047]); gap = c.get('gap', .07); dec = c.get('decay', 1.4); d = dec * 2.5 + gap * len(notes)
+    y = np.zeros(int(d * SR))
+    for i, f in enumerate(notes):
+        t = ts(d - i * gap); v = (np.sin(2 * np.pi * f * t) + .5 * np.sin(2 * np.pi * f * 1.004 * t)          # gentle shimmer
+                                  + .12 * np.sin(2 * np.pi * f * 2 * t) * np.exp(-t / (dec * .3))) * np.exp(-t / dec)
+        o = int(i * gap * SR); y[o:o + len(v)] += v * soft_on(len(v), .006) * (1 - .08 * i)
+    return .35 * y
+
+
+def sub(c):
+    t = ts(1.2); env = np.minimum(1, t / .07) ** 2 * np.exp(-t / .35)
+    return 1.1 * (np.sin(2 * np.pi * 52 * t) + .25 * np.sin(2 * np.pi * 104 * t)) * env
+
+
+def rise(c, up=True):
+    d = c.get('dur', 1); t = ts(d); q = t / d if up else 1 - t / d; f = 660 * 2 ** q
+    y = np.sin(2 * np.pi * np.cumsum(f) / SR) + .6 * np.sin(2 * np.pi * np.cumsum(f * 1.5) / SR)
+    return .22 * y * np.sin(np.pi * t / d) ** 2
+
+
+fall = lambda c: rise(c, False)
+
+
+def reverb(rt, n):   # stereo hall: decaying, darkening noise
+    t = ts(rt * 1.6); ir = np.stack([bp(rng.standard_normal(len(t)), 150, 5000) for _ in range(2)], 1) * np.exp(-t * 6.9 / rt)[:, None]
+    ir[:int(.012 * SR)] = 0; return ir / np.sqrt((ir ** 2).sum(0))
+
+
+def convolve(x, ir):
+    m = len(x) + len(ir); N = 1 << (m - 1).bit_length()
+    return np.fft.irfft(np.fft.rfft(x, N) * np.fft.rfft(ir, N), N)[:len(x)]
+
+
+KINDS = dict(key=key, tap=tap, air=air, glass=glass, sub=sub, rise=rise, fall=fall, tick=tick, whoosh=whoosh, pop=pop, impact=impact, ding=ding, chime=chime, count=count, flip=flip, shutter=shutter, paper=paper, scan=scan)
 
 if __name__ == '__main__':
-    src, dst = sys.argv[1:3]; S = json.load(open(src)); n = int(S['dur'] * SR); mix = np.zeros((n, 2))
+    src, dst = sys.argv[1:3]; S = json.load(open(src)); n = int(S['dur'] * SR); mix = np.zeros((n, 2)); wet = np.zeros(n)
     for c in S['cues']:
         s = KINDS[c['k']](c) * c.get('g', 1); o = int(max(0, c['t']) * SR)
         if o >= n: continue
         s = s[:n - o]; pan = c.get('pan', 0)
-        if c['k'] == 'whoosh':   # whooshes travel across the stereo field
+        wet[o:o + len(s)] += s * c.get('wet', 0)
+        if c['k'] in ('whoosh', 'air'):   # whooshes travel across the stereo field
             pr = np.linspace(pan if pan else -.6, -pan if pan else .6, len(s))
         else: pr = np.full(len(s), pan)
         mix[o:o + len(s), 0] += s * np.sqrt((1 - pr) / 2) * 1.41; mix[o:o + len(s), 1] += s * np.sqrt((1 + pr) / 2) * 1.41
+    if S.get('reverb'):
+        ir = reverb(S['reverb'].get('rt', 1.8), n)
+        for ch in (0, 1): mix[:, ch] += S['reverb'].get('mix', .5) * convolve(wet, ir[:, ch]) * 6
     mix /= max(1e-9, np.abs(mix).max()) / .9
     with wave.open(dst, 'wb') as w:
         w.setnchannels(2); w.setsampwidth(2); w.setframerate(SR); w.writeframes((mix * 32767).astype('<i2').tobytes())

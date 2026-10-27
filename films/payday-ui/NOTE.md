@@ -22,3 +22,5 @@ v9 hook: 0–1.1 s on night: "where did" (already up on frame 0) → "$301.75" s
 `payday-ui-sfx.mp4` = the same picture with code-made sound effects instead of a song (owner asked). Cues in `sfx.json`
 (on the film's beats) + a key tick per typed letter; built with the daily-reel `cues.cjs` + `sfx.py`. -14 LUFS, all gates pass.
 No samples or licences: safe to post as is, or to add a quiet TikTok song under it.
+Owner then asked for calm, refined sound "like an Apple product": `sfx.json` is now the calm set (soft taps on a rising pentatonic run,
+airy whooshes, glass chimes for "Saved" and the logo, soft sub, shared reverb); the first, punchier set is kept as `sfx-pop.json`. -13.8 LUFS.
