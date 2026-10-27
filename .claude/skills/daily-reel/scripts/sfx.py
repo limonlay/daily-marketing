@@ -165,8 +165,8 @@ def convolve(x, ir):
 
 KINDS = dict(key=key, tap=tap, air=air, glass=glass, sub=sub, rise=rise, fall=fall, tick=tick, whoosh=whoosh, pop=pop, impact=impact, ding=ding, chime=chime, count=count, flip=flip, shutter=shutter, paper=paper, scan=scan)
 
-def render(S):   # cue sheet -> stereo float mix, peak 0.9
-    n = int(S['dur'] * SR); mix = np.zeros((n, 2)); wet = np.zeros(n)
+if __name__ == '__main__':
+    src, dst = sys.argv[1:3]; S = json.load(open(src)); n = int(S['dur'] * SR); mix = np.zeros((n, 2)); wet = np.zeros(n)
     for c in S['cues']:
         s = KINDS[c['k']](c) * c.get('g', 1); o = int(max(0, c['t']) * SR)
         if o >= n: continue
@@ -179,14 +179,7 @@ def render(S):   # cue sheet -> stereo float mix, peak 0.9
     if S.get('reverb'):
         ir = reverb(S['reverb'].get('rt', 1.8), n)
         for ch in (0, 1): mix[:, ch] += S['reverb'].get('mix', .5) * convolve(wet, ir[:, ch]) * 6
-    return mix / (max(1e-9, np.abs(mix).max()) / .9)
-
-
-def write(mix, dst):
+    mix /= max(1e-9, np.abs(mix).max()) / .9
     with wave.open(dst, 'wb') as w:
         w.setnchannels(2); w.setsampwidth(2); w.setframerate(SR); w.writeframes((mix * 32767).astype('<i2').tobytes())
-
-
-if __name__ == '__main__':
-    src, dst = sys.argv[1:3]; S = json.load(open(src)); write(render(S), dst)
     print(f"{len(S['cues'])} cues, {S['dur']} s -> {dst}")
