@@ -154,6 +154,21 @@ h3{font-size:17px;font-weight:700;margin:22px 0 12px;letter-spacing:-.02em}
 
 </div>
 
+<!-- the button pops out of the app, grows, is pressed on the beat and turns into the next scene -->
+<div id="pop" style="position:absolute;inset:0;z-index:80;pointer-events:none">
+  <div id="pdim" class="a" style="inset:0;background:var(--night);opacity:0"></div>
+  <div id="gSum" class="a gb" style="left:280px;top:560px;width:520px;height:520px;background:var(--lemon);border-radius:0 150px 0 150px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;color:var(--prussian)"><span class="ms" style="font-size:260px">insights</span><span style="font-size:76px;font-weight:700">Summary</span></div>
+  <span class="ms a gIc" style="left:0;top:0;font-size:150px;color:var(--prussian)">home</span><span class="ms a gIc" style="left:0;top:0;font-size:150px;color:var(--prussian)">shopping_bag</span><span class="ms a gIc" style="left:0;top:0;font-size:150px;color:var(--prussian)">lightbulb</span><span class="ms a gIc" style="left:0;top:0;font-size:150px;color:var(--prussian)">movie</span><span class="ms a gIc" style="left:0;top:0;font-size:150px;color:var(--prussian)">restaurant</span>
+  <div id="gAdd" class="a gb" style="left:260px;top:540px;width:560px;height:560px;border-radius:50%;background:var(--lemon);display:grid;place-items:center;overflow:hidden"><span class="ms" id="gAddI" style="font-size:380px;color:var(--prussian)">add</span>
+    <svg id="iris" viewBox="-110 -110 220 220" width="560" height="560" style="position:absolute;left:0;top:0;opacity:0"><g id="irisg" fill="#14213d"><path d="M0 -36 L60 -98 L96 -46 Z" transform="rotate(0)"/><path d="M0 -36 L60 -98 L96 -46 Z" transform="rotate(60)"/><path d="M0 -36 L60 -98 L96 -46 Z" transform="rotate(120)"/><path d="M0 -36 L60 -98 L96 -46 Z" transform="rotate(180)"/><path d="M0 -36 L60 -98 L96 -46 Z" transform="rotate(240)"/><path d="M0 -36 L60 -98 L96 -46 Z" transform="rotate(300)"/></g></svg></div>
+  <div id="gBud" class="a gb" style="left:0;width:1080px;top:720px;text-align:center;font-size:170px;line-height:1.2;font-weight:700;color:var(--lemon);letter-spacing:-.03em;white-space:nowrap"><span id="gBudW">Budgets</span> <span id="gBudA">›</span></div>
+  <div id="gBar" class="a" style="left:0;top:775px;height:110px;width:0;background:var(--lemon);border-radius:0 55px 0 55px"></div>
+  <div id="gAI" class="a gb" style="left:190px;top:560px;width:700px;height:520px">
+    <div id="gB1" style="position:absolute;left:0;top:0;width:470px;height:320px;background:var(--lemon);border-radius:150px 150px 150px 0"></div>
+    <div id="gB2" style="position:absolute;right:0;bottom:0;width:430px;height:300px;background:var(--cream);border-radius:140px 140px 0 140px;display:grid;place-items:center"><span id="gDots" style="font-size:120px;font-weight:700;color:var(--prussian);letter-spacing:16px;opacity:0">•••</span></div></div>
+  <i class="a gT"></i><i class="a gT"></i><i class="a gT"></i><i class="a gT"></i>
+</div>
+<style>.gT{left:0;top:0;width:80px;height:22px;background:var(--lemon);border-radius:11px;visibility:hidden} .gb,.gIc{visibility:hidden}</style>
 <script>
 // Demo data = the app's English demo (limonlay/daily icons/shot-en-dark.webp). Budgets, chat answer and next month are illustrative.
 const CATS = [['home', 'Housing', 200, '#14213d', '50%', '#fff'], ['shopping_bag', 'Shopping', 57.5, '#ffd23f', '50%', '#000'],
@@ -236,6 +251,45 @@ function lcam_old(el, t, t0, t1, A, B, ox = 540, oy = 960) { const q = inout((t 
   el.style.transform = `translate(${L(A.x, B.x)}px,${L(A.y, B.y)}px) rotate(${L(A.r, B.r)}deg) scale(${lerp(A.s ?? 1, B.s ?? 1, q)})`; }
 function burst(el, t, from, x, y) { const q = k(t, from, .26); el.style.clipPath = `circle(${q * 2300}px at ${x}px ${y}px)`;
   }
+// ---------- the tap: the button leaves the app, grows in the middle (half a beat early), is pressed on the beat, turns into the scene ----------
+const GX = 540, GY = 820;
+function popTaps(t) {
+  document.querySelectorAll('#pop .gb, #pop .gIc, #pop .gT').forEach(e => { e.style.visibility = 'hidden'; });
+  $('pdim').style.opacity = 0; $('gBar').style.width = 0;
+  ['tSum', 'tAdd', 'tBudget', 'tAI'].forEach(id => { $(id).style.visibility = ''; });
+  const TAPS = [['tSum', 'gSum', S.sum], ['tAdd', 'gAdd', S.add], ['tBudget', 'gBud', S.bud], ['tAI', 'gAI', S.ai]];
+  const tap = TAPS.find(([, , bb]) => t >= tb(bb - 1) && t < tb(bb) + .46); if (!tap) return;
+  const [id, gid, bb] = tap, d = t - tb(bb), g = $(gid), src = $(id).getBoundingClientRect(), [bx, by] = at(id);
+  $(id).style.visibility = 'hidden';                                            // it has left the menu bar
+  const W = g.offsetWidth, H = g.offsetHeight, s0 = Math.min(src.width / W, src.height / H);
+  let x = 0, y = 0, sc = 1, op = 1;
+  const d0 = tb(bb - 1) - tb(bb);                                               // pops out on the beat before the press
+  if (d < 0) { const q = spring(cl((d - d0) / .28)); x = lerp(bx - GX, 0, cl(q)); y = lerp(by - GY, 0, cl(q)); sc = lerp(s0, 1, q);
+    $('pdim').style.opacity = .82 * out(cl((d - d0) / .16)); }
+  else if (d < .1) { sc = .86;                                                  // pressed: squash + four ticks for three frames
+    const hw = gid === 'gBud' ? 470 : W / 2 + 40, hh = gid === 'gBud' ? 150 : H / 2 + 40;
+    if (d < .1) [...document.querySelectorAll('#pop .gT')].forEach((e, i) => { const sx = i % 2 ? 1 : -1, sy = i < 2 ? -1 : 1;
+      e.style.visibility = 'visible'; e.style.transform = `translate(${GX + sx * hw - 40}px,${GY + sy * hh - 11}px) rotate(${sx * sy * 45}deg)`; }); }
+  g.style.visibility = 'visible'; g.style.opacity = op; if (gid === 'gSum') [...g.children].forEach(c => { c.style.opacity = 1; });
+  const at2 = (a, z) => cl((d - a) / (z - a)), hb = tb(bb + .5) - tb(bb);
+  if (gid === 'gSum' && d >= .06) {                                             // the tile opens to the whole screen, the five categories fly out of the chart
+    sc = lerp(1, 4.6, out(at2(.06, .3))); [...g.children].forEach(c => { c.style.opacity = 1 - at2(.04, .1); }); y = -1920 * at2(hb, hb + .14) ** 2;   // full lemon, then it slides up off the screen on the half beat
+    [...document.querySelectorAll('#pop .gIc')].forEach((e, i) => { const q = out(at2(.08 + i * .02, .4)), a = (-90 + i * 72) * Math.PI / 180;
+      e.style.visibility = 'visible'; e.style.opacity = 1; const up = -1920 * at2(hb, hb + .14) ** 2;
+      e.style.transform = `translate(${GX - 75 + Math.cos(a) * 340 * q}px,${GY - 75 + Math.sin(a) * 340 * q + up}px) scale(${lerp(.4, 1.5, q)})`; }); }
+  if (gid === 'gAdd') { const ir = at2(0, .2);                                   // the + twists into a camera shutter, "click", then opens up
+    $('iris').style.opacity = d >= 0 && d < .2 ? 1 : 0; $('gAddI').style.opacity = d >= 0 && d < .2 ? 0 : 1;
+    $('irisg').setAttribute('transform', `rotate(${lerp(0, 60, ir)}) scale(${lerp(1, .55, Math.sin(Math.PI * ir))})`);
+    if (d >= .2) { $('gAddI').style.opacity = 0; sc = lerp(1, 4.2, out(at2(.2, hb))); y = -1920 * at2(hb, hb + .14) ** 2; } }
+  if (gid === 'gBud' && d >= .04) {                                             // the › is pulled: a lemon bar sweeps across, then leaves to the right
+    g.style.opacity = 1 - at2(.04, .14); $('gBar').style.width = (1080 * out(at2(.04, .24))) + 'px';
+    $('gBar').style.transform = `translateX(${1080 * at2(.28, .44) ** 2}px)`; }
+  if (gid === 'gAI') { $('gDots').style.opacity = d >= 0 ? 1 : 0;               // dots on the press, then the two bubbles part to their places
+    const q = at2(.14, .44) ** 2; $('gB1').style.transform = `translate(${q * 700}px,${-q * 1100}px)`;   // the bubbles fly out of frame
+    $('gB2').style.transform = `translate(${-q * 700}px,${q * 1100}px)`; }
+  g.style.transform = `translate(${x}px,${y}px) scale(${sc})`;
+}
+
 window.render = t => {
   const b = beatOf(t);
   const inS = (a, z) => b >= a && b < z;
@@ -263,7 +317,7 @@ window.render = t => {
   [['tSum', S.sum], ['tAdd', S.add], ['tBudget', S.bud], ['tAI', S.ai]].forEach(([id, bb]) => { const p = t >= tb(bb) - .1 && t < tb(bb) + .04; $(id).style.transform = p ? 'scale(.86)' : 'none'; });
 
   // 1 summary: burst from the tab, categories replace each other on the beats
-  burst($('L1'), t, tb(S.sum), sx, sy); lcam($('L1'), t, tb(S.sum), tb(S.home2), { s: 1.08, r: -3, x: -30 }, { s: 1.22, r: 3, x: 30 });
+  burst($('L1'), t, tb(S.sum), 540, 820); lcam($('L1'), t, tb(S.sum), tb(S.home2), { s: 1.08, r: -3, x: -30 }, { s: 1.22, r: 3, x: 30 });
   const CB = [4, 5, 5.5, 6, 6.5];   // like the 15 s film: one beat, then half beats
   takes.forEach((el, i) => { const tin = tb(CB[i]), tnext = i + 1 < CB.length ? tb(CB[i + 1]) + .2 : tb(S.home2);
     show(el, t >= tin && t < tnext); el.style.zIndex = i + 1;
@@ -272,14 +326,14 @@ window.render = t => {
   typeText($('c1'), t, tb(4.3));
 
   // 2 add: burst from the + button, the receipt drops in, the scan line sweeps
-  burst($('L2'), t, tb(S.add), ax, ay); lcam($('L2'), t, tb(S.add), tb(S.saved), { s: 1.3, x: 110, y: 60, r: 3 }, { s: 1.05, x: -60, y: -40, r: -2 }); typeText($('c2'), t, tb(S.add) + .2);
+  burst($('L2'), t, tb(S.add), 540, 820); lcam($('L2'), t, tb(S.add), tb(S.saved), { s: 1.3, x: 110, y: 60, r: 3 }, { s: 1.05, x: -60, y: -40, r: -2 }); typeText($('c2'), t, tb(S.add) + .2);
   // three receipts land one after another (one photo, several receipts), then one scan line sweeps them all
-  [0, 1, 2].forEach(i => { const st = tb(S.add) + .03 + i * .08, q = k(t, st, .22), rot = [-8, 6, -3][i];
+  [0, 1, 2].forEach(i => { const st = tb(S.add) + .3 + i * .08, q = k(t, st, .22), rot = [-8, 6, -3][i];
     const e = $('rc' + i); e.style.opacity = t >= st ? 1 : 0; e.style.transform = `translateY(${(1 - q) * 300}px) rotate(${rot + (1 - q) * -10}deg)`; });
-  const sc = cl((t - tb(S.add) - .32) / .5); $('scan').style.top = lerp(420, 1560, sc) + 'px'; $('scan').style.opacity = t > tb(S.add) + .32 && sc < 1 ? 1 : 0;
+  const sc = cl((t - tb(S.add) - .6) / .5); $('scan').style.top = lerp(420, 1560, sc) + 'px'; $('scan').style.opacity = t > tb(S.add) + .6 && sc < 1 ? 1 : 0;
 
   // 3 budgets: burst from "Budgets ›", bars fill one per beat, all end under their limit
-  burst($('L3'), t, tb(S.bud), bx, by); lcam($('L3'), t, tb(S.bud), tb(S.home4), { s: 1.25, y: 260, r: -2 }, { s: 1.08, y: -40, r: 1 }, 540, 800); typeText($('c3'), t, tb(S.bud) + .04);
+  burst($('L3'), t, tb(S.bud), 540, 820); lcam($('L3'), t, tb(S.bud), tb(S.home4), { s: 1.25, y: 260, r: -2 }, { s: 1.08, y: -40, r: 1 }, 540, 800); typeText($('c3'), t, tb(S.bud) + .04);
   // rows slide in, icons pop, all bars fill fast (slightly staggered) while the amounts count up, then a check pops on every row
   const tf3 = Math.floor(t * 30 + 1e-6) / 30;
   [...document.querySelectorAll('.brow')].forEach((el, i) => { const [, , sp] = BUD[i], st = tb(S.bud) + .05 + i * .06;
@@ -291,7 +345,7 @@ window.render = t => {
   typeText($('b3ok'), t, tb(17), 40);
 
   // 4 AI: burst from the AI tab, the question types, then the answer
-  burst($('L4'), t, tb(S.ai), ix, iy); lcam($('L4'), t, tb(S.ai), tb(S.nov), { s: 1.06, x: 30, r: 2 }, { s: 1.16, x: 0, y: -30, r: -1 }, 540, 900); typeText($('c4'), t, tb(S.ai) + .04);
+  burst($('L4'), t, tb(S.ai), 540, 820); lcam($('L4'), t, tb(S.ai), tb(S.nov), { s: 1.06, x: 30, r: 2 }, { s: 1.16, x: 0, y: -30, r: -1 }, 540, 900); typeText($('c4'), t, tb(S.ai) + .04);
   // like the real chat: the question is typed in the input bar, sent (the bubble flies up), dots, the answer types out, the result lights up
   typeText($('qin'), t, tb(23.2), 62); $('ph4').style.opacity = t >= tb(23.2) ? 0 : 1;
   const sent = t >= tb(24.5); $('qin').style.visibility = sent ? 'hidden' : 'visible';
@@ -324,6 +378,8 @@ window.render = t => {
   const pr = t >= tb(45) && t < tb(45) + .2;   // the end card stays Prussian (owner); the link is tapped near the end
   $('u6').style.transform = `scale(${pr ? .92 : 1})`; $('u6').style.background = pr ? 'var(--night)' : 'var(--lemon)'; $('u6').style.color = pr ? 'var(--lemon)' : 'var(--prussian)';
   $('f6').style.opacity = t >= tb(43.5) ? 1 : 0; $('f6').style.transform = `scale(${lerp(.5, 1, k(t, tb(43.5), .35, spring))})`;   // pops in on the beat
+
+  popTaps(t);
 };
 render(0);
 </script></body></html>

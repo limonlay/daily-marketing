@@ -18,6 +18,7 @@ import numpy as np
 ap = argparse.ArgumentParser()
 ap.add_argument('video'); ap.add_argument('--expect', type=float); ap.add_argument('--beats')
 ap.add_argument('--sheet'); ap.add_argument('--silent', action='store_true', help='silent master: no audio expected, G4 skipped')
+ap.add_argument('--half', action='store_true', help='half beats (eighth notes) count as in time too')
 a = ap.parse_args()
 v = a.video
 run = lambda *c: subprocess.run(c, capture_output=True, text=True)
@@ -85,9 +86,10 @@ for i in raw_cuts:
 cuts = [(i + 1) / fps for i, _ in cuts if (i + 1) / fps > .2]   # frame 0 arrivals are not cuts
 if a.beats:
     B = np.array(json.load(open(a.beats)))
+    if a.half: B = np.sort(np.concatenate([B, (B[1:] + B[:-1]) / 2]))
     hit = [c for c in cuts if np.min(np.abs(B - c)) <= 0.05 + 1.5 / fps]
     pct = 100 * len(hit) / len(cuts) if cuts else 100
-    res.append(('G5 sync', pct >= 80, f'{len(hit)}/{len(cuts)} cuts on a beat ({pct:.0f} %)'))
+    res.append(('G5 sync', pct >= 80, f'{len(hit)}/{len(cuts)} cuts on a {"(half) " if a.half else ""}beat ({pct:.0f} %)'))
 
 for name, ok, msg in res: print(f'{name:<12}{"PASS" if ok else "FAIL"}  {msg}')
 print(f'cuts         {len(cuts)} at ' + ', '.join(f'{c:.2f}' for c in cuts[:20]))
