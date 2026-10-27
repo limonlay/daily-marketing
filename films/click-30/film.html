@@ -56,7 +56,7 @@ h3{font-size:17px;font-weight:700;margin:22px 0 12px;letter-spacing:-.02em}
 .brow .nm small{font-size:32px;color:var(--muted);font-weight:500}
 .brow .bar{height:22px;background:rgba(255,255,255,.12);margin-top:14px;border-radius:0 11px 0 11px;overflow:hidden}
 .brow .bar i{display:block;height:100%;width:0;background:var(--lemon)}
-.bub{position:absolute;max-width:800px;font-size:50px;line-height:1.3;padding:34px 44px;font-weight:500}
+.bub{position:absolute;max-width:860px;font-size:58px;line-height:1.3;padding:34px 44px;font-weight:500}
 </style></head><body>
 <div id="stage" style="position:absolute;inset:0;overflow:hidden">
 
@@ -210,11 +210,12 @@ const CAM = [[2.9, ...WIDE], [3, ...P.sum, 540, 1250, 3.2, -2],
   [21.9, ...WIDE], [22, ...P.ai, 540, 1250, 3.2, -2]];
 function camAt(t) { let i = 0; while (i < CAM.length - 1 && t >= tb(CAM[i + 1][0])) i++;
   const A = CAM[Math.max(0, i - 1)], B = CAM[i], q = i === 0 ? 1 : inout((t - tb(B[0])) / .85);
-  const v = B.slice(1).map((x, j) => lerp(A[j + 1], x, q)); v[4] *= 1 + .025 * Math.max(0, t - tb(B[0])); return v; }
+  const v = B.slice(1).map((x, j) => lerp(A[j + 1], x, q)); return v; }   // moves to each key and stops (no creep)
 const at = id => { const r = $(id).getBoundingClientRect(); return [r.left + r.width / 2, r.top + r.height / 2]; };   // targets in frame px
 // a layer bursts out of the clicked point: a flat circle opens from it, the content scales up from 0.85
 // camera on a layer: glides (in-out) from pose A to pose B over [t0, t1]; poses {s, x, y, r}, origin in frame px
-function lcam(el, t, t0, t1, A, B, ox = 540, oy = 960) { const q = inout((t - t0) / (t1 - t0)), L = (a, b) => lerp(a ?? 0, b ?? 0, q);
+function lcam(el) { el.style.transform = 'none'; }   // owner: no slow zoom/pan drifting on the scenes
+function lcam_old(el, t, t0, t1, A, B, ox = 540, oy = 960) { const q = inout((t - t0) / (t1 - t0)), L = (a, b) => lerp(a ?? 0, b ?? 0, q);
   el.style.transformOrigin = `${ox}px ${oy}px`;
   el.style.transform = `translate(${L(A.x, B.x)}px,${L(A.y, B.y)}px) rotate(${L(A.r, B.r)}deg) scale(${lerp(A.s ?? 1, B.s ?? 1, q)})`; }
 function burst(el, t, from, x, y) { const q = k(t, from, .38); el.style.clipPath = `circle(${q * 2300}px at ${x}px ${y}px)`;
@@ -257,7 +258,7 @@ window.render = t => {
   const [sx, sy] = at('tSum'), [ax, ay] = at('tAdd'), [bx, by] = at('tBudget'), [ix, iy] = at('tAI'), [ux, uy] = at('u6');
   cursor(t, [{ beat: S.sum, travel: .55, from: [880, 1700], to: [sx, sy] }, { beat: S.add, travel: .5, from: [700, 1500], to: [ax, ay] },
     { beat: S.bud, travel: .55, from: [600, 1300], to: [bx, by] }, { beat: S.ai, travel: .5, from: [700, 1500], to: [ix, iy] },
-    { beat: 43, travel: .7, from: [900, 1800], to: [ux, uy] }]);
+    { beat: 45, travel: .8, from: [900, 1800], to: [ux, uy] }]);
 
   // 1 summary: burst from the tab, categories replace each other on the beats
   burst($('L1'), t, tb(S.sum), sx, sy); lcam($('L1'), t, tb(S.sum), tb(S.home2), { s: 1.08, r: -3, x: -30 }, { s: 1.22, r: 3, x: 30 });
@@ -283,7 +284,7 @@ window.render = t => {
 
   // 4 AI: burst from the AI tab, the question types, then the answer
   burst($('L4'), t, tb(S.ai), ix, iy); lcam($('L4'), t, tb(S.ai), tb(S.nov), { s: 1.06, x: 30, r: 2 }, { s: 1.16, x: 0, y: -30, r: -1 }, 540, 900); typeText($('c4'), t, tb(S.ai) + .25);
-  typeText($('q'), t, tb(23.8), 50); typeText($('ans'), t, tb(25.4), 45);
+  typeText($('q'), t, tb(23.8), 50); typeText($('ans'), t, tb(25.4), 30);
   const qa = k(t, tb(23.7), .3, spring); $('q').style.transform = `scale(${lerp(.6, 1, qa)})`; $('q').style.transformOrigin = '100% 0';
   const aa = k(t, tb(25.3), .3, spring); $('ans').style.transform = `scale(${lerp(.6, 1, aa)})`; $('ans').style.transformOrigin = '0 0';
   $('ans').style.opacity = t >= tb(25.3) ? 1 : 0;
@@ -294,7 +295,7 @@ window.render = t => {
   typeText($('c5a'), t, tb(S.nov) + .15);
   const cq = k(t, tb(31), .4); $('card5').style.transform = `translateY(${(1 - cq) * 300}px) rotate(${(1 - cq) * -4}deg)`; $('card5').style.opacity = cl((t - tb(31)) / .08);
   const tf = Math.floor(t * 30 + 1e-6) / 30; $('bal5').textContent = money(Math.round(843.1 * k(tf, tb(31.3), 1.4) * 100) / 100);
-  typeText($('c5b'), t, tb(34)); typeText($('c5c'), t, tb(35));
+  typeText($('c5b'), t, tb(35), 30); typeText($('c5c'), t, tb(36.2), 30);
   lcam($('L5'), t, tb(S.nov), tb(S.cta), { s: 1.04, r: -2, y: 40 }, { s: 1.16, r: 1, y: -10 }, 540, 820);   // push into the balance
 
   // 6 CTA: the lemon bursts out on the strongest hit, then the link gets clicked
@@ -302,10 +303,10 @@ window.render = t => {
   const l6 = k(t, tb(S.cta), .5, spring);
   $('l6').style.transform = `scale(${lerp(3.2, 1, l6)}) rotate(${lerp(-30, 0, l6)}deg)`;
   lcam($('L6'), t, tb(S.cta), 30, { s: 1.35, r: 3 }, { s: 1.0, r: 0 }, 540, 900);   // pull back to the end card
-  typeText($('w6'), t, tb(39), 50);
-  $('u6').parentElement.style.opacity = t >= tb(40) ? 1 : 0;
-  const pr = t >= tb(43) && t < tb(43) + .12; $('u6').style.transform = `scale(${pr ? .94 : 1})`;
-  typeText($('f6'), t, tb(41), 55);
+  typeText($('w6'), t, tb(40), 30);
+  $('u6').parentElement.style.opacity = t >= tb(42) ? 1 : 0;
+  const pr = t >= tb(45) && t < tb(45) + .12; $('u6').style.transform = `scale(${pr ? .94 : 1})`;
+  typeText($('f6'), t, tb(43.5), 40);
 };
 render(0);
 </script></body></html>
