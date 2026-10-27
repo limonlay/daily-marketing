@@ -18,7 +18,7 @@ const [film, spec, outFile] = process.argv.slice(2), S = JSON.parse(fs.readFileS
         render(t);
         for (const el of document.querySelectorAll('[data-full]')) {
           if (!el.checkVisibility({ opacityProperty: true, visibilityProperty: true })) { seen.set(el, 0); continue; }
-          let hidden = 0; el.querySelectorAll('span').forEach(s => { if (s.style.visibility === 'hidden') hidden += s.textContent.length; });
+          let hidden = 0; el.querySelectorAll('*').forEach(s => { if (s.style.visibility === 'hidden' && !s.parentElement.closest('[style*="visibility: hidden"]')) hidden += s.textContent.length; });
           const n = el.textContent.length - hidden, was = seen.get(el) || 0;
           if (n > was && n - was < 4) out.push(t);   // a jump of many letters at once is a reset, not typing
           seen.set(el, n);

@@ -56,6 +56,7 @@ h3{font-size:17px;font-weight:700;margin:22px 0 12px;letter-spacing:-.02em}
 .brow .nm small{font-size:32px;color:var(--muted);font-weight:500}
 .brow .bar{height:22px;background:rgba(255,255,255,.12);margin-top:14px;border-radius:0 11px 0 11px;overflow:hidden}
 .brow .bar i{display:block;height:100%;width:0;background:var(--lemon)}
+.brow .ok{width:64px;height:64px;border-radius:50%;background:var(--lemon);display:grid;place-items:center;flex:none;opacity:0}
 .bub{position:absolute;max-width:860px;font-size:58px;line-height:1.3;padding:34px 44px;font-weight:500}
 </style></head><body>
 <div id="stage" style="position:absolute;inset:0;overflow:hidden">
@@ -174,7 +175,8 @@ $('takes').innerHTML = CATS.map(([ic, n, v, bg, r], i) => { const dark = i !== 1
     <div style="font-size:80px;font-weight:700;color:${ink};letter-spacing:-.03em;white-space:nowrap">${n}</div>
     <div style="font-size:150px;font-weight:700;color:${ink};letter-spacing:-.04em">$${v.toFixed(2)}</div></div>`; }).join('');
 $('brows').innerHTML = BUD.map(([ic, n, s, l, bg, fg, r]) => `<div class="brow"><div class="ic" style="background:${bg};border-radius:${r}"><span class="ms" style="color:${fg}">${ic}</span></div>
-  <div class="bx"><div class="nm"><span>${n}</span><small>$${s.toFixed(2)} / $${l}</small></div><div class="bar"><i></i></div></div></div>`).join('');
+  <div class="bx"><div class="nm"><span>${n}</span><small><span class="amt">$${s.toFixed(2)}</span> / $${l}</small></div><div class="bar"><i></i></div></div>
+  <div class="ok"><svg width="40" height="40" viewBox="0 0 24 24"><path d="M9.5 16.2 4.8 11.5 3.4 12.9 9.5 19 21 7.5 19.6 6.1Z" fill="#14213d"/></svg></div></div>`).join('');
 const takes = [...$('takes').children], rows = [...document.querySelectorAll('.tx')], bars = [...document.querySelectorAll('.brow .bar i')];
 
 // ---------- time: the song's real beats (Golf Clap 84.355 s → 114.355 s, librosa) ----------
@@ -193,15 +195,22 @@ const money = v => '$' + v.toLocaleString('en-US', { minimumFractionDigits: 2, m
 const show = (el, on) => { el.style.visibility = on ? 'visible' : 'hidden'; };
 const typeText = (el, t, at, cps = 65) => {               // fast typing; the untyped rest stays invisible so the line never shifts
   if (!el.dataset.full) el.dataset.full = el.innerHTML;
-  const full = el.dataset.full, plain = full.replace(/<[^>]+>/g, ''), n = Math.max(0, Math.min(plain.length, Math.floor((t - at) * cps)));
-  const caret = t >= at && t < at + plain.length / cps + .4 ? '<span style="display:inline-block;width:.09em;height:.82em;background:#ffd23f;vertical-align:-.06em;margin-left:.03em"></span>' : '';
-  if (n >= plain.length) { el.innerHTML = full + caret; } else {
-    const tagAt = full.indexOf('<'), cut = tagAt >= 0 && n >= tagAt ? tagAt : n;     // tags (the example chip) appear when typing reaches them
-    el.innerHTML = plain.slice(0, Math.min(n, cut)) + caret + '<span style="visibility:hidden">' + plain.slice(Math.min(n, cut)) + '</span>'; }
+  el.innerHTML = el.dataset.full;                            // types through tags too (the highlight, the example chip)
+  const len = el.textContent.length, n = Math.max(0, Math.min(len, Math.floor((t - at) * cps)));
+  const caretOn = t >= at && t < at + len / cps + .4, caret = () => { const c = document.createElement('span');
+    c.style.cssText = 'display:inline-block;width:.09em;height:.82em;background:#ffd23f;vertical-align:-.06em;margin-left:.03em'; return c; };
+  let left = n, split = false;
+  const walk = node => { for (const ch of [...node.childNodes]) {
+    if (ch.nodeType === 3) { if (split) { const h = document.createElement('span'); h.style.visibility = 'hidden'; ch.replaceWith(h); h.appendChild(ch); continue; }
+      if (left >= ch.data.length && !(left === ch.data.length && n < len && false)) { left -= ch.data.length; continue; }
+      const rest = ch.splitText(left), h = document.createElement('span'); h.style.visibility = 'hidden'; rest.replaceWith(h); h.appendChild(rest);
+      if (caretOn) h.before(caret()); split = true; }
+    else if (ch.nodeType === 1) { if (split) ch.style.visibility = 'hidden'; else walk(ch); } } };
+  walk(el); if (!split && caretOn) el.appendChild(caret());
   el.style.opacity = t >= at ? 1 : 0; };
 
 // ---------- scenes (beat indices) ----------
-const S = { home1: 3, sum: 4, home2: 7, add: 10, saved: 12, home3: 14.5, bud: 15, home4: 22, ai: 23, nov: 29, cta: 38 };
+const S = { home1: 3, sum: 4, home2: 7, add: 10, saved: 12, home3: 14.5, bud: 15, home4: 20, ai: 23, nov: 29, cta: 38 };
 window.CUTS = [S.home1, S.sum, S.home2, S.add, S.saved, S.bud, S.home4, S.ai, S.nov, S.cta].map(tb);
 // the app sits at zoom 2.15, centred
 // camera INSIDE the app (as in the 15 s film): the UI is laid out at full size with CSS zoom (sharp),
@@ -214,7 +223,7 @@ const WIDE = [200, 300, 540, 1000, 2.3, 0];
 const CAM = [[2.9, ...WIDE], [3, ...P.sum, 540, 1250, 3.2, -2],
   [6.9, ...WIDE], [8, 200, 380, 540, 1150, 2.6, -1.5], [9, ...P.add, 540, 1250, 3.3, 2],
   [12, 200, P.rows[1], 540, 760, 2.55, 0], [13, 200, P.rows[1], 540, 740, 2.75, -1.5], [14, P.bud[0] - 40, P.bud[1], 540, 1000, 3.0, 0],
-  [21.9, ...WIDE], [22, ...P.ai, 540, 1250, 3.2, -2]];
+  [19.9, ...WIDE], [21, 200, 380, 540, 1150, 2.6, 1.5], [22, ...P.ai, 540, 1250, 3.2, -2]];
 function camAt(t) { let i = 0; while (i < CAM.length - 1 && t >= tb(CAM[i + 1][0])) i++;
   const A = CAM[Math.max(0, i - 1)], B = CAM[i], q = i === 0 ? 1 : out((t - tb(B[0])) / .45);
   const v = B.slice(1).map((x, j) => lerp(A[j + 1], x, q)); return v; }   // moves to each key and stops (no creep)
@@ -272,9 +281,15 @@ window.render = t => {
 
   // 3 budgets: burst from "Budgets ›", bars fill one per beat, all end under their limit
   burst($('L3'), t, tb(S.bud), bx, by); lcam($('L3'), t, tb(S.bud), tb(S.home4), { s: 1.25, y: 260, r: -2 }, { s: 1.08, y: -40, r: 1 }, 540, 800); typeText($('c3'), t, tb(S.bud) + .04);
-  bars.forEach((el, i) => { const [, , s, l] = BUD[i]; el.style.width = (100 * s / l * k(t, tb(16 + i), .3)) + '%'; });
-  [...document.querySelectorAll('.brow')].forEach((el, i) => { const q = k(t, tb(S.bud) + .02 + i * .05, .3); el.style.opacity = q; el.style.transform = `translateY(${(1 - q) * 60}px)`; });
-  typeText($('b3ok'), t, tb(20.5), 30);
+  // rows slide in, icons pop, all bars fill fast (slightly staggered) while the amounts count up, then a check pops on every row
+  const tf3 = Math.floor(t * 30 + 1e-6) / 30;
+  [...document.querySelectorAll('.brow')].forEach((el, i) => { const [, , sp] = BUD[i], st = tb(S.bud) + .05 + i * .06;
+    const q = k(t, st, .3); el.style.opacity = cl((t - st) / .08); el.style.transform = `translateX(${(1 - q) * 260}px)`;
+    el.querySelector('.ic').style.transform = `scale(${lerp(.3, 1, k(t, st + .05, .35, spring))})`;
+    const f = k(tf3, tb(15.6) + i * .09, .55, spring); bars[i].style.width = (100 * sp / BUD[i][3] * f) + '%';
+    el.querySelector('.amt').textContent = '$' + (sp * cl(f)).toFixed(2);
+    const okq = k(t, tb(17.4) + i * .07, .3, spring), ok = el.querySelector('.ok'); ok.style.opacity = t >= tb(17.4) + i * .07 ? 1 : 0; ok.style.transform = `scale(${lerp(.2, 1, okq)})`; });
+  typeText($('b3ok'), t, tb(17), 40);
 
   // 4 AI: burst from the AI tab, the question types, then the answer
   burst($('L4'), t, tb(S.ai), ix, iy); lcam($('L4'), t, tb(S.ai), tb(S.nov), { s: 1.06, x: 30, r: 2 }, { s: 1.16, x: 0, y: -30, r: -1 }, 540, 900); typeText($('c4'), t, tb(S.ai) + .04);
@@ -286,9 +301,9 @@ window.render = t => {
   $('q').style.transform = `translateY(${(1 - fly) * 820}px) scale(${lerp(.7, 1, fly)})`;
   const dotsOn = t >= tb(24.5) + .2 && t < tb(25.6); show($('dots4'), dotsOn);
   [...$('dots4').children].forEach((d, i) => { d.style.opacity = Math.floor(t * 7) % 3 === i ? 1 : .35; });
-  typeText($('ans'), t, tb(25.6), 50); $('ans').style.opacity = t >= tb(25.6) ? 1 : 0;
-  const mk = $('ans').querySelector('.mk'), on = t >= tb(28);   // the result lights up on the beat
-  if (mk) { mk.style.background = on ? 'var(--lemon)' : 'none'; mk.style.color = on ? 'var(--prussian)' : 'inherit'; }
+  typeText($('ans'), t, tb(25.6), 65); $('ans').style.opacity = t >= tb(25.6) ? 1 : 0;
+  const mk = $('ans').querySelector('.mk');   // the result is wiped in lemon on the beat and stays to the cut
+  if (mk) { const w = k(t, tb(27.5), .3); mk.style.boxShadow = `inset ${Math.round(w * mk.offsetWidth)}px 0 0 0 var(--lemon)`; mk.style.color = w > .5 ? 'var(--prussian)' : 'inherit'; }
 
 
   // 5 next month: date flips, balance counts to more than last month (example)

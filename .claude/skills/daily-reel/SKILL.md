@@ -16,7 +16,7 @@ Work in `films/<name>/`. Reply to the owner in Thai.
 - **Text is typed fast** (~40–55 chars/s) with a lemon caret; the untyped rest stays invisible so lines never shift. Every line must finish typing before the film ends (end card typed by ~14 s, then a short hold).
 - **No white or cream full-screen grounds.** Use night `#0a0d14`, black, Prussian `#14213d`, Lemon `#ffd23f` grounds. Paper props (a receipt) may be white.
 - **No "free"** in the copy (paid plans are coming). End card: lemon, "Daily", `daily.limonlay.com`, "no download needed".
-- **Deliver silent.** The owner adds the song in TikTok/IG. Make a preview with the song only to check timing; never commit the song (copyright).
+- **Deliver silent.** The owner adds the song in TikTok/IG. No previews with the song any more (owner, 2026-10-27): check the silent master with `check.py --silent`; never commit the song (copyright).
 - **TikTok safe zone:** keep text between y ≈ 170 and 1500 and away from the right edge; use flat bands (night) behind text over the UI.
 - **Sharp.** Lay the UI out at full size with CSS `zoom` (not `transform: scale` — that scales a bitmap and blurs); no `will-change`; render at 2x and downscale (render.cjs). Counters step per frame so digits stay sharp under motion blur.
 - DESIGN.md still applies: flat colour, no gradients/borders/soft shadows (hard offset shadow OK), leaf corners, Google Sans, app motion tokens (ease-out `cubic-bezier(.2,.8,.2,1)`, ~6% overshoot only on things that "happen").

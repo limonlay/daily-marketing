@@ -17,7 +17,8 @@ import numpy as np
 
 ap = argparse.ArgumentParser()
 ap.add_argument('video'); ap.add_argument('--expect', type=float); ap.add_argument('--beats')
-ap.add_argument('--sheet'); a = ap.parse_args()
+ap.add_argument('--sheet'); ap.add_argument('--silent', action='store_true', help='silent master: no audio expected, G4 skipped')
+a = ap.parse_args()
 v = a.video
 run = lambda *c: subprocess.run(c, capture_output=True, text=True)
 
@@ -38,7 +39,7 @@ diff = np.abs(np.diff(fr, axis=0)).mean(axis=(1, 2)) if n > 1 else np.zeros(1)
 flat = fr.std(axis=(1, 2)) < 2.0
 res = []
 
-ok0 = (a.expect is None or abs(dur - a.expect) <= 0.1) and diff.max() > 1 and has_audio
+ok0 = (a.expect is None or abs(dur - a.expect) <= 0.1) and diff.max() > 1 and (has_audio or a.silent)
 silent = False
 if has_audio:
     vd = run('ffmpeg', '-i', v, '-af', 'volumedetect', '-vn', '-f', 'null', '-').stderr
