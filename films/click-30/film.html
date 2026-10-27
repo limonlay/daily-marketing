@@ -201,7 +201,7 @@ const typeText = (el, t, at, cps = 65) => {               // fast typing; the un
   el.style.opacity = t >= at ? 1 : 0; };
 
 // ---------- scenes (beat indices) ----------
-const S = { home1: 3, sum: 4, home2: 9, add: 10, saved: 12, home3: 14.5, bud: 15, home4: 22, ai: 23, nov: 29, cta: 38 };
+const S = { home1: 3, sum: 4, home2: 7, add: 10, saved: 12, home3: 14.5, bud: 15, home4: 22, ai: 23, nov: 29, cta: 38 };
 window.CUTS = [S.home1, S.sum, S.home2, S.add, S.saved, S.bud, S.home4, S.ai, S.nov, S.cta].map(tb);
 // the app sits at zoom 2.15, centred
 // camera INSIDE the app (as in the 15 s film): the UI is laid out at full size with CSS zoom (sharp),
@@ -212,7 +212,7 @@ let T = 0;
 const cam = (px, py, sx, sy, Sz, r) => { $('ui').style.zoom = Sz; $('uiw').style.transform = `perspective(2400px) translate(${sx}px,${sy}px) rotateY(${6 * Math.sin(T * .9)}deg) rotateX(${4 * Math.sin(T * .7 + 1)}deg) rotate(${r}deg) translate(${-px * Sz}px,${-py * Sz}px)`; };
 const WIDE = [200, 300, 540, 1000, 2.3, 0];
 const CAM = [[2.9, ...WIDE], [3, ...P.sum, 540, 1250, 3.2, -2],
-  [8.9, ...WIDE], [9, ...P.add, 540, 1250, 3.3, 2],
+  [6.9, ...WIDE], [8, 200, 380, 540, 1150, 2.6, -1.5], [9, ...P.add, 540, 1250, 3.3, 2],
   [12, 200, P.rows[1], 540, 760, 2.55, 0], [13, 200, P.rows[1], 540, 740, 2.75, -1.5], [14, P.bud[0] - 40, P.bud[1], 540, 1000, 3.0, 0],
   [21.9, ...WIDE], [22, ...P.ai, 540, 1250, 3.2, -2]];
 function camAt(t) { let i = 0; while (i < CAM.length - 1 && t >= tb(CAM[i + 1][0])) i++;
@@ -256,10 +256,10 @@ window.render = t => {
 
   // 1 summary: burst from the tab, categories replace each other on the beats
   burst($('L1'), t, tb(S.sum), sx, sy); lcam($('L1'), t, tb(S.sum), tb(S.home2), { s: 1.08, r: -3, x: -30 }, { s: 1.22, r: 3, x: 30 });
-  const CB = [4, 5, 6, 7, 8];
+  const CB = [4, 5, 5.5, 6, 6.5];   // like the 15 s film: one beat, then half beats
   takes.forEach((el, i) => { const tin = tb(CB[i]), tnext = i + 1 < CB.length ? tb(CB[i + 1]) + .2 : tb(S.home2);
     show(el, t >= tin && t < tnext); el.style.zIndex = i + 1;
-    el.style.transform = i === 0 ? 'none' : `translateX(${(1 - out((t - tin) / .14)) * (i % 2 ? -1080 : 1080)}px)`;
+    el.style.transform = i === 0 ? 'none' : `translateX(${(1 - out((t - tin) / .2)) * (i % 2 ? -1080 : 1080)}px)`;
     el.children[0].style.transform = `rotate(${(1 - out((t - tin) / .35)) * (i % 2 ? 40 : -40)}deg) scale(${lerp(.6, 1, out((t - tin) / .3))})`; });
   typeText($('c1'), t, tb(4.3));
 
