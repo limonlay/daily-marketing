@@ -9,3 +9,4 @@ sheet*.png
 !apple/sheet*.png
 motionmaxxing/draft.mp4
 motionmaxxing/track.wav
+__pycache__/
