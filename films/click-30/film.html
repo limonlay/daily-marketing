@@ -258,34 +258,34 @@ function popTaps(t) {
   $('pdim').style.opacity = 0; $('gBar').style.width = 0;
   ['tSum', 'tAdd', 'tBudget', 'tAI'].forEach(id => { $(id).style.visibility = ''; });
   const TAPS = [['tSum', 'gSum', S.sum], ['tAdd', 'gAdd', S.add], ['tBudget', 'gBud', S.bud], ['tAI', 'gAI', S.ai]];
-  const tap = TAPS.find(([, , bb]) => t >= tb(bb - 1) && t < tb(bb) + .46); if (!tap) return;
+  const tap = TAPS.find(([, , bb]) => t >= tb(bb - .5) - .02 && t < tb(bb) + .46); if (!tap) return;
   const [id, gid, bb] = tap, d = t - tb(bb), g = $(gid), src = $(id).getBoundingClientRect(), [bx, by] = at(id);
-  $(id).style.visibility = 'hidden';                                            // it has left the menu bar
+  const dp = t - tb(bb - .5);                                                   // 1) the small button is pressed in the app, half a beat early
+  if (dp < .12) { $(id).style.transform = dp >= 0 ? 'scale(.84)' : 'none';
+    if (dp >= 0) [...document.querySelectorAll('#pop .gT')].forEach((e, i) => { const sx = i % 2 ? 1 : -1, sy = i < 2 ? -1 : 1;
+      e.style.visibility = 'visible'; e.style.transform = `translate(${bx + sx * (src.width / 2 + 22) - 40}px,${by + sy * (src.height / 2 + 22) - 11}px) rotate(${sx * sy * 45}deg) scale(.6)`; });
+    return; }
+  $(id).style.transform = 'none'; $(id).style.visibility = 'hidden';           // 2) then it springs up out of the bar to the middle and grows
   const W = g.offsetWidth, H = g.offsetHeight, s0 = Math.min(src.width / W, src.height / H);
   let x = 0, y = 0, sc = 1, op = 1;
-  const d0 = tb(bb - 1) - tb(bb);                                               // pops out on the beat before the press
-  if (d < 0) { const q = spring(cl((d - d0) / .28)); x = lerp(bx - GX, 0, cl(q)); y = lerp(by - GY, 0, cl(q)); sc = lerp(s0, 1, q);
-    $('pdim').style.opacity = .82 * out(cl((d - d0) / .16)); }
-  else if (d < .1) { sc = .86;                                                  // pressed: squash + four ticks for three frames
-    const hw = gid === 'gBud' ? 470 : W / 2 + 40, hh = gid === 'gBud' ? 150 : H / 2 + 40;
-    if (d < .1) [...document.querySelectorAll('#pop .gT')].forEach((e, i) => { const sx = i % 2 ? 1 : -1, sy = i < 2 ? -1 : 1;
-      e.style.visibility = 'visible'; e.style.transform = `translate(${GX + sx * hw - 40}px,${GY + sy * hh - 11}px) rotate(${sx * sy * 45}deg)`; }); }
+  if (d < 0) { const q = spring(cl((dp - .12) / .2)); x = lerp(bx - GX, 0, cl(q)); y = lerp(by - GY, 0, cl(q)); sc = lerp(s0, 1, q);
+    $('pdim').style.opacity = .82 * out(cl((dp - .12) / .16)); }
   g.style.visibility = 'visible'; g.style.opacity = op; if (gid === 'gSum') [...g.children].forEach(c => { c.style.opacity = 1; });
   const at2 = (a, z) => cl((d - a) / (z - a)), hb = tb(bb + .5) - tb(bb);
-  if (gid === 'gSum' && d >= .06) {                                             // the tile opens to the whole screen, the five categories fly out of the chart
-    sc = lerp(1, 4.6, out(at2(.06, .3))); [...g.children].forEach(c => { c.style.opacity = 1 - at2(.04, .1); }); y = -1920 * at2(hb, hb + .14) ** 2;   // full lemon, then it slides up off the screen on the half beat
-    [...document.querySelectorAll('#pop .gIc')].forEach((e, i) => { const q = out(at2(.08 + i * .02, .4)), a = (-90 + i * 72) * Math.PI / 180;
+  if (gid === 'gSum' && d >= 0) {                                             // the tile opens to the whole screen, the five categories fly out of the chart
+    sc = lerp(1, 4.6, out(at2(0, .24))); [...g.children].forEach(c => { c.style.opacity = 1 - at2(0, .06); }); y = -1920 * at2(hb, hb + .14) ** 2;   // full lemon, then it slides up off the screen on the half beat
+    [...document.querySelectorAll('#pop .gIc')].forEach((e, i) => { const q = out(at2(.02 + i * .02, .34)), a = (-90 + i * 72) * Math.PI / 180;
       e.style.visibility = 'visible'; e.style.opacity = 1; const up = -1920 * at2(hb, hb + .14) ** 2;
       e.style.transform = `translate(${GX - 75 + Math.cos(a) * 340 * q}px,${GY - 75 + Math.sin(a) * 340 * q + up}px) scale(${lerp(.4, 1.5, q)})`; }); }
   if (gid === 'gAdd') { const ir = at2(0, .2);                                   // the + twists into a camera shutter, "click", then opens up
     $('iris').style.opacity = d >= 0 && d < .2 ? 1 : 0; $('gAddI').style.opacity = d >= 0 && d < .2 ? 0 : 1;
     $('irisg').setAttribute('transform', `rotate(${lerp(0, 60, ir)}) scale(${lerp(1, .55, Math.sin(Math.PI * ir))})`);
     if (d >= .2) { $('gAddI').style.opacity = 0; sc = lerp(1, 4.2, out(at2(.2, hb))); y = -1920 * at2(hb, hb + .14) ** 2; } }
-  if (gid === 'gBud' && d >= .04) {                                             // the › is pulled: a lemon bar sweeps across, then leaves to the right
-    g.style.opacity = 1 - at2(.04, .14); $('gBar').style.width = (1080 * out(at2(.04, .24))) + 'px';
+  if (gid === 'gBud' && d >= 0) {                                             // the › is pulled: a lemon bar sweeps across, then leaves to the right
+    g.style.opacity = 1 - at2(0, .1); $('gBar').style.width = (1080 * out(at2(0, .2))) + 'px';
     $('gBar').style.transform = `translateX(${1080 * at2(.28, .44) ** 2}px)`; }
-  if (gid === 'gAI') { $('gDots').style.opacity = d >= 0 ? 1 : 0;               // dots on the press, then the two bubbles part to their places
-    const q = at2(.14, .44) ** 2; $('gB1').style.transform = `translate(${q * 700}px,${-q * 1100}px)`;   // the bubbles fly out of frame
+  if (gid === 'gAI') { $('gDots').style.opacity = d >= 0 ? 1 : 0;               // dots on the beat, then the two bubbles fly apart
+    const q = at2(.1, .42) ** 2; $('gB1').style.transform = `translate(${q * 700}px,${-q * 1100}px)`;   // the bubbles fly out of frame
     $('gB2').style.transform = `translate(${-q * 700}px,${q * 1100}px)`; }
   g.style.transform = `translate(${x}px,${y}px) scale(${sc})`;
 }
@@ -314,7 +314,6 @@ window.render = t => {
 
   // the taps: the button presses in on the beat, the burst opens from it
   const [sx, sy] = at('tSum'), [ax, ay] = at('tAdd'), [bx, by] = at('tBudget'), [ix, iy] = at('tAI');
-  [['tSum', S.sum], ['tAdd', S.add], ['tBudget', S.bud], ['tAI', S.ai]].forEach(([id, bb]) => { const p = t >= tb(bb) - .1 && t < tb(bb) + .04; $(id).style.transform = p ? 'scale(.86)' : 'none'; });
 
   // 1 summary: burst from the tab, categories replace each other on the beats
   burst($('L1'), t, tb(S.sum), 540, 820); lcam($('L1'), t, tb(S.sum), tb(S.home2), { s: 1.08, r: -3, x: -30 }, { s: 1.22, r: 3, x: 30 });
