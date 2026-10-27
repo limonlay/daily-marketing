@@ -260,12 +260,10 @@ function popTaps(t) {
   const TAPS = [['tSum', 'gSum', S.sum], ['tAdd', 'gAdd', S.add], ['tBudget', 'gBud', S.bud], ['tAI', 'gAI', S.ai]];
   const tap = TAPS.find(([, , bb]) => t >= tb(bb - .5) - .02 && t < tb(bb) + .46); if (!tap) return;
   const [id, gid, bb] = tap, d = t - tb(bb), g = $(gid), src = $(id).getBoundingClientRect(), [bx, by] = at(id);
-  const dp = t - tb(bb - .5);                                                   // 1) the small button is pressed in the app, half a beat early
+  const dp = t - tb(bb - .5);                                                   // 1) the small button is pressed in the app (lemon + squash), half a beat early
   const lemonize = on => { if (id === 'tAdd') return; const e = $(id); e.style.background = on ? 'var(--lemon)' : ''; e.style.color = on ? 'var(--prussian)' : '';
     e.style.boxShadow = on ? '0 0 0 14px var(--lemon)' : 'none'; e.style.borderRadius = on ? '0 20px 0 20px' : ''; };
   if (dp < .12) { $(id).style.transform = dp >= 0 ? 'scale(.84)' : 'none'; lemonize(dp >= 0);
-    if (dp >= 0) [...document.querySelectorAll('#pop .gT')].forEach((e, i) => { const sx = i % 2 ? 1 : -1, sy = i < 2 ? -1 : 1;
-      e.style.visibility = 'visible'; e.style.transform = `translate(${bx + sx * (src.width / 2 + 22) - 40}px,${by + sy * (src.height / 2 + 22) - 11}px) rotate(${sx * sy * 45}deg) scale(.6)`; });
     return; }
   $(id).style.transform = 'none'; lemonize(false); $(id).style.visibility = 'hidden';           // 2) then it springs up out of the bar to the middle and grows
   const W = g.offsetWidth, H = g.offsetHeight, s0 = Math.min(src.width / W, src.height / H);
