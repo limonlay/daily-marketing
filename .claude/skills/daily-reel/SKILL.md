@@ -19,6 +19,7 @@ Work in `films/<name>/`. Reply to the owner in Thai.
 - **Deliver silent.** The owner adds the song in TikTok/IG. No previews with the song any more (owner, 2026-10-27): check the silent master with `check.py --silent`; never commit the song (copyright).
 - **TikTok safe zone:** keep text between y ≈ 170 and 1500 and away from the right edge; use flat bands (night) behind text over the UI.
 - **Sharp.** Lay the UI out at full size with CSS `zoom` (not `transform: scale` — that scales a bitmap and blurs); no `will-change`; render at 2x and downscale (render.cjs). Counters step per frame so digits stay sharp under motion blur.
+- **Taps must be readable** (owner, 2026-10-27): the small button is pressed first (turns lemon + squash + ticks), then springs up to the middle and grows, then turns into the next scene; play that moment in slow motion (speed ramp, `WARP` in `films/click-30/film.html`) — it does not have to sit on the beat. No cursor, finger dot, tap label, spotlight or ripple rings (all rejected).
 - DESIGN.md still applies: flat colour, no gradients/borders/soft shadows (hard offset shadow OK), leaf corners, Google Sans, app motion tokens (ease-out `cubic-bezier(.2,.8,.2,1)`, ~6% overshoot only on things that "happen").
 
 ## Flow
