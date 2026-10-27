@@ -146,7 +146,6 @@ h3{font-size:17px;font-weight:700;margin:22px 0 12px;letter-spacing:-.02em}
 
 <!-- 6 CTA -->
 <div class="L" id="L6" style="background:var(--prussian)">
-  <div class="a" id="g6" style="inset:0;background:var(--night)"></div>
   <img class="a" id="l6" src="lemon.svg" style="left:310px;top:520px;width:460px">
   <div class="t" id="w6" style="top:960px;font-size:220px;color:var(--cream)">Daily</div>
   <div class="a" style="left:0;right:0;top:1230px;text-align:center"><span id="u6" style="display:inline-block;font-size:58px;font-weight:600;color:var(--prussian);background:var(--lemon);padding:18px 44px;border-radius:0 36px 0 36px">daily.limonlay.com</span></div>
@@ -261,6 +260,7 @@ window.render = t => {
 
   // the taps: the button presses in on the beat, the burst opens from it
   const [sx, sy] = at('tSum'), [ax, ay] = at('tAdd'), [bx, by] = at('tBudget'), [ix, iy] = at('tAI');
+  [['tSum', S.sum], ['tAdd', S.add], ['tBudget', S.bud], ['tAI', S.ai]].forEach(([id, bb]) => { const p = t >= tb(bb) - .1 && t < tb(bb) + .04; $(id).style.transform = p ? 'scale(.86)' : 'none'; });
 
   // 1 summary: burst from the tab, categories replace each other on the beats
   burst($('L1'), t, tb(S.sum), sx, sy); lcam($('L1'), t, tb(S.sum), tb(S.home2), { s: 1.08, r: -3, x: -30 }, { s: 1.22, r: 3, x: 30 });
@@ -295,6 +295,7 @@ window.render = t => {
   // like the real chat: the question is typed in the input bar, sent (the bubble flies up), dots, the answer types out, the result lights up
   typeText($('qin'), t, tb(23.2), 62); $('ph4').style.opacity = t >= tb(23.2) ? 0 : 1;
   const sent = t >= tb(24.5); $('qin').style.visibility = sent ? 'hidden' : 'visible';
+  $('snd4').style.transform = t >= tb(24.5) - .1 && t < tb(24.5) + .04 ? 'scale(.84)' : 'none';
   const fly = k(t, tb(24.5), .3); $('q').style.opacity = sent ? 1 : 0; $('q').style.transformOrigin = '100% 0';
   $('q').style.transform = `translateY(${(1 - fly) * 820}px) scale(${lerp(.7, 1, fly)})`;
   const dotsOn = t >= tb(24.5) + .2 && t < tb(25.6); show($('dots4'), dotsOn);
@@ -320,20 +321,9 @@ window.render = t => {
   lcam($('L6'), t, tb(S.cta), 30, { s: 1.35, r: 3 }, { s: 1.0, r: 0 }, 540, 900);   // pull back to the end card
   typeText($('w6'), t, tb(40), 55);
   $('u6').parentElement.style.opacity = t >= tb(41.5) ? 1 : 0; $('u6').parentElement.style.transform = `scale(${lerp(.5, 1, k(t, tb(41.5), .3, spring))})`;
-  const pr = t >= tb(43) && t < tb(43) + .2; $('u6').style.transform = `scale(${pr ? .92 : 1})`; $('u6').style.background = pr ? 'var(--night)' : 'var(--lemon)'; $('u6').style.color = pr ? 'var(--lemon)' : 'var(--prussian)';
-  typeText($('f6'), t, tb(42.5), 60);
-  // the tapped link opens: night spreads from the pill behind the card (steady, so the end never sits still)
-  const [gx, gy] = at('u6'); $('g6').style.clipPath = `circle(${1450 * cl((t - tb(43) - .05) / 1.2)}px at ${gx}px ${gy}px)`;
-
-  // the button tells you: it turns lemon and lifts (hard offset shadow) just before the beat, presses in on it, the burst opens from it
-  [['tSum', S.sum], ['tAdd', S.add], ['tBudget', S.bud], ['tAI', S.ai], ['snd4', 24.5], ['u6', 43]].forEach(([id, bb]) => {
-    const e = $(id), d = t - tb(bb); if (id === 'u6' && d >= 0) return;   // the link's own press state takes over on the beat
-    const on = d >= -.45 && d < .04, q = out(cl((d + .45) / .2)), press = d >= -.1 && d < .04;
-    e.style.transform = on ? `scale(${press ? .86 : lerp(1, 1.15, q)})` : 'none';
-    const lemonBtn = ['tAdd', 'snd4', 'u6'].includes(id);   // already lemon: they turn cream instead
-    e.style.background = on ? (lemonBtn ? 'var(--cream)' : 'var(--lemon)') : ''; e.style.color = on ? 'var(--prussian)' : '';
-    e.style.boxShadow = on && !lemonBtn ? '0 0 0 18px var(--lemon)' : 'none';   // hard spread = padding without moving the layout
-    if (!lemonBtn) e.style.borderRadius = on ? '0 24px 0 24px' : ''; });
+  const pr = t >= tb(45) && t < tb(45) + .2;   // the end card stays Prussian (owner); the link is tapped near the end
+  $('u6').style.transform = `scale(${pr ? .92 : 1})`; $('u6').style.background = pr ? 'var(--night)' : 'var(--lemon)'; $('u6').style.color = pr ? 'var(--lemon)' : 'var(--prussian)';
+  $('f6').style.opacity = t >= tb(43.5) ? 1 : 0; $('f6').style.transform = `scale(${lerp(.5, 1, k(t, tb(43.5), .35, spring))})`;   // pops in on the beat
 };
 render(0);
 </script></body></html>
