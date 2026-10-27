@@ -13,7 +13,7 @@ The owner talks in Thai; reply in Thai.
 ## Layout
 | folder | what |
 |---|---|
-| `brand/` | DESIGN.md copy, lemon logo, app icon, app screenshots per language |
+| `brand/` | DESIGN.md copy, lemon logo, app icon, app screenshots per language; `sound/` = code-made sound kit (daily-reel `sound.py --kit`) |
 | `apple/` | Apple-style film, beat-cut film, paper-collage film; `rec.js` renders any page (`PAGE=… OUT=… [BEATS=…] node rec.js 450`); `daily-track-128bpm.wav` (code-made, free) |
 | `kinetic/` | kinetic-typography film (Thai) |
 | `lottie/` | Lottie splash (`daily-splash.json` + `lemon.png`) and preview |

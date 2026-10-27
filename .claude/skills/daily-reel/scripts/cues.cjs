@@ -28,6 +28,6 @@ const [film, spec, outFile] = process.argv.slice(2), S = JSON.parse(fs.readFileS
     }, [S.dur, STEP]);
     let last = -1; for (const t of ticks) if (t - last >= .028) { cues.push({ t, k: S.type.k ?? 'tick', g: S.type.g ?? .5, wet: S.type.wet ?? 0 }); last = t; }
   }
-  cues.sort((a, b) => a.t - b.t); fs.writeFileSync(outFile, JSON.stringify({ dur: S.dur, reverb: S.reverb, cues }, null, 1));
+  cues.sort((a, b) => a.t - b.t); fs.writeFileSync(outFile, JSON.stringify({ ...S, cues }, null, 1));
   await b.close(); console.log(`${cues.length} cues -> ${outFile}`);
 })();

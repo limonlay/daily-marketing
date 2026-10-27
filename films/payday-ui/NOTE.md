@@ -24,3 +24,5 @@ v9 hook: 0–1.1 s on night: "where did" (already up on frame 0) → "$301.75" s
 No samples or licences: safe to post as is, or to add a quiet TikTok song under it.
 Owner then asked for calm, refined sound "like an Apple product": `sfx.json` is now the calm set (soft taps on a rising pentatonic run,
 airy whooshes, glass chimes for "Saved" and the logo, soft sub, shared reverb); the first, punchier set is kept as `sfx-pop.json`. -13.8 LUFS.
+Then asked for brand-new sounds (not a re-tune of the old ones): `sound.json` + daily-reel `sound.py`, made from scratch. Track: `payday-ui-sound.wav`
+(-13.3 LUFS, synced to the clip from 0 s); `payday-ui-sfx.mp4` now carries it. Single sounds: `brand/sound/`.
