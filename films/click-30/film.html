@@ -120,6 +120,13 @@ h3{font-size:17px;font-weight:700;margin:22px 0 12px;letter-spacing:-.02em}
   <div class="cap" id="c4">just ask.</div>
   <div class="bub" id="q" style="right:70px;top:480px;background:var(--lemon);color:var(--prussian);border-radius:44px 0 44px 44px">how much did I spend on food this month?</div>
   <div class="bub" id="ans" style="left:70px;top:820px;background:var(--night);color:var(--cream);border-radius:0 44px 44px 44px">$31.40 on food this month. That's <b class="mk" style="font-weight:inherit;padding:0 8px;margin:0 -8px">18% less</b> than October. <span class="ex">example</span></div>
+  <div class="bub" id="dots4" style="left:70px;top:820px;background:var(--night);border-radius:0 44px 44px 44px;padding:34px 40px;display:flex;gap:16px">
+    <i style="width:22px;height:22px;border-radius:50%;background:var(--cream)"></i><i style="width:22px;height:22px;border-radius:50%;background:var(--cream)"></i><i style="width:22px;height:22px;border-radius:50%;background:var(--cream)"></i></div>
+  <div class="a" id="in4" style="left:70px;right:70px;top:1290px;height:130px;background:var(--night);border-radius:0 65px 0 65px;display:flex;align-items:center;padding:0 22px 0 44px;gap:20px">
+    <div id="ph4" style="flex:1;font-size:37px;color:var(--muted);white-space:nowrap;overflow:hidden">ask Daily…</div>
+    <div id="qin" style="position:absolute;left:40px;right:136px;font-size:37px;color:var(--cream);white-space:nowrap;overflow:hidden">how much did I spend on food this month?</div>
+    <div id="snd4" style="width:96px;height:96px;border-radius:50%;background:var(--lemon);display:grid;place-items:center"><svg width="48" height="48" viewBox="0 0 24 24"><path d="M12 4 L5 11 H10 V20 H14 V11 H19 Z" fill="#14213d"/></svg></div>
+  </div>
 </div>
 
 <!-- 5 NEXT MONTH -->
@@ -194,7 +201,7 @@ const typeText = (el, t, at, cps = 65) => {               // fast typing; the un
   el.style.opacity = t >= at ? 1 : 0; };
 
 // ---------- scenes (beat indices) ----------
-const S = { home1: 3, sum: 4, home2: 9, add: 10, saved: 12, home3: 14.5, bud: 15, home4: 22, ai: 23, nov: 30, cta: 38 };
+const S = { home1: 3, sum: 4, home2: 9, add: 10, saved: 12, home3: 14.5, bud: 15, home4: 22, ai: 23, nov: 29, cta: 38 };
 window.CUTS = [S.home1, S.sum, S.home2, S.add, S.saved, S.bud, S.home4, S.ai, S.nov, S.cta].map(tb);
 // the app sits at zoom 2.15, centred
 // camera INSIDE the app (as in the 15 s film): the UI is laid out at full size with CSS zoom (sharp),
@@ -271,11 +278,16 @@ window.render = t => {
 
   // 4 AI: burst from the AI tab, the question types, then the answer
   burst($('L4'), t, tb(S.ai), ix, iy); lcam($('L4'), t, tb(S.ai), tb(S.nov), { s: 1.06, x: 30, r: 2 }, { s: 1.16, x: 0, y: -30, r: -1 }, 540, 900); typeText($('c4'), t, tb(S.ai) + .04);
-  typeText($('q'), t, tb(23.4), 70); typeText($('ans'), t, tb(25), 45);
-  const qa = k(t, tb(23.3), .3, spring); $('q').style.transform = `scale(${lerp(.6, 1, qa)})`; $('q').style.transformOrigin = '100% 0';
-  const aa = k(t, tb(24.9), .3, spring); $('ans').style.transform = `scale(${lerp(.6, 1, aa)})`; $('ans').style.transformOrigin = '0 0';
-  $('ans').style.opacity = t >= tb(24.9) ? 1 : 0;
-  const mk = $('ans').querySelector('.mk'), on = t >= tb(28.5);   // the result lights up on the beat
+  // like the real chat: the question is typed in the input bar, sent (the bubble flies up), dots, the answer types out, the result lights up
+  typeText($('qin'), t, tb(23.2), 62); $('ph4').style.opacity = t >= tb(23.2) ? 0 : 1;
+  const sent = t >= tb(24.5); $('qin').style.visibility = sent ? 'hidden' : 'visible';
+  $('snd4').style.transform = t >= tb(24.5) - .1 && t < tb(24.5) + .04 ? 'scale(.84)' : 'none';
+  const fly = k(t, tb(24.5), .3); $('q').style.opacity = sent ? 1 : 0; $('q').style.transformOrigin = '100% 0';
+  $('q').style.transform = `translateY(${(1 - fly) * 820}px) scale(${lerp(.7, 1, fly)})`;
+  const dotsOn = t >= tb(24.5) + .2 && t < tb(25.6); show($('dots4'), dotsOn);
+  [...$('dots4').children].forEach((d, i) => { d.style.opacity = Math.floor(t * 7) % 3 === i ? 1 : .35; });
+  typeText($('ans'), t, tb(25.6), 50); $('ans').style.opacity = t >= tb(25.6) ? 1 : 0;
+  const mk = $('ans').querySelector('.mk'), on = t >= tb(28);   // the result lights up on the beat
   if (mk) { mk.style.background = on ? 'var(--lemon)' : 'none'; mk.style.color = on ? 'var(--prussian)' : 'inherit'; }
 
 
