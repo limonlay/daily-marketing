@@ -159,10 +159,10 @@ h3{font-size:17px;font-weight:700;margin:22px 0 12px;letter-spacing:-.02em}
   <div id="pdim" class="a" style="inset:0;background:var(--night);opacity:0"></div>
   <div id="gSum" class="a gb" style="left:280px;top:560px;width:520px;height:520px;background:var(--lemon);border-radius:0 150px 0 150px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;color:var(--prussian)"><span class="ms" style="font-size:260px">insights</span><span style="font-size:76px;font-weight:700">Summary</span></div>
   <span class="ms a gIc" style="left:0;top:0;font-size:150px;color:var(--prussian)">home</span><span class="ms a gIc" style="left:0;top:0;font-size:150px;color:var(--prussian)">shopping_bag</span><span class="ms a gIc" style="left:0;top:0;font-size:150px;color:var(--prussian)">lightbulb</span><span class="ms a gIc" style="left:0;top:0;font-size:150px;color:var(--prussian)">movie</span><span class="ms a gIc" style="left:0;top:0;font-size:150px;color:var(--prussian)">restaurant</span>
-  <div id="gAdd" class="a gb" style="left:260px;top:540px;width:560px;height:560px;border-radius:50%;background:var(--lemon);display:grid;place-items:center;overflow:hidden"><span class="ms" id="gAddI" style="font-size:380px;color:var(--prussian)">add</span>
-    <svg id="iris" viewBox="-110 -110 220 220" width="560" height="560" style="position:absolute;left:0;top:0;opacity:0"><g id="irisg" fill="#14213d"><path d="M0 -36 L60 -98 L96 -46 Z" transform="rotate(0)"/><path d="M0 -36 L60 -98 L96 -46 Z" transform="rotate(60)"/><path d="M0 -36 L60 -98 L96 -46 Z" transform="rotate(120)"/><path d="M0 -36 L60 -98 L96 -46 Z" transform="rotate(180)"/><path d="M0 -36 L60 -98 L96 -46 Z" transform="rotate(240)"/><path d="M0 -36 L60 -98 L96 -46 Z" transform="rotate(300)"/></g></svg></div>
+  <div id="gAdd" class="a gb" style="left:260px;top:540px;width:560px;height:560px;border-radius:50%;background:var(--lemon);display:grid;place-items:center;overflow:hidden"><span class="ms" id="gAddI" style="font-size:380px;color:var(--prussian)">add</span></div>
   <div id="gBud" class="a gb" style="left:0;width:1080px;top:720px;text-align:center;font-size:170px;line-height:1.2;font-weight:700;color:var(--lemon);letter-spacing:-.03em;white-space:nowrap"><span id="gBudW">Budgets</span> <span id="gBudA">›</span></div>
-  <div id="gBar" class="a" style="left:0;top:775px;height:110px;width:0;background:var(--lemon);border-radius:0 55px 0 55px"></div>
+  <div id="gBar" class="a" style="left:0;top:712px;height:220px;width:0;background:var(--lemon);border-radius:0 110px 0 110px"></div>
+  <svg id="gHole" class="a" width="1080" height="1920" viewBox="0 0 1080 1920" style="left:0;top:0;visibility:hidden"><path id="gHoleP" fill="#ffd23f" fill-rule="evenodd" d=""/></svg>
   <div id="gAI" class="a gb" style="left:190px;top:560px;width:700px;height:520px">
     <div id="gB1" style="position:absolute;left:0;top:0;width:470px;height:320px;background:var(--lemon);border-radius:150px 150px 150px 0"></div>
     <div id="gB2" style="position:absolute;right:0;bottom:0;width:430px;height:300px;background:var(--cream);border-radius:140px 140px 0 140px;display:grid;place-items:center"><span id="gDots" style="font-size:120px;font-weight:700;color:var(--prussian);letter-spacing:16px;opacity:0">•••</span></div></div>
@@ -255,10 +255,10 @@ function burst(el, t, from, x, y) { const q = k(t, from, .26); el.style.clipPath
 const GX = 540, GY = 820;
 function popTaps(t) {
   document.querySelectorAll('#pop .gb, #pop .gIc, #pop .gT').forEach(e => { e.style.visibility = 'hidden'; });
-  $('pdim').style.opacity = 0; $('gBar').style.width = 0;
+  $('pdim').style.opacity = 0; $('gBar').style.width = 0; $('gHole').style.visibility = 'hidden';
   ['tSum', 'tAdd', 'tBudget', 'tAI'].forEach(id => { const e = $(id); e.style.visibility = ''; if (id !== 'tAdd') { e.style.background = ''; e.style.color = ''; e.style.boxShadow = 'none'; e.style.borderRadius = ''; } });
   const TAPS = [['tSum', 'gSum', S.sum], ['tAdd', 'gAdd', S.add], ['tBudget', 'gBud', S.bud], ['tAI', 'gAI', S.ai]];
-  const tap = TAPS.find(([, , bb]) => t >= tb(bb - .5) - .02 && t < tb(bb) + .46); if (!tap) return;
+  const tap = TAPS.find(([, , bb]) => t >= tb(bb - .5) - .02 && t < tb(bb) + .62); if (!tap) return;
   const [id, gid, bb] = tap, d = t - tb(bb), g = $(gid), src = $(id).getBoundingClientRect(), [bx, by] = at(id);
   const dp = t - tb(bb - .5);                                                   // 1) the small button is pressed in the app (lemon + squash), half a beat early
   const lemonize = on => { if (id === 'tAdd') return; const e = $(id); e.style.background = on ? 'var(--lemon)' : ''; e.style.color = on ? 'var(--prussian)' : '';
@@ -277,16 +277,18 @@ function popTaps(t) {
     [...document.querySelectorAll('#pop .gIc')].forEach((e, i) => { const q = out(at2(.02 + i * .02, .34)), a = (-90 + i * 72) * Math.PI / 180;
       e.style.visibility = 'visible'; e.style.opacity = 1; const up = -1920 * at2(hb, hb + .14) ** 2;
       e.style.transform = `translate(${GX - 75 + Math.cos(a) * 340 * q}px,${GY - 75 + Math.sin(a) * 340 * q + up}px) scale(${lerp(.4, 1.5, q)})`; }); }
-  if (gid === 'gAdd') { const ir = at2(0, .2);                                   // the + twists into a camera shutter, "click", then opens up
-    $('iris').style.opacity = d >= 0 && d < .2 ? 1 : 0; $('gAddI').style.opacity = d >= 0 && d < .2 ? 0 : 1;
-    $('irisg').setAttribute('transform', `rotate(${lerp(0, 60, ir)}) scale(${lerp(1, .55, Math.sin(Math.PI * ir))})`);
-    if (d >= .2) { $('gAddI').style.opacity = 0; sc = lerp(1, 4.2, out(at2(.2, hb))); y = -1920 * at2(hb, hb + .14) ** 2; } }
-  if (gid === 'gBud' && d >= 0) {                                             // the › is pulled: a lemon bar sweeps across, then leaves to the right
-    g.style.opacity = 1 - at2(0, .1); $('gBar').style.width = (1080 * out(at2(0, .2))) + 'px';
-    $('gBar').style.transform = `translateX(${1080 * at2(.28, .44) ** 2}px)`; }
-  if (gid === 'gAI') { $('gDots').style.opacity = d >= 0 ? 1 : 0;               // dots on the beat, then the two bubbles fly apart
-    const q = at2(.1, .42) ** 2; $('gB1').style.transform = `translate(${q * 700}px,${-q * 1100}px)`;   // the bubbles fly out of frame
-    $('gB2').style.transform = `translate(${-q * 700}px,${q * 1100}px)`; }
+  if (gid === 'gAdd' && d >= 0) {                                              // the + shrinks away, the lemon fills the screen, then a lens opens from the middle
+    const sp = at2(0, .14); $('gAddI').style.transform = `scale(${1 - sp * sp})`;   // no spin: a turned + reads as an X
+    sc = lerp(1, 4.2, out(at2(.08, .26)));
+    if (d >= .26) { g.style.visibility = 'hidden'; const r = 1150 * out(at2(.26, .52)), H = $('gHole');
+      H.style.visibility = d < .55 ? 'visible' : 'hidden';
+      $('gHoleP').setAttribute('d', `M0 0H1080V1920H0Z M${GX - r} ${GY}a${r} ${r} 0 1 0 ${2 * r} 0a${r} ${r} 0 1 0 ${-2 * r} 0Z`); } }
+  else if (gid === 'gAdd') $('gAddI').style.transform = 'none';
+  if (gid === 'gBud' && d >= 0) {                                             // the › is pulled: a tall lemon bar wipes over the word, then leaves to the right
+    const w = out(at2(0, .2)); $('gBar').style.width = (1080 * w) + 'px'; if (d >= .15) g.style.visibility = 'hidden';   // covered: gone for good
+    $('gBar').style.transform = `translateX(${1080 * at2(.16, .28)}px)`; }
+  if (gid === 'gAI') { $('gDots').style.opacity = d >= -.1 ? 1 : 0;           // the AI "types" (dots) as it lands, then the bubbles pop one after the other
+    [['gB1', 0], ['gB2', 1]].forEach(([b, k2]) => { const q = at2(.06 + k2 * .07, .26 + k2 * .07); $(b).style.transform = `scale(${1 - q * q})`; }); }
   g.style.transform = `translate(${x}px,${y}px) scale(${sc})`;
 }
 
