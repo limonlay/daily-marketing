@@ -154,17 +154,6 @@ h3{font-size:17px;font-weight:700;margin:22px 0 12px;letter-spacing:-.02em}
 
 </div>
 
-<!-- the tap, as clean cuts: the small button is pressed in the app, cut to the button alone (big, on a flat ground), cut to the scene -->
-<div id="pop" style="position:absolute;inset:0;z-index:80;pointer-events:none">
-  <div id="pground" class="a" style="inset:0;background:var(--prussian);visibility:hidden"></div>
-  <div id="gSum" class="a gb" style="left:280px;top:560px;width:520px;height:520px;background:var(--lemon);border-radius:0 150px 0 150px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;color:var(--prussian)"><span class="ms" style="font-size:260px">insights</span><span style="font-size:76px;font-weight:700">Summary</span></div>
-  <div id="gAdd" class="a gb" style="left:260px;top:540px;width:560px;height:560px;border-radius:50%;background:var(--lemon);display:grid;place-items:center;overflow:hidden"><span class="ms" id="gAddI" style="font-size:380px;color:var(--prussian)">add</span></div>
-  <div id="gBud" class="a gb" style="left:0;width:1080px;top:720px;text-align:center;font-size:170px;line-height:1.2;font-weight:700;color:var(--lemon);letter-spacing:-.03em;white-space:nowrap"><span id="gBudW">Budgets</span> <span id="gBudA">›</span></div>
-  <div id="gAI" class="a gb" style="left:190px;top:560px;width:700px;height:520px">
-    <div id="gB1" style="position:absolute;left:0;top:0;width:470px;height:320px;background:var(--lemon);border-radius:150px 150px 150px 0"></div>
-    <div id="gB2" style="position:absolute;right:0;bottom:0;width:430px;height:300px;background:var(--cream);border-radius:140px 140px 0 140px;display:grid;place-items:center"><span id="gDots" style="font-size:120px;font-weight:700;color:var(--prussian);letter-spacing:16px;opacity:0">•••</span></div></div>
-</div>
-<style>.gb{visibility:hidden}</style>
 <script>
 // Demo data = the app's English demo (limonlay/daily icons/shot-en-dark.webp). Budgets, chat answer and next month are illustrative.
 const CATS = [['home', 'Housing', 200, '#14213d', '50%', '#fff'], ['shopping_bag', 'Shopping', 57.5, '#ffd23f', '50%', '#000'],
@@ -203,11 +192,9 @@ const out = bez(.2, .8, .2, 1), spring = bez(.34, 1.4, .64, 1), inout = bez(.45,
 const k = (t, at, d, e = out) => e((t - at) / d);
 const money = v => '$' + v.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 const show = (el, on) => { el.style.visibility = on ? 'visible' : 'hidden'; };
-let QT = null;
 const typeText = (el, t, at, cps = 65) => {               // fast typing; the untyped rest stays invisible so the line never shifts
   if (!el.dataset.full) el.dataset.full = el.innerHTML;
   el.innerHTML = el.dataset.full;                            // types through tags too (the highlight, the example chip)
-  t = QT ?? t;                                                                 // the frame's time, so a letter never appears mid-frame
   const len = el.textContent.length, n = Math.max(0, Math.min(len, Math.floor((t - at) * cps)));
   const caretOn = t >= at && t < at + len / cps + .4, caret = () => { const c = document.createElement('span');
     c.style.cssText = 'display:inline-block;width:.09em;height:.82em;background:#ffd23f;vertical-align:-.06em;margin-left:.03em'; return c; };
@@ -249,25 +236,7 @@ function lcam_old(el, t, t0, t1, A, B, ox = 540, oy = 960) { const q = inout((t 
   el.style.transform = `translate(${L(A.x, B.x)}px,${L(A.y, B.y)}px) rotate(${L(A.r, B.r)}deg) scale(${lerp(A.s ?? 1, B.s ?? 1, q)})`; }
 function burst(el, t, from, x, y) { const q = k(t, from, .26); el.style.clipPath = `circle(${q * 2300}px at ${x}px ${y}px)`;
   }
-// ---------- the tap: the button leaves the app, grows in the middle (half a beat early), is pressed on the beat, turns into the scene ----------
-const GX = 540, GY = 820, TAPCUT = .12;
-function popTaps(t) {
-  document.querySelectorAll('#pop .gb').forEach(e => { e.style.visibility = 'hidden'; }); $('pground').style.visibility = 'hidden';
-  ['tSum', 'tAdd', 'tBudget', 'tAI'].forEach(id => { const e = $(id); e.style.visibility = ''; e.style.transform = 'none';
-    if (id !== 'tAdd') { e.style.background = ''; e.style.color = ''; e.style.boxShadow = 'none'; e.style.borderRadius = ''; } });
-  const TAPS = [['tSum', 'gSum', S.sum, 'var(--prussian)'], ['tAdd', 'gAdd', S.add, 'var(--prussian)'], ['tBudget', 'gBud', S.bud, 'var(--night)'], ['tAI', 'gAI', S.ai, 'var(--prussian)']];
-  const tap = TAPS.find(([, , bb]) => t >= tb(bb - .5) - .02 && t < tb(bb)); if (!tap) return;
-  const [id, gid, bb, ground] = tap, dp = t - tb(bb - .5), e = $(id), g = $(gid);
-  if (dp < TAPCUT) {                                                             // 1) pressed in the app: lemon + squash
-    if (dp >= 0) { e.style.transform = 'scale(.84)';
-      if (id !== 'tAdd') { e.style.background = 'var(--lemon)'; e.style.color = 'var(--prussian)'; e.style.boxShadow = '0 0 0 14px var(--lemon)'; e.style.borderRadius = '0 20px 0 20px'; } }
-    return; }
-  $('pground').style.background = ground; $('pground').style.visibility = 'visible';   // 2) cut: the button alone, big and still, settling in a touch
-  g.style.visibility = 'visible'; g.style.opacity = 1; g.style.transform = `scale(${lerp(.9, 1, out(cl((dp - TAPCUT) / .14)))})`;
-  if (gid === 'gAI') $('gDots').style.opacity = 1;                               // 3) cut to the scene on the beat (the scene layers open with no wipe)
-}
-
-const renderFilm = t => {
+window.render = t => {
   const b = beatOf(t);
   const inS = (a, z) => b >= a && b < z;
   show($('s0'), b < S.home1);
@@ -291,10 +260,10 @@ const renderFilm = t => {
 
   // the taps: the button presses in on the beat, the burst opens from it
   const [sx, sy] = at('tSum'), [ax, ay] = at('tAdd'), [bx, by] = at('tBudget'), [ix, iy] = at('tAI');
+  [['tSum', S.sum], ['tAdd', S.add], ['tBudget', S.bud], ['tAI', S.ai]].forEach(([id, bb]) => { const p = t >= tb(bb) - .1 && t < tb(bb) + .04; $(id).style.transform = p ? 'scale(.86)' : 'none'; });
 
   // 1 summary: burst from the tab, categories replace each other on the beats
-  $('L1').style.clipPath = 'none';   // opens on the cut
-  lcam($('L1'), t, tb(S.sum), tb(S.home2), { s: 1.08, r: -3, x: -30 }, { s: 1.22, r: 3, x: 30 });
+  burst($('L1'), t, tb(S.sum), sx, sy); lcam($('L1'), t, tb(S.sum), tb(S.home2), { s: 1.08, r: -3, x: -30 }, { s: 1.22, r: 3, x: 30 });
   const CB = [4, 5, 5.5, 6, 6.5];   // like the 15 s film: one beat, then half beats
   takes.forEach((el, i) => { const tin = tb(CB[i]), tnext = i + 1 < CB.length ? tb(CB[i + 1]) + .2 : tb(S.home2);
     show(el, t >= tin && t < tnext); el.style.zIndex = i + 1;
@@ -303,19 +272,17 @@ const renderFilm = t => {
   typeText($('c1'), t, tb(4.3));
 
   // 2 add: burst from the + button, the receipt drops in, the scan line sweeps
-  $('L2').style.clipPath = 'none';   // opens on the cut
-  lcam($('L2'), t, tb(S.add), tb(S.saved), { s: 1.3, x: 110, y: 60, r: 3 }, { s: 1.05, x: -60, y: -40, r: -2 }); typeText($('c2'), t, tb(S.add));
+  burst($('L2'), t, tb(S.add), ax, ay); lcam($('L2'), t, tb(S.add), tb(S.saved), { s: 1.3, x: 110, y: 60, r: 3 }, { s: 1.05, x: -60, y: -40, r: -2 }); typeText($('c2'), t, tb(S.add) + .2);
   // three receipts land one after another (one photo, several receipts), then one scan line sweeps them all
-  [0, 1, 2].forEach(i => { const st = tb(S.add) + i * .07, q = k(t, st, .22), rot = [-8, 6, -3][i];
+  [0, 1, 2].forEach(i => { const st = tb(S.add) + .03 + i * .08, q = k(t, st, .22), rot = [-8, 6, -3][i];
     const e = $('rc' + i); e.style.opacity = t >= st ? 1 : 0; e.style.transform = `translateY(${(1 - q) * 300}px) rotate(${rot + (1 - q) * -10}deg)`; });
-  const sc = cl((t - tb(S.add) - .35) / .5); $('scan').style.top = lerp(420, 1560, sc) + 'px'; $('scan').style.opacity = t > tb(S.add) + .35 && sc < 1 ? 1 : 0;
+  const sc = cl((t - tb(S.add) - .32) / .5); $('scan').style.top = lerp(420, 1560, sc) + 'px'; $('scan').style.opacity = t > tb(S.add) + .32 && sc < 1 ? 1 : 0;
 
   // 3 budgets: burst from "Budgets ›", bars fill one per beat, all end under their limit
-  $('L3').style.clipPath = 'none';   // opens on the cut
-  lcam($('L3'), t, tb(S.bud), tb(S.home4), { s: 1.25, y: 260, r: -2 }, { s: 1.08, y: -40, r: 1 }, 540, 800); typeText($('c3'), t, tb(S.bud));
+  burst($('L3'), t, tb(S.bud), bx, by); lcam($('L3'), t, tb(S.bud), tb(S.home4), { s: 1.25, y: 260, r: -2 }, { s: 1.08, y: -40, r: 1 }, 540, 800); typeText($('c3'), t, tb(S.bud) + .04);
   // rows slide in, icons pop, all bars fill fast (slightly staggered) while the amounts count up, then a check pops on every row
   const tf3 = Math.floor(t * 30 + 1e-6) / 30;
-  [...document.querySelectorAll('.brow')].forEach((el, i) => { const [, , sp] = BUD[i], st = tb(S.bud) + i * .06;
+  [...document.querySelectorAll('.brow')].forEach((el, i) => { const [, , sp] = BUD[i], st = tb(S.bud) + .05 + i * .06;
     const q = k(t, st, .3); el.style.opacity = cl((t - st) / .08); el.style.transform = `translateX(${(1 - q) * 260}px)`;
     el.querySelector('.ic').style.transform = `scale(${lerp(.3, 1, k(t, st + .05, .35, spring))})`;
     const f = k(tf3, tb(15.6) + i * .09, .55, spring); bars[i].style.width = (100 * sp / BUD[i][3] * f) + '%';
@@ -324,8 +291,7 @@ const renderFilm = t => {
   typeText($('b3ok'), t, tb(17), 40);
 
   // 4 AI: burst from the AI tab, the question types, then the answer
-  $('L4').style.clipPath = 'none';   // opens on the cut
-  lcam($('L4'), t, tb(S.ai), tb(S.nov), { s: 1.06, x: 30, r: 2 }, { s: 1.16, x: 0, y: -30, r: -1 }, 540, 900); typeText($('c4'), t, tb(S.ai));
+  burst($('L4'), t, tb(S.ai), ix, iy); lcam($('L4'), t, tb(S.ai), tb(S.nov), { s: 1.06, x: 30, r: 2 }, { s: 1.16, x: 0, y: -30, r: -1 }, 540, 900); typeText($('c4'), t, tb(S.ai) + .04);
   // like the real chat: the question is typed in the input bar, sent (the bubble flies up), dots, the answer types out, the result lights up
   typeText($('qin'), t, tb(23.2), 62); $('ph4').style.opacity = t >= tb(23.2) ? 0 : 1;
   const sent = t >= tb(24.5); $('qin').style.visibility = sent ? 'hidden' : 'visible';
@@ -358,22 +324,6 @@ const renderFilm = t => {
   const pr = t >= tb(45) && t < tb(45) + .2;   // the end card stays Prussian (owner); the link is tapped near the end
   $('u6').style.transform = `scale(${pr ? .92 : 1})`; $('u6').style.background = pr ? 'var(--night)' : 'var(--lemon)'; $('u6').style.color = pr ? 'var(--lemon)' : 'var(--prussian)';
   $('f6').style.opacity = t >= tb(43.5) ? 1 : 0; $('f6').style.transform = `scale(${lerp(.5, 1, k(t, tb(43.5), .35, spring))})`;   // pops in on the beat
-
-  popTaps(t);
 };
-// ---------- speed ramp: each tap plays in slow motion (press -> spring up -> turning into the scene), the rest a little faster, 30 s in all ----------
-const WARP = (() => {
-  const DUR = 30, SLOW = .45, RAMP = .08, STEP = 1 / 600;
-  const W = [S.sum, S.add, S.bud, S.ai].map(bb => [tb(bb - .5) - .05, tb(bb) - .02]);   // slow from the press to the cut
-  const ss = x => { x = cl(x); return x * x * (3 - 2 * x); };
-  const m = T => Math.max(0, ...W.map(([a, z]) => ss((T - a + RAMP) / RAMP) * ss((z + RAMP - T) / RAMP)));
-  const table = s => { const ft = [0], rt = [0]; for (let T = 0; T < DUR; T += STEP) { const v = s * (1 - m(T)) + SLOW * m(T); ft.push(T + STEP); rt.push(rt[rt.length - 1] + STEP / v); } return [ft, rt]; };
-  let lo = 1, hi = 2; for (let i = 0; i < 30; i++) { const mid = (lo + hi) / 2, [, rt] = table(mid); rt[rt.length - 1] > DUR ? lo = mid : hi = mid; }
-  const [ft, rt] = table(hi);
-  const map = (x, A, B) => { let i = 0, j = A.length - 1; while (j - i > 1) { const k = (i + j) >> 1; A[k] <= x ? i = k : j = k; } return B[i] + (B[j] - B[i]) * (x - A[i]) / ((A[j] - A[i]) || 1); };
-  return { film: t => map(t, rt, ft), real: T => map(T, ft, rt), speed: hi };
-})();
-window.CUTS = [...window.CUTS, ...[S.sum, S.add, S.bud, S.ai].map(bb => tb(bb - .5) + TAPCUT)].sort((a, b) => a - b).map(WARP.real);                                       // motion blur never crosses a cut (real time)
-window.render = t => { QT = WARP.film(Math.floor(t * 30 + 1e-6) / 30); renderFilm(WARP.film(t)); };
 render(0);
 </script></body></html>
