@@ -1,0 +1,400 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8">
+<link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;600;700&display=block" rel="stylesheet">
+<style>
+@font-face{font-family:"Daily Symbols";font-weight:400 600;font-display:block;src:url(material-symbols-rounded.woff2) format("woff2")}
+/* Daily dark theme tokens (limonlay/daily index.html) */
+:root{--bg:#000;--surface-2:#14213d;--text:#fff;--muted:#9aa3b5;--prussian:#14213d;--lemon:#ffd23f;--alabaster:#e5e5e5;--inc:#4ade80;--exp:#ffd23f;--night:#0a0d14;--cream:#f2f0ea}
+*{box-sizing:border-box;margin:0}
+html,body{width:1080px;height:1920px;overflow:hidden;background:var(--bg);font-family:"Google Sans",sans-serif}
+.ms{font-family:"Daily Symbols";font-weight:normal;font-style:normal;line-height:1;letter-spacing:normal;white-space:nowrap;-webkit-font-feature-settings:"liga";font-feature-settings:"liga";font-variation-settings:"FILL" 1,"wght" 500}
+.a{position:absolute}
+.L{position:absolute;inset:0;visibility:hidden}
+.t{position:absolute;left:0;right:0;text-align:center;font-weight:700;letter-spacing:-.03em}
+.cap{position:absolute;left:0;right:0;top:200px;text-align:center;font-size:96px;font-weight:700;letter-spacing:-.03em;color:var(--cream)}
+.ex{display:inline-block;font-size:30px;font-weight:600;letter-spacing:0;color:var(--prussian);background:var(--cream);padding:6px 16px;border-radius:0 14px 0 14px;vertical-align:middle}
+/* the app, authored at phone size and laid out at full size with CSS zoom (sharp) */
+#ui{position:absolute;left:0;top:0;width:400px;height:830px;color:var(--text);padding:0 20px;background:var(--bg)}
+.hdr{display:flex;justify-content:space-between;align-items:center;height:56px;font-weight:700;font-size:20px;letter-spacing:-.03em}
+.hdr .ms{font-size:22px;margin-left:14px}
+.mon{display:flex;justify-content:space-between;align-items:center;height:44px}
+.mon b{font-size:20px;letter-spacing:-.02em}
+.seg{display:flex;background:var(--surface-2);border-radius:0 12px 0 12px;font-size:12px;font-weight:600}
+.seg span{padding:7px 12px}.seg .on{background:var(--lemon);color:#000;border-radius:0 12px 0 12px}
+.hero{position:relative;overflow:hidden;background:var(--prussian);border-radius:0 32px 0 32px;padding:24px 20px 20px;margin-top:12px}
+.hero .lem{position:absolute;width:164px;right:-30px;top:-26px}
+.hero small{color:var(--alabaster);opacity:.75;font-size:13px}
+.bal{font-size:50px;font-weight:700;letter-spacing:-.045em;line-height:1.1;margin:4px 0 16px}
+.pills{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.pill small::before{content:'';display:inline-block;width:6px;height:6px;border-radius:50%;margin-right:4px;vertical-align:1px}
+.pill:first-child small::before{background:var(--inc)}.pill:nth-child(2) small::before{background:var(--exp)}
+.pill b{display:block;font-size:20px;font-weight:600;margin-top:2px;letter-spacing:-.02em}
+.prog{height:4px;background:rgba(255,255,255,.15);margin-top:16px;border-radius:2px}.prog i{display:block;height:100%;width:30%;background:var(--lemon);border-radius:2px}
+h3{font-size:17px;font-weight:700;margin:22px 0 12px;letter-spacing:-.02em}
+.lh{display:flex;justify-content:space-between;align-items:center}
+.lh a{font-size:13px;font-weight:600;color:var(--lemon);text-decoration:none}
+.cats{display:flex;gap:12px}
+.chip{width:58px;text-align:center;font-size:11px}
+.chip .sh{width:52px;height:52px;margin:0 auto 6px;display:grid;place-items:center}
+.chip .sh .ms{font-size:24px}
+.chip b{display:block;color:var(--muted);font-weight:500;font-size:11px}
+.sub{display:flex;justify-content:space-between;font-size:12px;color:var(--muted);font-weight:600;margin:10px 0 4px}
+.tx{display:flex;align-items:center;gap:12px;padding:8px 0;position:relative}
+.tx .ico{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;flex:none}
+.tx .ico .ms{font-size:20px}
+.tx .info{flex:1}.tx .info div{font-weight:600;font-size:15px}.tx .info small{color:var(--muted);font-size:13px}
+.tx .amt{font-weight:600;letter-spacing:-.02em}
+.tx .hl{position:absolute;left:-20px;right:-20px;top:0;bottom:0;background:var(--lemon);opacity:0}
+.nav{position:absolute;left:0;right:0;bottom:0;height:64px;display:flex;justify-content:space-around;align-items:center;background:var(--bg);font-size:11px;color:var(--muted)}
+.nav div{display:grid;justify-items:center;gap:3px}.nav .ms{font-size:22px}
+.nav .fab{width:48px;height:48px;border-radius:50%;background:var(--lemon);color:#000;display:grid;place-items:center}
+.nav .fab .ms{font-size:28px;color:#000}
+/* budget + chat screens (rebuilt; illustrative layout) */
+.brow{display:flex;align-items:center;gap:30px;margin:0 70px 54px}
+.brow .ic{width:110px;height:110px;display:grid;place-items:center;flex:none}
+.brow .ic .ms{font-size:56px}
+.brow .bx{flex:1}.brow .nm{display:flex;justify-content:space-between;font-size:40px;font-weight:600;color:var(--cream)}
+.brow .nm small{font-size:32px;color:var(--muted);font-weight:500}
+.brow .bar{height:22px;background:rgba(255,255,255,.12);margin-top:14px;border-radius:0 11px 0 11px;overflow:hidden}
+.brow .bar i{display:block;height:100%;width:0;background:var(--lemon)}
+.brow .ok{width:64px;height:64px;border-radius:50%;background:var(--lemon);display:grid;place-items:center;flex:none;opacity:0}
+.bub{position:absolute;max-width:860px;font-size:58px;line-height:1.3;padding:34px 44px;font-weight:500}
+</style></head><body>
+<div id="stage" style="position:absolute;inset:0;overflow:hidden">
+
+<!-- HOOK -->
+<div class="L" id="s0" style="background:var(--night)">
+  <div class="t" id="h0a" style="top:560px;font-size:130px;color:var(--cream)">where did your</div>
+  <div class="t" id="h0b" style="top:740px;font-size:250px;color:var(--lemon);letter-spacing:-.05em">$301.75</div>
+  <div class="t" id="h0c" style="top:1060px;font-size:130px;color:var(--cream)">go??</div>
+</div>
+
+<!-- HOME (the app) -->
+<div class="L" id="home"><div id="uiw" style="position:absolute;left:0;top:0;transform-origin:0 0"><div id="ui">
+  <div class="hdr"><span>Daily <img src="lemon.svg" style="width:22px;vertical-align:-2px"></span><span><span class="ms">search</span><span class="ms">more_horiz</span></span></div>
+  <div class="mon"><b><span class="ms" style="font-size:20px;color:var(--muted)">chevron_left</span> October <span class="ms" style="font-size:20px;color:var(--muted)">chevron_right</span></b><div class="seg"><span class="on">Month</span><span>Year</span></div></div>
+  <div class="hero"><img class="lem" src="lemon.svg"><small>Balance</small><div class="bal">$698.25</div>
+    <div class="pills"><div class="pill"><small>Income</small><b>$1,000.00</b></div><div class="pill"><small>Expenses</small><b>$301.75</b></div></div><div class="prog"><i></i></div></div>
+  <div class="lh"><h3>Where it went</h3><a id="tBudget">Budgets ›</a></div>
+  <div class="cats" id="cats"></div>
+  <div class="lh"><h3>Transactions</h3><div class="seg"><span class="on">All</span><span>In</span><span>Out</span></div></div>
+  <div class="sub"><span>WED, OCT 14</span><span>−$40.30</span></div>
+  <div id="rows"></div>
+  <div class="nav"><div><span class="ms" style="color:#fff">receipt_long</span>Transactions</div><div id="tSum"><span class="ms">insights</span>Summary</div>
+    <div class="fab" id="tAdd"><span class="ms">add</span></div><div><span class="ms">document_scanner</span>Scan</div><div id="tAI"><span class="ms">forum</span>AI</div></div>
+</div></div>
+  <div class="a" id="band" style="left:0;top:1190px;width:1080px;height:730px;background:var(--bg)"></div>
+  <div class="a" id="saved" style="left:0;right:0;top:1250px;display:flex;justify-content:center;align-items:center;gap:30px">
+    <img src="lemon.svg" style="width:170px"><span style="background:var(--lemon);color:var(--prussian);font-size:80px;font-weight:700;padding:20px 46px;border-radius:0 44px 0 44px">Saved</span></div>
+  <div class="t" id="cSaved" style="top:1410px;font-size:96px;color:var(--cream)">3 receipts. logged.</div>
+</div>
+
+<!-- 1 SUMMARY: categories burst out, one after another -->
+<div class="L" id="L1"><div id="takes"></div><div class="cap" id="c1" style="z-index:9">there it is.</div></div>
+
+<!-- 2 ADD: the receipt -->
+<div class="L" id="L2" style="background:var(--prussian)">
+  <div class="cap" id="c2">snap them all.</div>
+  <div class="a rc" id="rc0" style="left:80px;top:430px;width:440px;background:#fff;padding:44px 42px;box-shadow:20px 20px 0 var(--lemon);border-radius:0 56px 0 56px;color:var(--prussian)">
+    <div style="font-size:44px;font-weight:700">Coffee House</div>
+    <div style="display:flex;justify-content:space-between;font-size:38px;margin-top:26px"><span>Latte</span><span>4.50</span></div>
+    <div style="display:flex;justify-content:space-between;font-size:46px;font-weight:700;margin-top:34px;background:var(--lemon);padding:14px 20px;border-radius:0 24px 0 24px"><span>Total</span><span>$4.50</span></div></div>
+  <div class="a rc" id="rc1" style="left:560px;top:520px;width:440px;background:#fff;padding:44px 42px;box-shadow:20px 20px 0 var(--lemon);border-radius:0 56px 0 56px;color:var(--prussian)">
+    <div style="font-size:44px;font-weight:700">Fresh Market</div>
+    <div style="display:flex;justify-content:space-between;font-size:38px;margin-top:26px"><span>Groceries</span><span>23.80</span></div>
+    <div style="display:flex;justify-content:space-between;font-size:46px;font-weight:700;margin-top:34px;background:var(--lemon);padding:14px 20px;border-radius:0 24px 0 24px"><span>Total</span><span>$23.80</span></div></div>
+  <div class="a rc" id="rc2" style="left:300px;top:960px;width:440px;background:#fff;padding:44px 42px;box-shadow:20px 20px 0 var(--lemon);border-radius:0 56px 0 56px;color:var(--prussian)">
+    <div style="font-size:44px;font-weight:700">City Taxi</div>
+    <div style="display:flex;justify-content:space-between;font-size:38px;margin-top:26px"><span>Ride</span><span>12.00</span></div>
+    <div style="display:flex;justify-content:space-between;font-size:46px;font-weight:700;margin-top:34px;background:var(--lemon);padding:14px 20px;border-radius:0 24px 0 24px"><span>Total</span><span>$12.00</span></div></div>
+  <div class="a" id="scan" style="left:40px;width:1000px;height:18px;background:var(--lemon)"></div>
+</div>
+
+<!-- 3 BUDGETS -->
+<div class="L" id="L3" style="background:var(--night)">
+  <div class="cap" id="c3">set it once.</div>
+  <div class="a" style="left:0;right:0;top:420px" id="brows"></div>
+  <div class="t" id="b3ok" style="top:1340px;font-size:64px;color:var(--lemon)">under budget. every one.</div>
+</div>
+
+<!-- 4 AI CHAT -->
+<div class="L" id="L4" style="background:var(--prussian)">
+  <div class="cap" id="c4">just ask.</div>
+  <div class="bub" id="q" style="right:70px;top:480px;background:var(--lemon);color:var(--prussian);border-radius:44px 0 44px 44px">how much did I spend on food this month?</div>
+  <div class="bub" id="ans" style="left:70px;top:820px;background:var(--night);color:var(--cream);border-radius:0 44px 44px 44px">$31.40 on food this month. That's <b class="mk" style="font-weight:inherit;padding:0 8px;margin:0 -8px">18% less</b> than October. <span class="ex">example</span></div>
+  <div class="bub" id="dots4" style="left:70px;top:820px;background:var(--night);border-radius:0 44px 44px 44px;padding:34px 40px;display:flex;gap:16px">
+    <i style="width:22px;height:22px;border-radius:50%;background:var(--cream)"></i><i style="width:22px;height:22px;border-radius:50%;background:var(--cream)"></i><i style="width:22px;height:22px;border-radius:50%;background:var(--cream)"></i></div>
+  <div class="a" id="in4" style="left:70px;right:70px;top:1290px;height:130px;background:var(--night);border-radius:0 65px 0 65px;display:flex;align-items:center;padding:0 22px 0 44px;gap:20px">
+    <div id="ph4" style="flex:1;font-size:37px;color:var(--muted);white-space:nowrap;overflow:hidden">ask Daily…</div>
+    <div id="qin" style="position:absolute;left:40px;right:136px;font-size:37px;color:var(--cream);white-space:nowrap;overflow:hidden">how much did I spend on food this month?</div>
+    <div id="snd4" style="width:96px;height:96px;border-radius:50%;background:var(--lemon);display:grid;place-items:center"><svg width="48" height="48" viewBox="0 0 24 24"><path d="M12 4 L5 11 H10 V20 H14 V11 H19 Z" fill="#14213d"/></svg></div>
+  </div>
+</div>
+
+<!-- 5 NEXT MONTH -->
+<div class="L" id="L5" style="background:var(--night)">
+  <div class="a" style="left:0;right:0;top:200px;text-align:center"><span id="nov" style="display:inline-block;font-size:56px;font-weight:700;padding:14px 36px;border-radius:0 30px 0 30px;background:var(--lemon);color:var(--prussian)">NOV 25</span></div>
+  <div class="t" id="c5a" style="top:330px;font-size:120px;color:var(--cream)">…day 25 again.</div>
+  <div class="a" id="card5" style="left:90px;width:900px;top:640px;background:var(--prussian);border-radius:0 72px 0 72px;padding:60px 56px;color:#fff;overflow:hidden">
+    <img src="lemon.svg" style="position:absolute;width:340px;right:-60px;top:-50px">
+    <div style="font-size:34px;color:var(--alabaster);opacity:.75">Balance</div>
+    <div id="bal5" style="font-size:150px;font-weight:700;letter-spacing:-.045em;line-height:1.1">$0.00</div>
+    <div style="font-size:36px;color:var(--muted);margin-top:16px">last month: $698.25 <span class="ex" style="margin-left:14px">example</span></div>
+    <div id="dif5" style="position:absolute;right:56px;bottom:52px;font-size:42px;font-weight:700;color:var(--prussian);background:var(--lemon);padding:8px 22px;border-radius:0 24px 0 24px;transform-origin:100% 100%">+$144.85</div></div>
+  <div class="t" id="c5b" style="top:1220px;font-size:110px;color:var(--lemon)">same salary.</div>
+  <div class="t" id="c5c" style="top:1360px;font-size:110px;color:var(--cream)">more left.</div>
+</div>
+
+<!-- 6 CTA -->
+<div class="L" id="L6" style="background:var(--prussian)">
+  <img class="a" id="l6" src="lemon.svg" style="left:310px;top:520px;width:460px">
+  <div class="t" id="w6" style="top:960px;font-size:220px;color:var(--cream)">Daily</div>
+  <div class="a" style="left:0;right:0;top:1230px;text-align:center"><span id="u6" style="display:inline-block;font-size:58px;font-weight:600;color:var(--prussian);background:var(--lemon);padding:18px 44px;border-radius:0 36px 0 36px">daily.limonlay.com</span></div>
+  <div class="t" id="f6" style="top:1400px;font-size:50px;font-weight:500;letter-spacing:0;color:var(--cream)">no download needed</div>
+</div>
+
+</div>
+
+<!-- the button pops out of the app, grows, is pressed on the beat and turns into the next scene -->
+<div id="pop" style="position:absolute;inset:0;z-index:80;pointer-events:none">
+  <div id="pdim" class="a" style="inset:0;background:var(--night);opacity:0"></div>
+  <div id="gSum" class="a gb" style="left:280px;top:560px;width:520px;height:520px;background:var(--lemon);border-radius:0 150px 0 150px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;color:var(--prussian)"><span class="ms" style="font-size:260px">insights</span><span style="font-size:76px;font-weight:700">Summary</span></div>
+  <span class="ms a gIc" style="left:0;top:0;font-size:150px;color:var(--prussian)">home</span><span class="ms a gIc" style="left:0;top:0;font-size:150px;color:var(--prussian)">shopping_bag</span><span class="ms a gIc" style="left:0;top:0;font-size:150px;color:var(--prussian)">lightbulb</span><span class="ms a gIc" style="left:0;top:0;font-size:150px;color:var(--prussian)">movie</span><span class="ms a gIc" style="left:0;top:0;font-size:150px;color:var(--prussian)">restaurant</span>
+  <div id="gAdd" class="a gb" style="left:260px;top:540px;width:560px;height:560px;border-radius:50%;background:var(--lemon);display:grid;place-items:center;overflow:hidden"><span class="ms" id="gAddI" style="font-size:380px;color:var(--prussian)">add</span></div>
+  <div id="gBud" class="a gb" style="left:0;width:1080px;top:720px;text-align:center;font-size:170px;line-height:1.2;font-weight:700;color:var(--lemon);letter-spacing:-.03em;white-space:nowrap"><span id="gBudW">Budgets</span> <span id="gBudA">›</span></div>
+  <div id="gBar" class="a" style="left:0;top:712px;height:220px;width:0;background:var(--lemon);border-radius:0 110px 0 110px"></div>
+  <svg id="gHole" class="a" width="1080" height="1920" viewBox="0 0 1080 1920" style="left:0;top:0;visibility:hidden"><path id="gHoleP" fill="#ffd23f" fill-rule="evenodd" d=""/></svg>
+  <div id="gAI" class="a gb" style="left:190px;top:560px;width:700px;height:520px">
+    <div id="gB1" style="position:absolute;left:0;top:0;width:470px;height:320px;background:var(--lemon);border-radius:150px 150px 150px 0"></div>
+    <div id="gB2" style="position:absolute;right:0;bottom:0;width:430px;height:300px;background:var(--cream);border-radius:140px 140px 0 140px;display:grid;place-items:center"><span id="gDots" style="font-size:120px;font-weight:700;color:var(--prussian);letter-spacing:16px;opacity:0">•••</span></div></div>
+  <i class="a gT"></i><i class="a gT"></i><i class="a gT"></i><i class="a gT"></i>
+</div>
+<style>.gT{left:0;top:0;width:80px;height:22px;background:var(--lemon);border-radius:11px;visibility:hidden} .gb,.gIc{visibility:hidden}</style>
+<script>
+// Demo data = the app's English demo (limonlay/daily icons/shot-en-dark.webp). Budgets, chat answer and next month are illustrative.
+const CATS = [['home', 'Housing', 200, '#14213d', '50%', '#fff'], ['shopping_bag', 'Shopping', 57.5, '#ffd23f', '50%', '#000'],
+  ['lightbulb', 'Bills & utilities', 25, '#fff', '0', '#000'], ['movie', 'Entertainment', 9.75, '#e5e5e5', '50% 50% 0 50%', '#000'],
+  ['restaurant', 'Food', 8.25, '#14213d', '50%', '#fff']];
+const ROWS = [['restaurant', 'Food', 'Coffee', 4.5, '#ffd23f', '#000'], ['shopping_bag', 'Shopping', 'Groceries', 23.8, '#14213d', '#fff'],
+  ['directions_bus', 'Transport', 'Taxi', 12, '#e5e5e5', '#000']];   // the three receipts just scanned (illustrative)
+const BUD = [['home', 'Housing', 200, 250, '#ffd23f', '#14213d', '50%'], ['shopping_bag', 'Shopping', 57.5, 80, '#14213d', '#ffd23f', '50%'],
+  ['lightbulb', 'Bills', 25, 40, '#fff', '#000', '0'], ['movie', 'Fun', 9.75, 30, '#e5e5e5', '#000', '50% 50% 0 50%'], ['restaurant', 'Food', 31.4, 60, '#ffd23f', '#14213d', '50%']];
+const $ = id => document.getElementById(id);
+$('cats').innerHTML = CATS.map(([ic, n, v, bg, r, fg]) => `<div class="chip"><div class="sh" style="background:${bg};border-radius:${r}"><span class="ms" style="color:${fg}">${ic}</span></div><div style="white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${n}</div><b>$${v.toFixed(2)}</b></div>`).join('');
+$('rows').innerHTML = ROWS.map(([ic, n, s, v, bg, fg]) => `<div class="tx"><div class="hl"></div><div class="ico" style="background:${bg}"><span class="ms" style="color:${fg}">${ic}</span></div><div class="info"><div>${n}</div><small>${s}</small></div><div class="amt">−$${v.toFixed(2)}</div></div>`).join('');
+const TAKE_BG = ['#14213d', '#ffd23f', '#0a0d14', '#14213d', '#0a0d14'];
+$('takes').innerHTML = CATS.map(([ic, n, v, bg, r], i) => { const dark = i !== 1, ink = dark ? '#f2f0ea' : '#14213d';
+  return `<div class="a" style="inset:0;background:${TAKE_BG[i]};visibility:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:40px">
+    <div style="width:360px;height:360px;background:${dark ? '#ffd23f' : '#14213d'};border-radius:${r === '0' ? '0 120px 0 120px' : r};display:grid;place-items:center">
+      <span class="ms" style="font-size:190px;color:${dark ? '#14213d' : '#ffd23f'}">${ic}</span></div>
+    <div style="font-size:80px;font-weight:700;color:${ink};letter-spacing:-.03em;white-space:nowrap">${n}</div>
+    <div style="font-size:150px;font-weight:700;color:${ink};letter-spacing:-.04em">$${v.toFixed(2)}</div></div>`; }).join('');
+$('brows').innerHTML = BUD.map(([ic, n, s, l, bg, fg, r]) => `<div class="brow"><div class="ic" style="background:${bg};border-radius:${r}"><span class="ms" style="color:${fg}">${ic}</span></div>
+  <div class="bx"><div class="nm"><span>${n}</span><small><span class="amt">$${s.toFixed(2)}</span> / $${l}</small></div><div class="bar"><i></i></div></div>
+  <div class="ok"><svg width="40" height="40" viewBox="0 0 24 24"><path d="M9.5 16.2 4.8 11.5 3.4 12.9 9.5 19 21 7.5 19.6 6.1Z" fill="#14213d"/></svg></div></div>`).join('');
+const takes = [...$('takes').children], rows = [...document.querySelectorAll('.tx')], bars = [...document.querySelectorAll('.brow .bar i')];
+
+// ---------- time: the song's real beats (Golf Clap 84.355 s → 114.355 s, librosa) ----------
+const BEATS = [0.514, 1.141, 1.768, 2.395, 3.022, 3.649, 4.299, 4.926, 5.553, 6.156, 6.807, 7.457, 8.084, 8.687, 9.338, 9.964, 10.615, 11.242, 11.892, 12.495, 13.146, 13.773, 14.399, 15.026, 15.677, 16.304, 16.931, 17.558, 18.181, 18.762, 19.459, 20.086, 20.713, 21.34, 21.99, 22.617, 23.244, 23.871, 24.498, 25.125, 25.752, 26.402, 27.029, 27.656, 28.307, 28.934, 29.561];
+const cl = x => Math.min(1, Math.max(0, x)), lerp = (a, b, x) => a + (b - a) * x;
+const tb = n => { const B = BEATS, i = Math.floor(n); if (i < 0) return B[0] + n * (B[1] - B[0]);
+  if (i >= B.length - 1) return B[B.length - 1] + (n - B.length + 1) * (B[1] - B[0]); return lerp(B[i], B[i + 1], n - i); };
+const beatOf = t => { const B = BEATS; if (t < B[0]) return (t - B[0]) / (B[1] - B[0]);
+  for (let i = 0; i < B.length - 1; i++) if (t < B[i + 1]) return i + (t - B[i]) / (B[i + 1] - B[i]); return B.length - 1 + (t - B[B.length - 1]) / (B[1] - B[0]); };
+const bez = (x1, y1, x2, y2) => x => { x = cl(x); let lo = 0, hi = 1, s = .5;
+  for (let i = 0; i < 24; i++) { s = (lo + hi) / 2; const bx = 3 * x1 * s * (1 - s) ** 2 + 3 * x2 * s * s * (1 - s) + s ** 3; bx < x ? lo = s : hi = s; }
+  return 3 * y1 * s * (1 - s) ** 2 + 3 * y2 * s * s * (1 - s) + s ** 3; };
+const out = bez(.2, .8, .2, 1), spring = bez(.34, 1.4, .64, 1), inout = bez(.45, 0, .25, 1);
+const k = (t, at, d, e = out) => e((t - at) / d);
+const money = v => '$' + v.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+const show = (el, on) => { el.style.visibility = on ? 'visible' : 'hidden'; };
+const typeText = (el, t, at, cps = 65) => {               // fast typing; the untyped rest stays invisible so the line never shifts
+  if (!el.dataset.full) el.dataset.full = el.innerHTML;
+  el.innerHTML = el.dataset.full;                            // types through tags too (the highlight, the example chip)
+  const len = el.textContent.length, n = Math.max(0, Math.min(len, Math.floor((t - at) * cps)));
+  const caretOn = t >= at && t < at + len / cps + .4, caret = () => { const c = document.createElement('span');
+    c.style.cssText = 'display:inline-block;width:.09em;height:.82em;background:#ffd23f;vertical-align:-.06em;margin-left:.03em'; return c; };
+  let left = n, split = false;
+  const walk = node => { for (const ch of [...node.childNodes]) {
+    if (ch.nodeType === 3) { if (split) { const h = document.createElement('span'); h.style.visibility = 'hidden'; ch.replaceWith(h); h.appendChild(ch); continue; }
+      if (left >= ch.data.length && !(left === ch.data.length && n < len && false)) { left -= ch.data.length; continue; }
+      const rest = ch.splitText(left), h = document.createElement('span'); h.style.visibility = 'hidden'; rest.replaceWith(h); h.appendChild(rest);
+      if (caretOn) h.before(caret()); split = true; }
+    else if (ch.nodeType === 1) { if (split) ch.style.visibility = 'hidden'; else walk(ch); } } };
+  walk(el); if (!split && caretOn) el.appendChild(caret());
+  el.style.opacity = t >= at ? 1 : 0; };
+
+// ---------- scenes (beat indices) ----------
+const S = { home1: 3, sum: 4, home2: 7, add: 10, saved: 12, home3: 14.5, bud: 15, home4: 20, ai: 23, nov: 29, cta: 38 };
+window.CUTS = [S.home1, S.sum, S.home2, S.add, S.saved, S.bud, S.home4, S.ai, S.nov, S.cta].map(tb);
+// the app sits at zoom 2.15, centred
+// camera INSIDE the app (as in the 15 s film): the UI is laid out at full size with CSS zoom (sharp),
+// a wrapper carries the move + a slow 3D orbit; keys glide 0.5 s with the app's ease-out
+const uiPos = id => { let e = $(id), x = e.offsetWidth / 2, y = e.offsetHeight / 2; while (e && e.id !== 'ui') { x += e.offsetLeft; y += e.offsetTop; e = e.offsetParent; } return [x, y]; };
+const P = { sum: uiPos('tSum'), add: uiPos('tAdd'), bud: uiPos('tBudget'), ai: uiPos('tAI'), rows: uiPos('rows') };
+let T = 0;
+const cam = (px, py, sx, sy, Sz, r) => { $('ui').style.zoom = Sz; $('uiw').style.transform = `perspective(2400px) translate(${sx}px,${sy}px) rotateY(${6 * Math.sin(T * .9)}deg) rotateX(${4 * Math.sin(T * .7 + 1)}deg) rotate(${r}deg) translate(${-px * Sz}px,${-py * Sz}px)`; };
+const WIDE = [200, 300, 540, 1000, 2.3, 0];
+const CAM = [[2.9, ...WIDE], [3, ...P.sum, 540, 1250, 3.2, -2],
+  [6.9, ...WIDE], [8, 200, 380, 540, 1150, 2.6, -1.5], [9, ...P.add, 540, 1250, 3.3, 2],
+  [12, 200, P.rows[1], 540, 760, 2.55, 0], [13, 200, P.rows[1], 540, 740, 2.75, -1.5], [14, P.bud[0] - 40, P.bud[1], 540, 1000, 3.0, 0],
+  [19.9, ...WIDE], [21, 200, 380, 540, 1150, 2.6, 1.5], [22, ...P.ai, 540, 1250, 3.2, -2]];
+function camAt(t) { let i = 0; while (i < CAM.length - 1 && t >= tb(CAM[i + 1][0])) i++;
+  const A = CAM[Math.max(0, i - 1)], B = CAM[i], q = i === 0 ? 1 : out((t - tb(B[0])) / .45);
+  const v = B.slice(1).map((x, j) => lerp(A[j + 1], x, q)); return v; }   // moves to each key and stops (no creep)
+const at = id => { const r = $(id).getBoundingClientRect(); return [r.left + r.width / 2, r.top + r.height / 2]; };   // targets in frame px
+// a layer bursts out of the clicked point: a flat circle opens from it, the content scales up from 0.85
+// camera on a layer: glides (in-out) from pose A to pose B over [t0, t1]; poses {s, x, y, r}, origin in frame px
+// dynamic editing, no drifting: every 2 beats the shot HARD-CUTS between the wide frame and a tighter framing (B pose)
+function lcam(el) { el.style.transform = 'none'; }   // layers hold still: no zoom framings (owner: the 2-beat zoom jumps looked odd)
+function lcam_old(el, t, t0, t1, A, B, ox = 540, oy = 960) { const q = inout((t - t0) / (t1 - t0)), L = (a, b) => lerp(a ?? 0, b ?? 0, q);
+  el.style.transformOrigin = `${ox}px ${oy}px`;
+  el.style.transform = `translate(${L(A.x, B.x)}px,${L(A.y, B.y)}px) rotate(${L(A.r, B.r)}deg) scale(${lerp(A.s ?? 1, B.s ?? 1, q)})`; }
+function burst(el, t, from, x, y) { const q = k(t, from, .26); el.style.clipPath = `circle(${q * 2300}px at ${x}px ${y}px)`;
+  }
+// ---------- the tap: the button leaves the app, grows in the middle (half a beat early), is pressed on the beat, turns into the scene ----------
+const GX = 540, GY = 820;
+function popTaps(t) {
+  document.querySelectorAll('#pop .gb, #pop .gIc, #pop .gT').forEach(e => { e.style.visibility = 'hidden'; });
+  $('pdim').style.opacity = 0; $('gBar').style.width = 0; $('gHole').style.visibility = 'hidden';
+  ['tSum', 'tAdd', 'tBudget', 'tAI'].forEach(id => { const e = $(id); e.style.visibility = ''; if (id !== 'tAdd') { e.style.background = ''; e.style.color = ''; e.style.boxShadow = 'none'; e.style.borderRadius = ''; } });
+  const TAPS = [['tSum', 'gSum', S.sum], ['tAdd', 'gAdd', S.add], ['tBudget', 'gBud', S.bud], ['tAI', 'gAI', S.ai]];
+  const tap = TAPS.find(([, , bb]) => t >= tb(bb - .5) - .02 && t < tb(bb) + .62); if (!tap) return;
+  const [id, gid, bb] = tap, d = t - tb(bb), g = $(gid), src = $(id).getBoundingClientRect(), [bx, by] = at(id);
+  const dp = t - tb(bb - .5);                                                   // 1) the small button is pressed in the app (lemon + squash), half a beat early
+  const lemonize = on => { if (id === 'tAdd') return; const e = $(id); e.style.background = on ? 'var(--lemon)' : ''; e.style.color = on ? 'var(--prussian)' : '';
+    e.style.boxShadow = on ? '0 0 0 14px var(--lemon)' : 'none'; e.style.borderRadius = on ? '0 20px 0 20px' : ''; };
+  if (dp < .12) { $(id).style.transform = dp >= 0 ? 'scale(.84)' : 'none'; lemonize(dp >= 0);
+    return; }
+  $(id).style.transform = 'none'; lemonize(false); $(id).style.visibility = 'hidden';           // 2) then it springs up out of the bar to the middle and grows
+  const W = g.offsetWidth, H = g.offsetHeight, s0 = Math.min(src.width / W, src.height / H);
+  let x = 0, y = 0, sc = 1, op = 1;
+  if (d < 0) { const q = spring(cl((dp - .12) / .2)); x = lerp(bx - GX, 0, cl(q)); y = lerp(by - GY, 0, cl(q)); sc = lerp(s0, 1, q);
+    $('pdim').style.opacity = .82 * out(cl((dp - .12) / .16)); }
+  g.style.visibility = 'visible'; g.style.opacity = op; if (gid === 'gSum') [...g.children].forEach(c => { c.style.opacity = 1; });
+  const at2 = (a, z) => cl((d - a) / (z - a)), hb = tb(bb + .5) - tb(bb);
+  if (gid === 'gSum' && d >= 0) {                                             // the tile opens to the whole screen, the five categories fly out of the chart
+    sc = lerp(1, 4.6, out(at2(.03, .27))); [...g.children].forEach(c => { c.style.opacity = 1 - at2(0, .03); }); y = -1920 * at2(hb, hb + .14) ** 2;   // full lemon, then it slides up off the screen on the half beat
+    [...document.querySelectorAll('#pop .gIc')].forEach((e, i) => { const q = out(at2(.02 + i * .02, .34)), a = (-90 + i * 72) * Math.PI / 180;
+      e.style.visibility = 'visible'; e.style.opacity = 1; const up = -1920 * at2(hb, hb + .14) ** 2;
+      e.style.transform = `translate(${GX - 75 + Math.cos(a) * 340 * q}px,${GY - 75 + Math.sin(a) * 340 * q + up}px) scale(${lerp(.4, 1.5, q)})`; }); }
+  if (gid === 'gAdd' && d >= 0) {                                              // the + shrinks away, the lemon fills the screen, then a lens opens from the middle
+    const sp = at2(0, .14); $('gAddI').style.transform = `scale(${1 - sp * sp})`;   // no spin: a turned + reads as an X
+    sc = lerp(1, 4.2, out(at2(.08, .26)));
+    if (d >= .26) { g.style.visibility = 'hidden'; const r = 1150 * out(at2(.26, .52)), H = $('gHole');
+      H.style.visibility = d < .55 ? 'visible' : 'hidden';
+      $('gHoleP').setAttribute('d', `M0 0H1080V1920H0Z M${GX - r} ${GY}a${r} ${r} 0 1 0 ${2 * r} 0a${r} ${r} 0 1 0 ${-2 * r} 0Z`); } }
+  else if (gid === 'gAdd') $('gAddI').style.transform = 'none';
+  if (gid === 'gBud' && d >= 0) {                                             // the › is pulled: a tall lemon bar wipes over the word, then leaves to the right
+    const w = out(at2(0, .2)); $('gBar').style.width = (1080 * w) + 'px'; if (d >= .15) g.style.visibility = 'hidden';   // covered: gone for good
+    $('gBar').style.transform = `translateX(${1080 * at2(.16, .28)}px)`; }
+  if (gid === 'gAI') { $('gDots').style.opacity = d >= -.1 ? 1 : 0;           // the AI "types" (dots) as it lands, then the bubbles pop one after the other
+    [['gB1', 0], ['gB2', 1]].forEach(([b, k2]) => { const q = at2(.06 + k2 * .07, .26 + k2 * .07); $(b).style.transform = `scale(${1 - q * q})`; }); }
+  g.style.transform = `translate(${x}px,${y}px) scale(${sc})`;
+}
+
+const renderFilm = t => {
+  const b = beatOf(t);
+  const inS = (a, z) => b >= a && b < z;
+  show($('s0'), b < S.home1);
+  show($('home'), inS(S.home1, S.sum + .6) || inS(S.home2, S.add + .6) || inS(S.saved, S.bud + .6) || inS(S.home4, S.ai + .6));
+  show($('L1'), inS(S.sum, S.home2)); show($('L2'), inS(S.add, S.saved)); show($('L3'), inS(S.bud, S.home4));
+  show($('L4'), inS(S.ai, S.nov)); show($('L5'), inS(S.nov, S.cta)); show($('L6'), b >= S.cta);
+
+  // hook
+  typeText($('h0a'), t, -.12, 40); typeText($('h0b'), t, tb(0), 45); typeText($('h0c'), t, tb(.5), 40);
+  $('s0').style.transform = `scale(${1 + .04 * cl(t / tb(3))})`;
+
+  // home: slow push, the new row + Saved after the receipt
+  T = t; cam(...camAt(t));
+  const sv = b >= S.saved && b < S.home3;
+  show($('band'), sv); show($('saved'), sv); show($('cSaved'), sv);
+  rows.forEach((el, i) => { const st = tb(S.saved) + i * .12, nr = t < st ? 0 : k(t, st, .3);
+    el.style.opacity = b < S.home3 && b >= S.saved ? nr : (b >= S.home3 ? 1 : 0); el.style.transform = `scale(${lerp(.9, 1, nr)})`;
+    el.querySelector('.hl').style.opacity = t < st ? 0 : .32 * (1 - cl((t - st) / 1.2)); });
+  const svq = k(t, tb(S.saved), .35, spring); $('saved').style.transform = `scale(${lerp(.5, 1, svq)})`;
+  typeText($('cSaved'), t, tb(S.saved + .6));
+
+  // the taps: the button presses in on the beat, the burst opens from it
+  const [sx, sy] = at('tSum'), [ax, ay] = at('tAdd'), [bx, by] = at('tBudget'), [ix, iy] = at('tAI');
+
+  // 1 summary: burst from the tab, categories replace each other on the beats
+  burst($('L1'), t, tb(S.sum), 540, 820); lcam($('L1'), t, tb(S.sum), tb(S.home2), { s: 1.08, r: -3, x: -30 }, { s: 1.22, r: 3, x: 30 });
+  const CB = [4, 5, 5.5, 6, 6.5];   // like the 15 s film: one beat, then half beats
+  takes.forEach((el, i) => { const tin = tb(CB[i]), tnext = i + 1 < CB.length ? tb(CB[i + 1]) + .2 : tb(S.home2);
+    show(el, t >= tin && t < tnext); el.style.zIndex = i + 1;
+    el.style.transform = i === 0 ? 'none' : `translateX(${(1 - out((t - tin) / .2)) * (i % 2 ? -1080 : 1080)}px)`;
+    el.children[0].style.transform = `rotate(${(1 - out((t - tin) / .35)) * (i % 2 ? 40 : -40)}deg) scale(${lerp(.6, 1, out((t - tin) / .3))})`; });
+  typeText($('c1'), t, tb(4.3));
+
+  // 2 add: burst from the + button, the receipt drops in, the scan line sweeps
+  burst($('L2'), t, tb(S.add), 540, 820); lcam($('L2'), t, tb(S.add), tb(S.saved), { s: 1.3, x: 110, y: 60, r: 3 }, { s: 1.05, x: -60, y: -40, r: -2 }); typeText($('c2'), t, tb(S.add) + .2);
+  // three receipts land one after another (one photo, several receipts), then one scan line sweeps them all
+  [0, 1, 2].forEach(i => { const st = tb(S.add) + .3 + i * .08, q = k(t, st, .22), rot = [-8, 6, -3][i];
+    const e = $('rc' + i); e.style.opacity = t >= st ? 1 : 0; e.style.transform = `translateY(${(1 - q) * 300}px) rotate(${rot + (1 - q) * -10}deg)`; });
+  const sc = cl((t - tb(S.add) - .6) / .5); $('scan').style.top = lerp(420, 1560, sc) + 'px'; $('scan').style.opacity = t > tb(S.add) + .6 && sc < 1 ? 1 : 0;
+
+  // 3 budgets: burst from "Budgets ›", bars fill one per beat, all end under their limit
+  burst($('L3'), t, tb(S.bud), 540, 820); lcam($('L3'), t, tb(S.bud), tb(S.home4), { s: 1.25, y: 260, r: -2 }, { s: 1.08, y: -40, r: 1 }, 540, 800); typeText($('c3'), t, tb(S.bud) + .04);
+  // rows slide in, icons pop, all bars fill fast (slightly staggered) while the amounts count up, then a check pops on every row
+  const tf3 = Math.floor(t * 30 + 1e-6) / 30;
+  [...document.querySelectorAll('.brow')].forEach((el, i) => { const [, , sp] = BUD[i], st = tb(S.bud) + .05 + i * .06;
+    const q = k(t, st, .3); el.style.opacity = cl((t - st) / .08); el.style.transform = `translateX(${(1 - q) * 260}px)`;
+    el.querySelector('.ic').style.transform = `scale(${lerp(.3, 1, k(t, st + .05, .35, spring))})`;
+    const f = k(tf3, tb(15.6) + i * .09, .55, spring); bars[i].style.width = (100 * sp / BUD[i][3] * f) + '%';
+    el.querySelector('.amt').textContent = '$' + (sp * cl(f)).toFixed(2);
+    const okq = k(t, tb(17.4) + i * .07, .3, spring), ok = el.querySelector('.ok'); ok.style.opacity = t >= tb(17.4) + i * .07 ? 1 : 0; ok.style.transform = `scale(${lerp(.2, 1, okq)})`; });
+  typeText($('b3ok'), t, tb(17), 40);
+
+  // 4 AI: burst from the AI tab, the question types, then the answer
+  burst($('L4'), t, tb(S.ai), 540, 820); lcam($('L4'), t, tb(S.ai), tb(S.nov), { s: 1.06, x: 30, r: 2 }, { s: 1.16, x: 0, y: -30, r: -1 }, 540, 900); typeText($('c4'), t, tb(S.ai) + .04);
+  // like the real chat: the question is typed in the input bar, sent (the bubble flies up), dots, the answer types out, the result lights up
+  typeText($('qin'), t, tb(23.2), 62); $('ph4').style.opacity = t >= tb(23.2) ? 0 : 1;
+  const sent = t >= tb(24.5); $('qin').style.visibility = sent ? 'hidden' : 'visible';
+  $('snd4').style.transform = t >= tb(24.5) - .1 && t < tb(24.5) + .04 ? 'scale(.84)' : 'none';
+  const fly = k(t, tb(24.5), .3); $('q').style.opacity = sent ? 1 : 0; $('q').style.transformOrigin = '100% 0';
+  $('q').style.transform = `translateY(${(1 - fly) * 820}px) scale(${lerp(.7, 1, fly)})`;
+  const dotsOn = t >= tb(24.5) + .2 && t < tb(25.6); show($('dots4'), dotsOn);
+  [...$('dots4').children].forEach((d, i) => { d.style.opacity = Math.floor(t * 7) % 3 === i ? 1 : .35; });
+  typeText($('ans'), t, tb(25.6), 65); $('ans').style.opacity = t >= tb(25.6) ? 1 : 0;
+  const mk = $('ans').querySelector('.mk');   // the result is wiped in lemon on the beat and stays to the cut
+  if (mk) { const w = k(t, tb(27.5), .3); mk.style.boxShadow = `inset ${Math.round(w * mk.offsetWidth)}px 0 0 0 var(--lemon)`; mk.style.color = w > .5 ? 'var(--prussian)' : 'inherit'; }
+
+
+  // 5 next month: date flips, balance counts to more than last month (example)
+  const fl = out((t - tb(S.nov)) / .3); $('nov').style.transform = `scaleY(${fl})`;
+  typeText($('c5a'), t, tb(S.nov) + .15);
+  const cq = k(t, tb(31), .4); $('card5').style.transform = `translateY(${(1 - cq) * 300}px) rotate(${(1 - cq) * -4}deg)`; $('card5').style.opacity = cl((t - tb(31)) / .08);
+  const tf = Math.floor(t * 30 + 1e-6) / 30; $('bal5').textContent = money(Math.round(843.1 * k(tf, tb(31.3), .8) * 100) / 100);
+  typeText($('c5b'), t, tb(33), 30); typeText($('c5c'), t, tb(36), 30);
+  const dq = k(t, tb(34.5), .3, spring); $('dif5').style.transform = `scale(${lerp(.3, 1, dq)})`; $('dif5').style.opacity = t >= tb(34.5) ? 1 : 0;
+  lcam($('L5'), t, tb(S.nov), tb(S.cta), { s: 1.04, r: -2, y: 40 }, { s: 1.16, r: 1, y: -10 }, 540, 820);   // push into the balance
+
+  // 6 CTA: the lemon bursts out on the strongest hit, then the link pill presses in
+  burst($('L6'), t, tb(S.cta), 540, 960);
+  const l6 = k(t, tb(S.cta), .5, spring);
+  $('l6').style.transform = `scale(${lerp(3.2, 1, l6)}) rotate(${lerp(-30, 0, l6)}deg)`;
+  lcam($('L6'), t, tb(S.cta), 30, { s: 1.35, r: 3 }, { s: 1.0, r: 0 }, 540, 900);   // pull back to the end card
+  typeText($('w6'), t, tb(40), 55);
+  $('u6').parentElement.style.opacity = t >= tb(41.5) ? 1 : 0; $('u6').parentElement.style.transform = `scale(${lerp(.5, 1, k(t, tb(41.5), .3, spring))})`;
+  const pr = t >= tb(45) && t < tb(45) + .2;   // the end card stays Prussian (owner); the link is tapped near the end
+  $('u6').style.transform = `scale(${pr ? .92 : 1})`; $('u6').style.background = pr ? 'var(--night)' : 'var(--lemon)'; $('u6').style.color = pr ? 'var(--lemon)' : 'var(--prussian)';
+  $('f6').style.opacity = t >= tb(43.5) ? 1 : 0; $('f6').style.transform = `scale(${lerp(.5, 1, k(t, tb(43.5), .35, spring))})`;   // pops in on the beat
+
+  popTaps(t);
+};
+// ---------- speed ramp: each tap plays in slow motion (press -> spring up -> turning into the scene), the rest a little faster, 30 s in all ----------
+const WARP = (() => {
+  const DUR = 30, SLOW = .45, RAMP = .08, STEP = 1 / 600;
+  const W = [S.sum, S.add, S.bud, S.ai].map(bb => [tb(bb - .5) - .05, tb(bb) + .15]);
+  const ss = x => { x = cl(x); return x * x * (3 - 2 * x); };
+  const m = T => Math.max(0, ...W.map(([a, z]) => ss((T - a + RAMP) / RAMP) * ss((z + RAMP - T) / RAMP)));
+  const table = s => { const ft = [0], rt = [0]; for (let T = 0; T < DUR; T += STEP) { const v = s * (1 - m(T)) + SLOW * m(T); ft.push(T + STEP); rt.push(rt[rt.length - 1] + STEP / v); } return [ft, rt]; };
+  let lo = 1, hi = 2; for (let i = 0; i < 30; i++) { const mid = (lo + hi) / 2, [, rt] = table(mid); rt[rt.length - 1] > DUR ? lo = mid : hi = mid; }
+  const [ft, rt] = table(hi);
+  const map = (x, A, B) => { let i = 0, j = A.length - 1; while (j - i > 1) { const k = (i + j) >> 1; A[k] <= x ? i = k : j = k; } return B[i] + (B[j] - B[i]) * (x - A[i]) / ((A[j] - A[i]) || 1); };
+  return { film: t => map(t, rt, ft), real: T => map(T, ft, rt), speed: hi };
+})();
+window.CUTS = window.CUTS.map(WARP.real);                                       // motion blur never crosses a cut (real time)
+window.render = t => renderFilm(WARP.film(t));
+render(0);
+</script></body></html>
