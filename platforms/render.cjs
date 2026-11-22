@@ -1,5 +1,6 @@
 // Renders every image in platforms/art/art.js → platforms/out/img/*.png
 // Usage: node platforms/render.cjs [filter]   (filter = substring of the file name, optional)
+//        PAGE=<page.html> OUT=<dir> node platforms/render.cjs   renders another page with the same JOBS / renderJob contract
 // Needs Playwright (preinstalled in cloud sessions) and the network for Google Fonts (Noto Sans CJK, Material Symbols).
 const http = require('http');
 const fs = require('fs');
@@ -8,7 +9,8 @@ let chromium;
 try { ({ chromium } = require('playwright')); } catch { ({ chromium } = require('/opt/node22/lib/node_modules/playwright')); }
 
 const ROOT = path.resolve(__dirname, '..');
-const OUT = path.join(__dirname, 'out', 'img');
+const OUT = process.env.OUT ? path.resolve(ROOT, process.env.OUT) : path.join(__dirname, 'out', 'img');
+const PAGE = process.env.PAGE || 'platforms/art/art.html'; // e.g. PAGE=rename/lemo/mock.html OUT=rename/lemo/out
 const TYPES = { '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/css', '.svg': 'image/svg+xml', '.webp': 'image/webp', '.png': 'image/png', '.woff2': 'font/woff2' };
 
 const server = http.createServer((req, res) => {
@@ -25,7 +27,7 @@ const server = http.createServer((req, res) => {
   const browser = await chromium.launch();
   const page = await browser.newPage({ viewport: { width: 1200, height: 1200 }, deviceScaleFactor: 1 });
   page.on('pageerror', (e) => console.error('pageerror', e.message));
-  await page.goto(`http://localhost:${port}/platforms/art/art.html`, { waitUntil: 'networkidle' });
+  await page.goto(`http://localhost:${port}/${PAGE}`, { waitUntil: 'networkidle' });
   const jobs = await page.evaluate(() => window.JOBS);
   const filter = process.argv[2] || '';
   let n = 0;
