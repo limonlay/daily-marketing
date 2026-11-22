@@ -6,7 +6,7 @@ For a separate marketing / video session. The app lives in `limonlay/daily`; thi
 - **Daily** — free income/expense tracker, no ads. Web app (PWA) at https://daily.limonlay.com — works on phone, iPad and computer, installs to the home screen, no app store.
 - Features: quick add, monthly/yearly summary + charts, budgets per category, recurring items, many currencies incl. crypto,
   receipt scan with AI, chat with AI about your own money ("how much did I spend on food this month?"), CSV/XLSX import & export,
-  category packs, app lock (PIN / Face ID), 2FA + passkeys, 14 languages (th, en, zh-CN, zh-TW, ja, ko, vi, id, ms, es, fr, de, pt, ru).
+  category packs, app lock (PIN / Face ID), 2FA + passkeys, 18 languages (th, en, zh-CN, zh-TW, ja, ko, vi, id, ms, es, fr, de, it, nl, pl, pt, ru, tr).
 - Privacy: data visible only to its owner, no selling data, no ads, no tracking; error reports are anonymised.
 
 ## Audience (global)
@@ -14,6 +14,7 @@ For a separate marketing / video session. The app lives in `limonlay/daily`; thi
 - Priority markets: Thailand, Japan first (owner's markets), then English-speaking, Spanish/Portuguese (LatAm), Indonesia/Vietnam.
 
 ## Channels
+Full per-platform kit (setup, bios, captions, images, calendar): `platforms/KIT.md`.
 - Core (all countries): TikTok + Instagram Reels + YouTube Shorts (one 9:16 clip, many languages), Product Hunt launch, Reddit (helpful, not salesy), multilingual SEO articles.
 - Regional: Lemon8 + LINE VOOM (TH/JP), X (JP), Naver Blog (KR), Xiaohongshu (CN/TW), Facebook groups (ID/PH/VN), Telegram/VK (RU).
 - No paid ads until payments (Pro plan) exist.
@@ -30,7 +31,7 @@ For a separate marketing / video session. The app lives in `limonlay/daily`; thi
 4. "Before vs after tracking for one month: where the money leaked".
 5. "Travelling? Log in yen, see it in baht" (multi-currency).
 6. "Payday plan in 60 seconds" (budgets + recurring).
-7. "Free, no ads, 14 languages" (language switch montage).
+7. "No ads, 18 languages" (language switch montage). Owner rule: never the word "free" in posts (paid plans are coming).
 8. "Lock your money app with Face ID" (privacy).
 9. Seasonal: 11.11 shopping, new-year money plan, payday.
 10. "From messy spreadsheet to charts" (CSV/XLSX import).

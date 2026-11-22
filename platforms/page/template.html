@@ -1,0 +1,244 @@
+<title>Daily Marketing Kit</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anuphan:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;700&family=Noto+Sans+KR:wght@400;700&family=Noto+Sans+SC:wght@400;700&family=Noto+Sans+TC:wght@400;700&display=swap">
+<style>
+/* Layout: a Prussian masthead, a sticky tab bar, then one view at a time; cards are flat colour blocks with leaf corners (Daily's own shape). */
+:root {
+  --bg: #faf9f6; --fg: #14213d; --muted: #586179; --surface: #ffffff; --surface2: #eeece6;
+  --accent: #ffd23f; --accent-ink: #876800; --pr: #14213d; --on-pr: #f2f0ea; --pr2: #1d2c50; --ok: #2f7d4f;
+  --font: 'Anuphan', 'Noto Sans JP', 'Noto Sans KR', 'Noto Sans SC', 'Noto Sans TC', system-ui, sans-serif;
+  --r: 16px;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #0a0d14; --fg: #f2f0ea; --muted: #9aa3b5; --surface: #121a2e; --surface2: #1b2742; --accent-ink: #ffd23f; --ok: #7fd3a0; color-scheme: dark; } }
+:root[data-theme="dark"] { --bg: #0a0d14; --fg: #f2f0ea; --muted: #9aa3b5; --surface: #121a2e; --surface2: #1b2742; --accent-ink: #ffd23f; --ok: #7fd3a0; color-scheme: dark; }
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--fg); font-family: var(--font); font-size: 16px; line-height: 1.55; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--pr); }
+.wrap { max-width: 1120px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+h1, h2, h3 { line-height: 1.2; text-wrap: balance; margin: 0; }
+p { margin: 0; }
+a { color: var(--accent-ink); }
+
+.mast { background: var(--pr); color: var(--on-pr); margin-top: calc(-1 * env(safe-area-inset-top, 0px)); padding-top: calc(env(safe-area-inset-top, 0px) + 28px); padding-bottom: 28px; }
+.mast .wrap { display: grid; grid-template-columns: 1fr auto; gap: 20px; align-items: center; }
+.brand { display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 20px; letter-spacing: -0.02em; }
+.brand img { width: 30px; transform: rotate(-8deg); }
+.mast h1 { font-size: clamp(28px, 5vw, 44px); margin-top: 10px; }
+.mast h1 span { position: relative; z-index: 0; white-space: nowrap; }
+.mast h1 span::after { content: ""; position: absolute; left: -2px; right: -2px; bottom: -4px; height: 0.3em; background: var(--accent); z-index: -1; opacity: .9; }
+.mast p { color: #c9cfdc; margin-top: 8px; max-width: 62ch; }
+.stats { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+.stat { background: var(--pr2); border-radius: 0 12px 0 12px; padding: 8px 14px; font-size: 14px; }
+.stat b { color: var(--accent); font-size: 20px; margin-right: 4px; font-variant-numeric: tabular-nums; }
+.mast .lemon { width: clamp(70px, 14vw, 150px); transform: rotate(-12deg); }
+
+.tabs { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--bg); }
+.tabs .wrap { display: flex; gap: 6px; overflow-x: auto; padding-block: 10px; scrollbar-width: none; }
+.tabs a { flex: none; text-decoration: none; color: var(--fg); background: var(--surface2); padding: 8px 14px; border-radius: 0 12px 0 12px; font-weight: 600; font-size: 15px; }
+.tabs a[aria-current="page"] { background: var(--accent); color: #14213d; }
+.tabs a:focus-visible, button:focus-visible, summary:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+
+main { padding-block: 18px 60px; }
+.view { display: grid; gap: 18px; }
+.lead { color: var(--muted); max-width: 70ch; }
+.sec-title { font-size: 24px; margin-top: 10px; }
+.card { background: var(--surface); border-radius: 0 var(--r) 0 var(--r); padding: 18px; min-width: 0; }
+.grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 14px; }
+.grid3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; }
+ul.clean { margin: 6px 0 0; padding-left: 20px; display: grid; gap: 4px; }
+.k { font-size: 13px; font-weight: 700; letter-spacing: .04em; color: var(--muted); text-transform: uppercase; margin: 14px 0 4px; }
+
+.week { display: grid; grid-template-columns: 210px 1fr; gap: 14px; }
+.week h3 { font-size: 17px; }
+@media (max-width: 640px) { .week { grid-template-columns: 1fr; gap: 4px; } .mast .wrap { grid-template-columns: 1fr; } .mast .lemon { display: none; } }
+
+.chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip { background: var(--surface2); border: 0; color: var(--fg); font: inherit; font-size: 14px; font-weight: 600; padding: 6px 12px; border-radius: 0 10px 0 10px; cursor: pointer; }
+.chip[aria-pressed="true"] { background: var(--pr); color: var(--on-pr); }
+.tier { display: inline-block; font-size: 12px; font-weight: 700; padding: 3px 9px; border-radius: 0 8px 0 8px; background: var(--accent); color: #14213d; white-space: nowrap; }
+.tier.t2 { background: var(--pr); color: var(--on-pr); }
+.tier.t3 { background: var(--surface2); color: var(--fg); }
+
+details.pf { background: var(--surface); border-radius: 0 var(--r) 0 var(--r); }
+details.pf > summary { list-style: none; cursor: pointer; padding: 16px 18px; display: grid; grid-template-columns: auto 1fr auto; gap: 12px; align-items: center; }
+details.pf > summary::-webkit-details-marker { display: none; }
+details.pf > summary h3 { font-size: 18px; }
+details.pf > summary .sub { color: var(--muted); font-size: 14px; }
+details.pf > summary .chev { font-size: 22px; color: var(--muted); transition: transform .2s cubic-bezier(.2,.8,.2,1); }
+details.pf[open] > summary .chev { transform: rotate(90deg); }
+.pf .body { padding: 0 18px 18px; display: grid; gap: 4px; min-width: 0; }
+.done { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--muted); }
+.done input { width: 18px; height: 18px; accent-color: #14213d; }
+details.pf.is-done > summary h3 { color: var(--muted); }
+details.pf.is-done > summary .tick { display: inline; }
+.tick { display: none; color: var(--ok); font-weight: 700; }
+
+.copybox { background: var(--surface2); border-radius: 0 12px 0 12px; padding: 12px 14px; display: grid; gap: 8px; min-width: 0; }
+.copybox .hd { display: flex; justify-content: space-between; align-items: center; gap: 8px; flex-wrap: wrap; }
+.copybox .lab { font-size: 13px; font-weight: 700; color: var(--muted); }
+.copybox .lab .img { font-weight: 500; }
+.copybox pre { margin: 0; white-space: pre-wrap; word-break: break-word; font-family: var(--font); font-size: 15px; line-height: 1.55; }
+.cnt { font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.cnt.over { color: #d9480f; font-weight: 700; }
+.copy { border: 0; background: var(--accent); color: #14213d; font: inherit; font-size: 13px; font-weight: 700; padding: 5px 12px; border-radius: 0 9px 0 9px; cursor: pointer; transition: transform .12s cubic-bezier(.2,.8,.2,1); }
+.copy:active { transform: scale(.96); }
+.copy.ok { background: var(--pr); color: var(--on-pr); }
+.thumbs { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; }
+.thumbs figure { margin: 0; flex: none; width: 150px; }
+.thumbs img { width: 150px; height: 150px; object-fit: contain; background: var(--surface2); border-radius: 0 10px 0 10px; display: block; }
+.thumbs figcaption { font-size: 11px; color: var(--muted); word-break: break-all; margin-top: 3px; }
+
+.piece h3 { font-size: 19px; }
+.meta { color: var(--muted); font-size: 14px; margin-top: 4px; }
+.date { display: inline-block; font-weight: 700; font-variant-numeric: tabular-nums; background: var(--pr); color: var(--on-pr); padding: 2px 8px; border-radius: 0 8px 0 8px; font-size: 13px; margin-right: 6px; }
+
+.gal { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; }
+.gal figure { margin: 0; min-width: 0; }
+.gal img { width: 100%; aspect-ratio: 1; object-fit: contain; background: var(--surface); border-radius: 0 12px 0 12px; display: block; }
+.gal figcaption { font-size: 12px; color: var(--muted); margin-top: 4px; word-break: break-all; }
+.tablewrap { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; min-width: 640px; font-size: 15px; }
+th, td { text-align: left; padding: 10px 12px; vertical-align: top; }
+thead th { background: var(--pr); color: var(--on-pr); font-size: 13px; }
+tbody tr:nth-child(odd) td { background: var(--surface); }
+tbody tr:nth-child(even) td { background: var(--surface2); }
+code { font-size: .9em; background: var(--surface2); padding: 1px 6px; border-radius: 0 6px 0 6px; word-break: break-all; }
+.rules li::marker { color: var(--accent-ink); }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+
+<header class="mast">
+  <div class="wrap">
+    <div>
+      <div class="brand">Daily <img src="lemon.svg" alt=""></div>
+      <h1>Marketing <span>ทุกแพลตฟอร์ม</span></h1>
+      <p>แผน 6 สัปดาห์ ไบโอ แคปชันพร้อมโพสต์ รูปทุกขนาด และคำตอบสำเร็จรูป กดคัดลอกแล้ววางในแอปได้เลย ทุกข้อความยึดตามสิ่งที่แอปทำได้จริงวันนี้</p>
+      <div class="stats" id="stats"></div>
+    </div>
+    <img class="lemon" src="lemon.svg" alt="">
+  </div>
+</header>
+<nav class="tabs" aria-label="หัวข้อ"><div class="wrap" id="tabs"></div></nav>
+<main class="wrap" id="main"></main>
+
+<script id="kit" type="application/json">/*KIT_JSON*/null</script>
+<script>
+(function () {
+  const K = JSON.parse(document.getElementById('kit').textContent);
+  const L = K.LANG;
+  const $ = (s, r) => (r || document).querySelector(s);
+  const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  const TXT = [];
+  const store = { get(k) { try { return localStorage.getItem(k); } catch (e) { return null; } }, set(k, v) { try { localStorage.setItem(k, v); } catch (e) {} } };
+
+  function copyBox(label, text, opt) {
+    opt = opt || {};
+    const i = TXT.push(text) - 1;
+    const count = opt.limit ? `<span class="cnt${opt.count > opt.limit ? ' over' : ''}">${opt.count}/${opt.limit}</span>` : '';
+    const img = opt.img ? ` <span class="img">· รูป ${esc(opt.img)}</span>` : '';
+    return `<div class="copybox"><div class="hd"><span class="lab">${esc(label)}${img}</span><span>${count} <button class="copy" type="button" data-i="${i}">คัดลอก</button></span></div><pre lang="${esc(opt.lang || '')}">${esc(text)}</pre></div>`;
+  }
+  const list = (a) => `<ul class="clean">${a.map((x) => `<li>${esc(x)}</li>`).join('')}</ul>`;
+  const thumbs = (a) => a && a.length ? `<div class="k">รูปที่ใช้</div><div class="thumbs">${a.map((f) => `<figure><img loading="lazy" src="img/${esc(f.replace(/\.png$/, '.webp'))}" alt="${esc(f)}"><figcaption>${esc(f)}</figcaption></figure>`).join('')}</div>` : '';
+  const tierName = { 1: 'เริ่มสัปดาห์นี้', 2: 'วันเปิดตัว', 3: 'ตามประเทศ' };
+
+  const views = {
+    plan: { t: 'แผน', render() {
+      return `<div class="card"><h2 class="sec-title" style="margin:0">กติกาทุกแพลตฟอร์ม</h2><ul class="clean rules">${K.rules.map((r) => `<li>${esc(r)}</li>`).join('')}</ul></div>
+      <h2 class="sec-title">6 สัปดาห์แรก</h2>
+      ${K.calendar.map((w) => `<div class="card week"><h3>${esc(w.week)}</h3><div>${list(w.items)}</div></div>`).join('')}
+      <div class="grid2">
+        <div class="card"><h2 class="sec-title" style="margin:0;font-size:20px">ชื่อบัญชี (เช็กว่าว่างก่อน)</h2><ul class="clean">${K.handles.map((h) => `<li>${esc(h.where)}: <code>${esc(h.handle)}</code></li>`).join('')}</ul></div>
+        <div class="card"><h2 class="sec-title" style="margin:0;font-size:20px">วัดผล</h2>${list(K.measure)}</div>
+      </div>
+      <div class="card"><h2 class="sec-title" style="margin:0;font-size:20px">งานถัดไปที่ Claude ทำต่อได้</h2>${list(K.next)}</div>`;
+    } },
+    platforms: { t: 'แพลตฟอร์ม', render() {
+      const f = store.get('tier') || 'all';
+      const chips = [['all', 'ทั้งหมด'], ['1', tierName[1]], ['2', tierName[2]], ['3', tierName[3]]].map(([v, n]) => `<button class="chip" type="button" data-tier="${v}" aria-pressed="${f === v}">${n}</button>`).join('');
+      const cards = K.platforms.map((p) => {
+        const done = store.get('done:' + p.id) === '1';
+        const posts = typeof p.posts === 'string' ? `<div class="k">โพสต์</div><p>${esc(p.posts)}</p>` : (p.posts || []).length ? `<div class="k">โพสต์พร้อมใช้</div><div class="grid2">${p.posts.map((x) => copyBox(`${x.title} · ${L[x.lang] || x.lang}`, x.text, { img: x.img, lang: x.lang })).join('')}</div>` : '';
+        return `<details class="pf${done ? ' is-done' : ''}" data-tier="${p.tier}" data-id="${esc(p.id)}"${f !== 'all' && String(p.tier) !== f ? ' hidden' : ''}>
+          <summary><span class="tier t${p.tier}">${tierName[p.tier]}</span><span><h3>${esc(p.name)} <span class="tick">✓</span></h3><span class="sub">${esc(p.langs)}</span></span><span class="chev" aria-hidden="true">›</span></summary>
+          <div class="body">
+            <label class="done"><input type="checkbox" id="done-${esc(p.id)}" data-done="${esc(p.id)}"${done ? ' checked' : ''}> ตั้งบัญชีแล้ว (จำไว้ในเครื่องนี้)</label>
+            <p style="margin-top:8px">${esc(p.why)}</p>
+            ${p.setup ? `<div class="k">ตั้งค่า</div>${list(p.setup)}` : ''}
+            ${(p.bio || []).length ? `<div class="k">ไบโอ / ข้อความโปรไฟล์</div><div class="grid2">${p.bio.map((b) => copyBox(`${b.label || 'Bio'} · ${L[b.lang] || b.lang}`, b.text, { limit: b.limit, count: b.count, lang: b.lang })).join('')}</div>` : ''}
+            ${p.specs ? `<div class="k">ขนาด / สเปก</div>${list(p.specs)}` : ''}
+            ${p.rhythm ? `<div class="k">ความถี่</div><p>${esc(p.rhythm)}</p>` : ''}
+            ${p.tips ? `<div class="k">เคล็ดลับ</div>${list(p.tips)}` : ''}
+            ${posts}
+            ${thumbs(p.images)}
+          </div></details>`;
+      }).join('');
+      return `<p class="lead">แตะชื่อแพลตฟอร์มเพื่อเปิด ติ๊ก "ตั้งบัญชีแล้ว" เพื่อจำว่าทำไปถึงไหน ตัวนับตัวอักษรเทียบกับขีดจำกัดของแพลตฟอร์ม</p><div class="chips" id="tierchips">${chips}</div><div class="view" style="gap:10px">${cards}</div>`;
+    } },
+    content: { t: 'คอนเทนต์', render() {
+      return `<p class="lead">ไอเดียละ 1 คลิป ใช้ไฟล์เดียวกันลง TikTok · Reels · Shorts · Facebook Reels · LINE VOOM · Lemon8 แคปชันมี 3 ภาษาหลัก</p>
+      <div class="card"><div class="k" style="margin-top:0">วิดีโอที่มีแล้ว</div><ul class="clean">${K.films.map((f) => `<li><b>${esc(f.name)}</b><br>${f.files.map((x) => `<code>${esc(x)}</code>`).join('<br>')}</li>`).join('')}</ul></div>
+      ${K.pieces.map((c) => `<div class="card piece"><h3>${esc(c.id)} · ${esc(c.name)}</h3><p class="meta">ไฟล์: ${esc(c.asset)} · ลงเมื่อ: ${esc(c.when)}</p><div class="grid3" style="margin-top:10px">${Object.entries(c.captions).map(([l, t]) => copyBox(L[l], t, { lang: l })).join('')}</div></div>`).join('')}
+      <h2 class="sec-title">ตามเทศกาล</h2>
+      <div class="grid2">${K.seasonal.map((s) => `<div class="card"><p><span class="date">${esc(s.date.slice(5).replace('-', '/'))}</span><b>${esc(s.name)}</b></p><p class="meta">${esc(s.where)}</p><div style="margin-top:8px">${copyBox(L[s.lang], s.text, { lang: s.lang })}</div></div>`).join('')}</div>`;
+    } },
+    languages: { t: '18 ภาษา', render() {
+      return `<p class="lead">ใช้เป็นชื่อและคำอธิบาย YouTube Shorts (Subtitles → Add language) และโพสต์ในกลุ่มของแต่ละประเทศ รูปคู่กันคือ square-&lt;ภาษา&gt;-1080.png และ blog-&lt;ภาษา&gt;-1200x630.png</p>
+      <div class="grid2">${Object.entries(K.intro).map(([l, v]) => `<div class="card"><h3 style="font-size:17px">${esc(L[l])}</h3><div style="display:grid;gap:8px;margin-top:8px">${copyBox('ชื่อคลิป', v.hook + ' · Daily', { lang: l })}${copyBox('คำอธิบาย / โพสต์', `${v.hook}\n${v.text}\n${v.cta}\n${v.tags}`, { lang: l, img: `square-${l}-1080.png` })}</div></div>`).join('')}</div>`;
+    } },
+    faq: { t: 'FAQ', render() {
+      return `<p class="lead">คำตอบสำเร็จรูปสำหรับคอมเมนต์และข้อความ ตอบภายใน 24 ชั่วโมงในภาษาของคนถาม</p>${K.faq.map((f) => `<div class="card"><h3 style="font-size:18px">${esc(f.q)}</h3><div class="grid3" style="margin-top:10px">${Object.entries(f.a).map(([l, t]) => copyBox(L[l], t, { lang: l })).join('')}</div></div>`).join('')}`;
+    } },
+    assets: { t: 'รูปและวิดีโอ', render() {
+      const groups = [['รูปโปรไฟล์', /^(avatar|producthunt-thumb)/], ['สี่เหลี่ยม 18 ภาษา (โพสต์ฟีด กลุ่ม)', /^square-/], ['ปกบทความ 18 ภาษา 1200×630', /^blog-/], ['Carousel 4:5', /^carousel-/], ['Story 9:16', /^story-/], ['ปก 3:4 (Lemon8, 小红书)', /^(lemon8|xhs)-/], ['แบนเนอร์และปก', /^(youtube|x-header|facebook|linkedin|line-)/], ['Product Hunt', /^producthunt-gallery/], ['Pinterest', /^pinterest-/]];
+      return `<p class="lead">ไฟล์จริงขนาดเต็มอยู่ใน repo <code>limonlay/daily-marketing</code> ที่ <code>platforms/out/img/</code> (PNG) และ <code>platforms/out/video/</code> (MP4) รูปในหน้านี้เป็นตัวอย่างย่อ</p>
+      ${groups.map(([n, re]) => { const a = K.images.filter((x) => re.test(x.f)); return a.length ? `<h2 class="sec-title" style="font-size:19px">${esc(n)} <span class="meta">(${a.length})</span></h2><div class="gal">${a.map((x) => `<figure><img loading="lazy" src="img/${esc(x.f.replace(/\.png$/, '.webp'))}" alt="${esc(x.f)}"><figcaption>${esc(x.f)}${x.d ? ' · ' + esc(x.d) : ''}</figcaption></figure>`).join('')}</div>` : ''; }).join('')}
+      <h2 class="sec-title" style="font-size:19px">วิดีโอแนวนอน / สี่เหลี่ยม</h2><div class="card">${list(K.videos.map((v) => 'platforms/out/video/' + v))}<p class="meta" style="margin-top:8px">16:9 สำหรับ YouTube, X, LinkedIn, Product Hunt · 1:1 สำหรับฟีด X / Facebook / LinkedIn · แนวตั้ง 9:16 ใช้ไฟล์เดิมใน films/</p></div>`;
+    } },
+    seo: { t: 'SEO', render() {
+      return `<p class="lead">บทความบนเว็บ Daily ช่วยให้คนค้นเจอใน Google แต่ละประเทศ เป็นงานฝั่งแอป (Lane B) ต้องเปิดงานใน TASKS.md ผ่าน Planner</p>
+      <div class="tablewrap"><table><thead><tr><th>ภาษา</th><th>คำค้น</th><th>หัวข้อบทความแรก</th></tr></thead><tbody>${K.seo.map((s) => `<tr><td>${esc(L[s.lang])}</td><td lang="${esc(s.lang)}">${esc(s.kw)}</td><td lang="${esc(s.lang)}">${esc(s.title)}</td></tr>`).join('')}</tbody></table></div>`;
+    } },
+  };
+
+  const ids = Object.keys(views);
+  $('#tabs').innerHTML = ids.map((id) => `<a href="#${id}" data-v="${id}">${views[id].t}</a>`).join('');
+  const nPosts = K.pieces.length * 3 + K.seasonal.length + K.platforms.reduce((n, p) => n + (Array.isArray(p.posts) ? p.posts.length : 0), 0) + Object.keys(K.intro).length;
+  $('#stats').innerHTML = [[K.platforms.length, 'แพลตฟอร์ม'], [18, 'ภาษา'], [nPosts, 'ข้อความพร้อมโพสต์'], [K.images.length, 'รูป'], [K.videos.length, 'วิดีโอตัดใหม่']].map(([n, t]) => `<span class="stat"><b>${n}</b>${t}</span>`).join('');
+
+  function show() {
+    const id = ids.includes(location.hash.slice(1)) ? location.hash.slice(1) : 'plan';
+    TXT.length = 0;
+    $('#main').innerHTML = `<div class="view">${views[id].render()}</div>`;
+    document.querySelectorAll('#tabs a').forEach((a) => { if (a.dataset.v === id) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
+  }
+  window.addEventListener('hashchange', show);
+  show();
+
+  document.addEventListener('click', (e) => {
+    const b = e.target.closest('.copy');
+    if (b) {
+      const t = TXT[+b.dataset.i];
+      const ok = () => { b.textContent = 'คัดลอกแล้ว'; b.classList.add('ok'); setTimeout(() => { b.textContent = 'คัดลอก'; b.classList.remove('ok'); }, 1600); };
+      const fallback = () => { const pre = b.closest('.copybox').querySelector('pre'); const r = document.createRange(); r.selectNodeContents(pre); const s = getSelection(); s.removeAllRanges(); s.addRange(r); b.textContent = 'เลือกข้อความแล้ว กดคัดลอกเอง'; };
+      try { navigator.clipboard.writeText(t).then(ok, fallback); } catch (err) { fallback(); }
+      return;
+    }
+    const c = e.target.closest('[data-tier]');
+    if (c && c.classList.contains('chip')) {
+      const v = c.dataset.tier;
+      store.set('tier', v);
+      document.querySelectorAll('#tierchips .chip').forEach((x) => x.setAttribute('aria-pressed', String(x.dataset.tier === v)));
+      document.querySelectorAll('details.pf').forEach((d) => { d.hidden = v !== 'all' && d.dataset.tier !== v; });
+    }
+  });
+  document.addEventListener('change', (e) => {
+    const id = e.target.dataset && e.target.dataset.done;
+    if (!id) return;
+    store.set('done:' + id, e.target.checked ? '1' : '0');
+    e.target.closest('details').classList.toggle('is-done', e.target.checked);
+  });
+})();
+</script>

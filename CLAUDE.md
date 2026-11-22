@@ -20,6 +20,7 @@ The owner talks in Thai; reply in Thai.
 | `motionmaxxing/` | motionmaxxing comparison film + STORYBOARD/NOTE |
 | `landing/` | landing-page mockups and their screenshots |
 | `promo/` | older promo (orange era, outdated colours); `appcap.js` needs the app repo (`../full.js`) |
+| `platforms/` | marketing kit for every platform: plan, bios, captions in 18 languages, images per platform size, video cut-downs (`platforms/README.md`, `KIT.md`) |
 
 ## How videos are made (all free)
 HTML page with a pure `render(t)` → Playwright screenshots per frame (Chromium at `/opt/pw-browsers/chromium` in cloud sessions) → ffmpeg.
