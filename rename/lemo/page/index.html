@@ -1,16 +1,16 @@
-<title>Lemo Mockup</title>
+<title>Lemo · Lemoly Mockup</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anuphan:wght@400;500;600;700&display=swap">
 <style>
-/* Layout: Prussian masthead with the new wordmark, an A/B switch, then one mockup per block; flat colour blocks, leaf corners. */
+/* Layout: Prussian masthead with the chosen wordmark, a sticky name + logo switch, then one mockup per block; flat colour blocks, leaf corners. */
 :root {
   --bg: #faf9f6; --fg: #14213d; --muted: #586179; --surface: #ffffff; --surface2: #eeece6;
-  --accent: #ffd23f; --accent-ink: #876800; --pr: #14213d; --on-pr: #f2f0ea; --pr2: #1d2c50; --warn: #b5410d;
+  --accent: #ffd23f; --accent-ink: #876800; --pr: #14213d; --on-pr: #f2f0ea; --pr2: #1d2c50; --warn: #b5410d; --good: #2f7d4f;
   --font: 'Anuphan', system-ui, sans-serif; --r: 16px;
 }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg: #0a0d14; --fg: #f2f0ea; --muted: #9aa3b5; --surface: #121a2e; --surface2: #1b2742; --accent-ink: #ffd23f; --warn: #ff9b6a; color-scheme: dark; } }
-:root[data-theme="dark"] { --bg: #0a0d14; --fg: #f2f0ea; --muted: #9aa3b5; --surface: #121a2e; --surface2: #1b2742; --accent-ink: #ffd23f; --warn: #ff9b6a; color-scheme: dark; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --bg: #0a0d14; --fg: #f2f0ea; --muted: #9aa3b5; --surface: #121a2e; --surface2: #1b2742; --accent-ink: #ffd23f; --warn: #ff9b6a; --good: #7fd3a0; color-scheme: dark; } }
+:root[data-theme="dark"] { --bg: #0a0d14; --fg: #f2f0ea; --muted: #9aa3b5; --surface: #121a2e; --surface2: #1b2742; --accent-ink: #ffd23f; --warn: #ff9b6a; --good: #7fd3a0; color-scheme: dark; }
 * { box-sizing: border-box; }
 body { background: var(--bg); color: var(--fg); font-family: var(--font); font-size: 16px; line-height: 1.6; }
 body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--pr); }
@@ -18,11 +18,11 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
 h1, h2, h3 { margin: 0; line-height: 1.2; text-wrap: balance; }
 p { margin: 0; }
 .mast { background: var(--pr); color: var(--on-pr); margin-top: calc(-1 * env(safe-area-inset-top, 0px)); padding-top: calc(env(safe-area-inset-top, 0px) + 36px); padding-bottom: 36px; }
-.word { display: inline-flex; align-items: center; gap: .16em; font-weight: 700; letter-spacing: -0.03em; font-size: clamp(64px, 13vw, 132px); line-height: 1; }
+.word { display: inline-flex; align-items: center; gap: .16em; font-weight: 700; letter-spacing: -0.03em; font-size: clamp(60px, 12vw, 124px); line-height: 1; }
 .word img { height: .8em; transform: translateY(-0.03em) rotate(-8deg); }
-.mast p { color: #c9cfdc; margin-top: 14px; max-width: 60ch; }
+.mast p { color: #c9cfdc; margin-top: 14px; max-width: 62ch; }
 .pill { display: inline-block; background: var(--pr2); border-radius: 0 10px 0 10px; padding: 4px 12px; font-size: 14px; margin-top: 14px; }
-main { padding-block: 22px 64px; display: grid; gap: 22px; }
+main { padding-block: 22px 64px; display: grid; gap: 24px; }
 .sec h2 { font-size: 24px; margin-bottom: 6px; }
 .lead { color: var(--muted); max-width: 70ch; }
 .card { background: var(--surface); border-radius: 0 var(--r) 0 var(--r); padding: 18px; min-width: 0; }
@@ -34,8 +34,9 @@ figcaption { font-size: 14px; color: var(--muted); margin-top: 6px; }
 .opt h3 { font-size: 18px; }
 .opt p { color: var(--muted); margin-top: 4px; font-size: 15px; }
 .tag { display: inline-block; font-size: 12px; font-weight: 700; padding: 2px 9px; border-radius: 0 8px 0 8px; background: var(--accent); color: #14213d; margin-left: 6px; vertical-align: 2px; }
-.switch { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--bg); padding-block: 10px; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
-.switch span { color: var(--muted); font-size: 15px; margin-right: 4px; }
+.switch { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--bg); padding-block: 10px; display: flex; gap: 8px 18px; align-items: center; flex-wrap: wrap; }
+.grp { display: flex; gap: 6px; align-items: center; flex-wrap: wrap; }
+.grp > span { color: var(--muted); font-size: 15px; margin-right: 2px; }
 .switch button { border: 0; font: inherit; font-weight: 700; font-size: 15px; padding: 8px 16px; border-radius: 0 12px 0 12px; background: var(--surface2); color: var(--fg); cursor: pointer; transition: transform .12s cubic-bezier(.2,.8,.2,1); }
 .switch button:active { transform: scale(.96); }
 .switch button[aria-pressed="true"] { background: var(--pr); color: var(--on-pr); }
@@ -46,76 +47,118 @@ figcaption { font-size: 14px; color: var(--muted); margin-top: 6px; }
 ul.clean { margin: 8px 0 0; padding-left: 20px; display: grid; gap: 8px; }
 ul.clean li::marker { color: var(--accent-ink); }
 .warn { color: var(--warn); font-weight: 700; }
-code { background: var(--surface2); padding: 1px 6px; border-radius: 0 6px 0 6px; font-size: .92em; }
 .narrow { max-width: 420px; }
+.tablewrap { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; min-width: 640px; font-size: 15px; }
+th, td { text-align: left; padding: 10px 12px; vertical-align: top; }
+thead th { background: var(--pr); color: var(--on-pr); font-size: 14px; }
+thead th:first-child { width: 22%; }
+tbody tr:nth-child(odd) td { background: var(--surface); }
+tbody tr:nth-child(even) td { background: var(--surface2); }
+td:first-child { font-weight: 700; }
+.plus { color: var(--good); font-weight: 700; }
+.minus { color: var(--warn); font-weight: 700; }
+.verdict { background: var(--pr); color: var(--on-pr); border-radius: 0 var(--r) 0 var(--r); padding: 18px; }
+.verdict h2 { font-size: 22px; }
+.verdict p { color: #c9cfdc; margin-top: 6px; max-width: 70ch; }
+.verdict b { color: var(--accent); }
 @media (max-width: 560px) { .vs { grid-template-columns: 1fr; } }
 @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 </style>
 
 <header class="mast">
   <div class="wrap">
-    <div class="word" aria-label="Lemo">Lemo<img src="lemon.svg" alt=""></div>
-    <p>ม็อกอัปถ้าเปลี่ยนชื่อจาก Daily เป็น Lemo ใช้หน้าจอจริงของแอปและสไตล์เดิมทุกอย่าง (กรมท่า + มะนาว มุมใบไม้ สีทึบ) เปลี่ยนแค่ชื่อ ยังไม่ได้แตะแอปจริง</p>
-    <span class="pill">โดเมน lemo.limonlay.com ในภาพเป็นตัวอย่างเท่านั้น</span>
+    <div class="word" aria-live="polite"><span id="heroName">Lemoly</span><img src="lemon.svg" alt=""></div>
+    <p>ม็อกอัปชื่อใหม่แทน Daily ใช้หน้าจอจริงของแอปและสไตล์เดิมทุกอย่าง (กรมท่า + มะนาว มุมใบไม้ สีทึบ) เปลี่ยนแค่ชื่อ ยังไม่ได้แตะแอปจริง สลับชื่อและแบบโลโก้ได้ที่แถบด้านล่าง</p>
+    <span class="pill">โดเมนและชื่อบัญชีในภาพเป็นตัวอย่างเท่านั้น</span>
   </div>
 </header>
 
 <main class="wrap">
+  <section class="verdict">
+    <h2>สรุปสั้น</h2>
+    <p>ถ้าต้องเลือกระหว่างสองชื่อนี้ ผมเอียงไปทาง <b>Lemoly</b> เพราะเป็นคำเฉพาะ ค้นหาแล้วเจอเราง่าย ยังไม่เจอแอปไหนใช้ชื่อนี้ และลงท้าย -ly เหมือน Daily และ limonlay ทำให้ผู้ใช้เดิมเดาได้ว่าเป็นแอปเดิม ส่วน <b>Lemo</b> สั้นและติดหูกว่า แต่ชื่อนี้มีคนใช้แล้วหลายที่ ทั้งสองชื่อควรใช้โลโก้ <b>แบบ A</b> ในแอป ส่วน <b>แบบ B</b> เข้ากับ Lemoly มากกว่า ใช้เป็นโลโก้ใหญ่บนโปสเตอร์ได้</p>
+  </section>
+
+  <section class="sec">
+    <h2>เทียบทุกขนาด</h2>
+    <p class="lead">จากใหญ่ไปเล็ก: โปสเตอร์ · โพสต์ · หัวแอป (มืด / สว่าง) · ชื่อใต้ไอคอน ดูตัวเล็กสุดเป็นหลัก เพราะคนเห็นบ่อยที่สุด</p>
+    <figure class="card" style="margin-top:12px"><img src="img/names-compare.webp" alt="Daily, Lemo และ Lemoly แบบ A และ B เทียบกันทุกขนาด"></figure>
+  </section>
+
+  <section class="sec">
+    <h2>Lemo กับ Lemoly</h2>
+    <div class="tablewrap" style="margin-top:10px"><table>
+      <thead><tr><th></th><th>Lemo</th><th>Lemoly</th></tr></thead>
+      <tbody>
+        <tr><td>ความยาว</td><td><span class="plus">สั้น</span> 4 ตัว จำง่าย</td><td>6 ตัว ยาวกว่า Daily 1 ตัว</td></tr>
+        <tr><td>ต่อจาก Daily</td><td>เสียงต่างจากเดิมทั้งคำ</td><td><span class="plus">ลงท้าย -ly</span> เหมือน Daily และ limonlay ผู้ใช้เดิมเดาได้</td></tr>
+        <tr><td>อ่านออกเสียง</td><td>ไทย เลโม่ · ญี่ปุ่น レモ (ใกล้ レモン)</td><td>ไทย เลโมลี่ · ญี่ปุ่น レモリー · คนพูดอังกฤษอาจอ่านได้ 2 แบบ (LEM-uh-lee / leh-MOH-lee)</td></tr>
+        <tr><td>สะกด</td><td><span class="plus">ง่าย</span></td><td><span class="minus">อาจพิมพ์เป็น lemony</span> (คำอังกฤษที่มีอยู่แล้ว มือถืออาจแก้คำให้อัตโนมัติ) หรือ lemolly</td></tr>
+        <tr><td>ชื่อซ้ำ</td><td><span class="minus">มีแล้วหลายที่:</span> แอปแชท 17+ "Lemo - Chill &amp; Chat", แอปการศึกษา Lemo, แอปฟิตเนส LEMO, ขั้วต่อไฟฟ้า LEMO</td><td><span class="plus">ยังไม่เจอแอปชื่อนี้</span> ที่ใกล้กัน: แอปวิดีโอ Lumoly (18+) และเครื่องหมายการค้า LEMOLLY ในสหรัฐ (หมวดเสื้อผ้า / อิเล็กทรอนิกส์ ตามผลค้นหา ยังไม่ได้ยืนยัน)</td></tr>
+        <tr><td>ค้นหาเจอ</td><td>คำสั้นทั่วไป ผลค้นหาปนกับของอื่น</td><td><span class="plus">คำเฉพาะ</span> ค้นแล้วเจอเราง่ายกว่า</td></tr>
+        <tr><td>โลโก้แบบ B</td><td>มะนาวอยู่ท้ายคำ คนจะอ่านเป็น "Lem"</td><td><span class="plus">มะนาวอยู่กลางคำ</span> ตัวใหญ่อ่านเป็น o ได้ดีกว่า ตัวเล็กยังอ่านยาก</td></tr>
+        <tr><td>ความหมายในภาษาอื่น</td><td><span class="minus">อินโดนีเซีย:</span> คำสแลง "lemot" แปลว่าช้า อืด</td><td>ยังไม่เจอปัญหาชัดๆ (ยังไม่ได้เช็กครบ 18 ภาษา)</td></tr>
+      </tbody>
+    </table></div>
+  </section>
+
+  <div class="switch" role="group" aria-label="เลือกชื่อและแบบโลโก้ในม็อกอัป">
+    <div class="grp"><span>ชื่อ</span>
+      <button type="button" id="nLemo" data-n="lemo" aria-pressed="false">Lemo</button>
+      <button type="button" id="nLemoly" data-n="lemoly" aria-pressed="true">Lemoly</button></div>
+    <div class="grp"><span>โลโก้</span>
+      <button type="button" id="oA" data-o="A" aria-pressed="true">A · ชื่อ + มะนาว</button>
+      <button type="button" id="oB" data-o="B" aria-pressed="false">B · มะนาวเป็น o</button></div>
+  </div>
+
   <section class="sec">
     <h2>โลโก้ 3 แบบ</h2>
     <p class="lead">แถวบนสุดคือ Daily ตอนนี้ ไว้เทียบ ไอคอนแอปไม่ต้องเปลี่ยน เพราะเป็นมะนาวลูกเดียวอยู่แล้ว</p>
-    <figure class="card" style="margin-top:12px"><img src="img/lemo-wordmarks.webp" alt="โลโก้ Lemo 3 แบบเทียบกับ Daily บนพื้นกรมท่าและพื้นสว่าง"></figure>
+    <figure class="card" style="margin-top:12px"><img data-src="N-wordmarks" src="img/lemoly-wordmarks.webp" alt="โลโก้ 3 แบบของชื่อที่เลือก เทียบกับ Daily"></figure>
     <div class="three" style="margin-top:12px">
-      <div class="card opt"><h3>A · ชื่อ + มะนาว<span class="tag">แนะนำ</span></h3><p>โครงเดียวกับ Daily ตอนนี้ อ่านออกทุกขนาด ตั้งแต่หัวแอปจนถึงไอคอนเล็กๆ</p></div>
-      <div class="card opt"><h3>B · มะนาวเป็นตัว o</h3><p>ตัวใหญ่ดูเป็นโลโก้และจำง่าย แต่ตัวเล็ก (หัวแอป ไบโอ) คนจะอ่านเป็น "Lem" ใช้เป็นโลโก้บนโปสเตอร์คู่กับ A ได้</p></div>
-      <div class="card opt"><h3>C · ตัวเล็ก + มะนาวเป็น o</h3><p>นุ่มกว่า เป็นกันเองกว่า แต่มีปัญหาเดียวกับ B และต่างจากสไตล์ตัวอักษรของแอปที่ขึ้นต้นตัวใหญ่</p></div>
+      <div class="card opt"><h3>A · ชื่อ + มะนาว<span class="tag">แนะนำในแอป</span></h3><p>โครงเดียวกับ Daily ตอนนี้ อ่านออกทุกขนาด ตั้งแต่หัวแอปจนถึงไอคอนเล็กๆ</p></div>
+      <div class="card opt"><h3>B · มะนาวเป็นตัว o</h3><p>ตัวใหญ่ดูเป็นโลโก้และจำง่าย กับ Lemoly อ่านเป็น o ได้ดีกว่า ตัวเล็กยังอ่านยากทั้งสองชื่อ</p></div>
+      <div class="card opt"><h3>C · ตัวเล็ก + มะนาวเป็น o</h3><p>นุ่มกว่า แต่มีปัญหาเดียวกับ B และต่างจากตัวอักษรของแอปที่ขึ้นต้นด้วยตัวใหญ่</p></div>
     </div>
   </section>
-
-  <div class="switch" role="group" aria-label="เลือกแบบโลโก้ในม็อกอัป">
-    <span>ม็อกอัปด้านล่างใช้โลโก้แบบ</span>
-    <button type="button" id="optA" data-v="A" aria-pressed="true">A · ชื่อ + มะนาว</button>
-    <button type="button" id="optB" data-v="B" aria-pressed="false">B · มะนาวเป็น o</button>
-  </div>
 
   <section class="sec">
     <h2>ในแอป</h2>
     <p class="lead">หัวแอปจริง 3 ภาษา ทั้งโหมดมืดและสว่าง</p>
-    <figure style="margin-top:12px"><img data-src="lemo-X-app" src="img/lemo-A-app.webp" alt="หน้าแรกของแอปที่หัวเป็น Lemo ภาษาไทย อังกฤษ ญี่ปุ่น"></figure>
+    <figure style="margin-top:12px"><img data-src="N-X-app" src="img/lemoly-A-app.webp" alt="หน้าแรกของแอปที่หัวเป็นชื่อใหม่ ภาษาไทย อังกฤษ ญี่ปุ่น"></figure>
   </section>
 
   <section class="sec two">
-    <figure><img data-src="lemo-X-splash" src="img/lemo-A-splash.webp" alt="หน้าเปิดแอป Lemo"><figcaption>หน้าเปิดแอป (splash)</figcaption></figure>
-    <figure><img src="img/lemo-home-screen.webp" alt="ไอคอน Lemo บนหน้าจอโฮมของมือถือ"><figcaption>บนหน้าจอโฮม: ไอคอนเดิม ชื่อใต้ไอคอนเป็น Lemo</figcaption></figure>
+    <figure><img data-src="N-X-splash" src="img/lemoly-A-splash.webp" alt="หน้าเปิดแอปของชื่อใหม่"><figcaption>หน้าเปิดแอป (splash)</figcaption></figure>
+    <figure><img data-src="N-home-screen" src="img/lemoly-home-screen.webp" alt="ไอคอนแอปบนหน้าจอโฮมพร้อมชื่อใหม่"><figcaption>บนหน้าจอโฮม: ไอคอนเดิม ชื่อใต้ไอคอนเปลี่ยน</figcaption></figure>
   </section>
 
   <section class="sec">
     <h2>โปรไฟล์โซเชียล</h2>
-    <p class="lead">ชื่อบัญชีตัวอย่าง lemo.limonlay ต้องเช็กว่าว่างก่อน</p>
-    <figure class="narrow" style="margin-top:12px"><img data-src="lemo-X-profile" src="img/lemo-A-profile.webp" alt="หน้าโปรไฟล์โซเชียลของ Lemo"></figure>
+    <figure class="narrow" style="margin-top:12px"><img data-src="N-X-profile" src="img/lemoly-A-profile.webp" alt="หน้าโปรไฟล์โซเชียลของชื่อใหม่"></figure>
   </section>
 
   <section class="sec">
     <h2>ก่อน / หลัง</h2>
     <div class="vs card" style="margin-top:12px">
       <figure><div class="lab old">Daily ตอนนี้</div><img src="img/daily-square-th.webp" alt="โพสต์สี่เหลี่ยมของ Daily"></figure>
-      <figure><div class="lab">Lemo</div><img data-src="lemo-X-square-th" src="img/lemo-A-square-th.webp" alt="โพสต์สี่เหลี่ยมแบบเดียวกันเป็น Lemo"></figure>
+      <figure><div class="lab" id="afterLab1">Lemoly</div><img data-src="N-X-square-th" src="img/lemoly-A-square-th.webp" alt="โพสต์สี่เหลี่ยมแบบเดียวกันกับชื่อใหม่"></figure>
     </div>
     <div class="vs card" style="margin-top:12px">
       <figure><div class="lab old">Daily ตอนนี้</div><img src="img/daily-x-header.webp" alt="หัวโปรไฟล์ X ของ Daily"></figure>
-      <figure><div class="lab">Lemo</div><img data-src="lemo-X-x-header" src="img/lemo-A-x-header.webp" alt="หัวโปรไฟล์ X ของ Lemo"></figure>
+      <figure><div class="lab" id="afterLab2">Lemoly</div><img data-src="N-X-x-header" src="img/lemoly-A-x-header.webp" alt="หัวโปรไฟล์ X ของชื่อใหม่"></figure>
     </div>
-    <figure class="narrow" style="margin-top:12px"><img data-src="lemo-X-square-en" src="img/lemo-A-square-en.webp" alt="โพสต์ภาษาอังกฤษของ Lemo"><figcaption>โพสต์ภาษาอังกฤษ</figcaption></figure>
+    <figure class="narrow" style="margin-top:12px"><img data-src="N-X-square-en" src="img/lemoly-A-square-en.webp" alt="โพสต์ภาษาอังกฤษของชื่อใหม่"><figcaption>โพสต์ภาษาอังกฤษ</figcaption></figure>
   </section>
 
   <section class="sec card">
-    <h2>ควรรู้ก่อนตัดสินใจ</h2>
+    <h2>ควรรู้ก่อนตัดสินใจ (ทั้งสองชื่อ)</h2>
     <ul class="clean">
-      <li><b>ชื่อมีคนใช้แล้วในหมวดอื่น:</b> ใน App Store มี "Lemo - Chill & Chat" (แอปแชทเสียง 17+ จากสิงคโปร์) แอปการศึกษาชื่อ Lemo และใน Google Play มีแอปฟิตเนส LEMO ส่วน LEMO ยังเป็นยี่ห้อขั้วต่อไฟฟ้าของสวิส ยังไม่เจอแอปการเงินที่ชื่อนี้ แต่ใน store ต้องเติมคำต่อท้าย เช่น "Lemo: จดรายรับรายจ่าย" และควรเช็กเครื่องหมายการค้า (กรมทรัพย์สินทางปัญญา / WIPO) ก่อนใช้จริง</li>
-      <li><b>ภาษาอินโดนีเซีย:</b> คำสแลง "lemot" แปลว่าช้า อืด ออกเสียงใกล้ Lemo ไม่ร้ายแรง แต่อินโดนีเซียเป็นตลาดหนึ่งในแผน</li>
-      <li><b>ข้อดี:</b> สั้น จำง่าย ผูกกับมะนาวทันที ญี่ปุ่นอ่าน "レモ" ใกล้ "レモン" เข้ากับชื่อสตูดิโอ limonlay และไอคอนไม่ต้องเปลี่ยน</li>
+      <li><b>เช็กเครื่องหมายการค้าก่อนใช้จริง</b> ที่กรมทรัพย์สินทางปัญญาและ WIPO ในหมวดซอฟต์แวร์และการเงิน ใน store อาจต้องเติมคำต่อท้าย เช่น "Lemoly: จดรายรับรายจ่าย"</li>
       <li><b>จังหวะตอนนี้ดีที่สุด:</b> ยังไม่ได้เปิดบัญชีโซเชียล และยังไม่ได้ส่ง Google brand verification (T-27) กับ Paddle live (T-26) <span class="warn">ถ้าจะเปลี่ยน ควรตัดสินก่อนส่งสองอย่างนี้</span> เพราะชื่อแอปผูกกับทั้งคู่</li>
-      <li><b>โดเมน:</b> เลือกได้ว่าจะใช้ lemo.limonlay.com, โดเมนใหม่ หรือเก็บ daily.limonlay.com ไว้ (ชื่อกับลิงก์จะไม่ตรงกัน)</li>
+      <li><b>โดเมน:</b> ในภาพใช้ &lt;ชื่อ&gt;.limonlay.com เป็นตัวอย่าง เลือกได้ว่าจะใช้ซับโดเมนนี้ โดเมนใหม่ หรือเก็บ daily.limonlay.com ไว้ (ชื่อกับลิงก์จะไม่ตรงกัน)</li>
+      <li><b>ไอคอนไม่ต้องเปลี่ยน</b> เป็นมะนาวลูกเดียวอยู่แล้ว ผู้ใช้เดิมยังเห็นไอคอนเดิมบนหน้าจอโฮม</li>
     </ul>
   </section>
 
@@ -133,15 +176,20 @@ code { background: var(--surface2); padding: 1px 6px; border-radius: 0 6px 0 6px
 
 <script>
 (function () {
-  const btns = document.querySelectorAll('.switch button');
-  function set(v) {
-    btns.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.v === v)));
-    document.querySelectorAll('img[data-src]').forEach((i) => { i.src = 'img/' + i.dataset.src.replace('-X-', '-' + v + '-') + '.webp'; });
-    try { localStorage.setItem('lemo-opt', v); } catch (e) {}
+  const st = { n: 'lemoly', o: 'A' };
+  const NAMES = { lemo: 'Lemo', lemoly: 'Lemoly' };
+  function apply() {
+    document.querySelectorAll('[data-n]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.n === st.n)));
+    document.querySelectorAll('[data-o]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.o === st.o)));
+    document.querySelectorAll('img[data-src]').forEach((i) => { i.src = 'img/' + i.dataset.src.replace(/^N/, st.n).replace('-X-', '-' + st.o + '-') + '.webp'; });
+    document.getElementById('heroName').textContent = NAMES[st.n];
+    document.getElementById('afterLab1').textContent = NAMES[st.n];
+    document.getElementById('afterLab2').textContent = NAMES[st.n];
+    try { localStorage.setItem('rename-state', JSON.stringify(st)); } catch (e) {}
   }
-  btns.forEach((b) => b.addEventListener('click', () => set(b.dataset.v)));
-  let saved = null;
-  try { saved = localStorage.getItem('lemo-opt'); } catch (e) {}
-  if (saved === 'B') set('B');
+  document.querySelectorAll('[data-n]').forEach((b) => b.addEventListener('click', () => { st.n = b.dataset.n; apply(); }));
+  document.querySelectorAll('[data-o]').forEach((b) => b.addEventListener('click', () => { st.o = b.dataset.o; apply(); }));
+  try { const s = JSON.parse(localStorage.getItem('rename-state') || 'null'); if (s && NAMES[s.n] && /^[AB]$/.test(s.o)) { st.n = s.n; st.o = s.o; } } catch (e) {}
+  apply();
 })();
 </script>
