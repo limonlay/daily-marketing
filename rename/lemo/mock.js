@@ -1,4 +1,4 @@
-/* Mockups for a possible rename Daily → Lemo / Lemoly. Not the real brand yet: nothing here ships.
+/* Mockups for a possible rename Daily → Lemo / Lemoly / Lemolo. Not the real brand yet: nothing here ships.
    Same rules as brand/DESIGN.md. The app screenshots are the real ones with the header wordmark painted over. */
 (function () {
   const LEMON = '../../platforms/art/lemon.svg';
@@ -62,9 +62,9 @@
   };
 
   L.compare = () => {
-    const c = canvas(1600, 1000, 'th', 'night');
-    const cols = [['Daily', 'D'], ['Lemo', 'A'], ['Lemo', 'B'], ['Lemoly', 'A'], ['Lemoly', 'B']];
-    const head = ['ตอนนี้', 'Lemo · A', 'Lemo · B', 'Lemoly · A', 'Lemoly · B'];
+    const c = canvas(1920, 1000, 'th', 'night');
+    const cols = [['Daily', 'D'], ['Lemo', 'A'], ['Lemoly', 'A'], ['Lemoly', 'B'], ['Lemolo', 'A'], ['Lemolo', 'B']];
+    const head = ['ตอนนี้', 'Lemo · A', 'Lemoly · A', 'Lemoly · B', 'Lemolo · A', 'Lemolo · B'];
     cols.forEach(([n, k], i) => {
       NAME = n;
       const x = 30 + i * 314;
@@ -75,7 +75,7 @@
       const ic = box(c, x + 97, 680, 100, 100, 'ico', `<img src="${ICON}" alt="" style="width:100%;height:100%;display:block">`, {});
       box(c, x, 790, 294, null, 'lbl', esc(n), { fontSize: '26px', textAlign: 'center', color: 'var(--cream)' });
     });
-    box(c, 30, 880, 1540, null, 'lbl', 'ขนาดใหญ่ (โปสเตอร์) · กลาง (โพสต์) · เล็ก (หัวแอป มืด / สว่าง) · ชื่อใต้ไอคอน', { fontSize: '26px', color: '#9aa3b5', textAlign: 'center' });
+    box(c, 30, 880, 1860, null, 'lbl', 'ขนาดใหญ่ (โปสเตอร์) · กลาง (โพสต์) · เล็ก (หัวแอป มืด / สว่าง) · ชื่อใต้ไอคอน', { fontSize: '26px', color: '#9aa3b5', textAlign: 'center' });
     NAME = 'Lemo';
   };
 
@@ -172,8 +172,8 @@
   };
 
   const J = [];
-  J.push({ kind: 'compare', w: 1600, h: 1000, file: 'names-compare.png' });
-  ['Lemo', 'Lemoly'].forEach((name) => {
+  J.push({ kind: 'compare', w: 1920, h: 1000, file: 'names-compare.png' });
+  ['Lemo', 'Lemoly', 'Lemolo'].forEach((name) => {
     const f = name.toLowerCase();
     J.push({ kind: 'wordmarks', name, w: 1600, h: 1080, file: `${f}-wordmarks.png` });
     ['A', 'B'].forEach((k) => {
