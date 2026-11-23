@@ -79,6 +79,25 @@
     NAME = 'Lemo';
   };
 
+  // more name ideas, one row each: big A, big B, and both at app-header size
+  const SHORT = [['Daily', 'ตอนนี้', 'D'], ['Lemolo', 'เลโมโล · レモロ'], ['Lemodo', 'เลโมโด · レモド'], ['Lemosa', 'เลโมซ่า · レモサ'], ['Lemoka', 'เลโมก้า · レモカ'], ['Lemoly', 'เลโมลี่ · レモリー']];
+  L.shortlist = () => {
+    const c = canvas(1600, 60 + SHORT.length * 150, 'th', 'night');
+    ['', 'แบบ A', 'แบบ B', 'หัวแอป A', 'หัวแอป B'].forEach((h, i) => box(c, [40, 300, 700, 1100, 1350][i], 16, 300, null, 'lbl', h, { fontSize: '24px', color: '#9aa3b5' }));
+    SHORT.forEach(([n, say, only], r) => {
+      NAME = n;
+      const y = 60 + r * 150;
+      box(c, 40, y + 22, 250, null, 'lbl', `<b style="font-size:34px;color:var(--cream)">${esc(n)}</b><br>${esc(say)}`, { fontSize: '22px', color: '#9aa3b5', lineHeight: 1.35 });
+      const cell = (x, w, k, fs, bg, fg) => box(c, x, y, w, 130, '', k ? wmHtml(k) : '', { background: bg, color: fg, fontSize: px(fs), display: 'grid', placeItems: 'center', borderRadius: '0 24px 0 24px', overflow: 'hidden' });
+      const dim = only ? { opacity: '.55' } : {};
+      Object.assign(cell(300, 380, only || 'A', 64, 'var(--pr)', 'var(--cream)').style, dim);
+      Object.assign(cell(700, 380, only ? '' : 'B', 64, 'var(--pr)', 'var(--cream)').style, dim);
+      Object.assign(cell(1100, 230, only || 'A', 26, '#000', '#fff').style, dim);
+      Object.assign(cell(1350, 230, only ? '' : 'B', 26, '#000', '#fff').style, dim);
+    });
+    NAME = 'Lemo';
+  };
+
   L.app = () => {
     const c = canvas(1600, 1180, 'th');
     shape(c, 'c', -160, 760, 560, 'var(--pr2)');
@@ -173,6 +192,7 @@
 
   const J = [];
   J.push({ kind: 'compare', w: 1920, h: 1000, file: 'names-compare.png' });
+  J.push({ kind: 'shortlist', w: 1600, h: 960, file: 'names-shortlist.png' });
   ['Lemo', 'Lemoly', 'Lemolo'].forEach((name) => {
     const f = name.toLowerCase();
     J.push({ kind: 'wordmarks', name, w: 1600, h: 1080, file: `${f}-wordmarks.png` });
